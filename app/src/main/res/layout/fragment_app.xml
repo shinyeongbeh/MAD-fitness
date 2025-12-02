@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".App">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button_App_Feedback"
+            android:layout_width="224dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="93dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="94dp"
+            android:layout_marginBottom="421dp"
+            android:backgroundTint="#F8E9E9"
+            android:text="       Feedback"
+            android:textAlignment="textStart"
+            android:textColor="#020000"
+            android:textColorLink="#BC8787"
+            app:icon="@drawable/ic_launcher_foreground"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="#0F0101"
+            app:iconTintMode="multiply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_App_SP2" />
+
+        <Button
+            android:id="@+id/button_App_SP2"
+            android:layout_width="224dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="83dp"
+            android:backgroundTint="#F8E9E9"
+            android:text="           App"
+            android:textAlignment="textStart"
+            android:textColor="#020000"
+            android:textColorLink="#BC8787"
+            app:icon="@drawable/ic_launcher_foreground"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="#0F0101"
+            app:iconTintMode="multiply"
+            app:layout_constraintTop_toBottomOf="@+id/TV_app"
+            tools:layout_editor_absoluteX="93dp" />
+
+        <Button
+            android:id="@+id/button_App_AppVersion"
+            android:layout_width="224dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="93dp"
+            android:layout_marginTop="83dp"
+            android:layout_marginEnd="94dp"
+            android:layout_marginBottom="28dp"
+            android:backgroundTint="#F8E9E9"
+            android:text="      AppVersion"
+            android:textAlignment="textStart"
+            android:textColor="#020000"
+            android:textColorLink="#BC8787"
+            app:icon="@drawable/ic_launcher_foreground"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="#0F0101"
+            app:iconTintMode="multiply"
+            app:layout_constraintBottom_toTopOf="@+id/button_App_Feedback"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TV_app" />
+
+        <TextView
+            android:id="@+id/TV_app"
+            android:layout_width="130dp"
+            android:layout_height="59dp"
+            android:layout_marginTop="32dp"
+            android:text="App"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/button_App_SP"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
