@@ -2,11 +2,14 @@ package com.example.mad;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,4 +64,77 @@ public class SettingPage extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_setting_page, container, false);
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        //App
+        Button btnApp = view.findViewById(R.id.button_App_SP);
+        View.OnClickListener OCLApp = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.toApp);
+            }
+        };
+        btnApp.setOnClickListener(OCLApp);
+
+
+        //Account
+        Button btnAccount = view.findViewById(R.id.button_Account_SP);
+        View.OnClickListener OCLAcc = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.toAccount);
+            }
+        };
+        btnAccount.setOnClickListener(OCLAcc);
+
+
+        //Notification
+        Button btnNotification = view.findViewById(R.id.button_Notification_SP);
+        View.OnClickListener OCLNoc = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.toNotification2);
+            }
+        };
+        btnNotification.setOnClickListener(OCLNoc);
+
+
+        //Privacy
+        Button btnPrivacy = view.findViewById(R.id.button_Privacy_SP);
+        View.OnClickListener OCLPri = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.toPrivacy);
+            }
+        };
+        btnPrivacy.setOnClickListener(OCLPri);
+
+        //Theme
+        Button btnTheme = view.findViewById(R.id.button_Theme_SP);
+        View.OnClickListener OCLThe = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.toTheme);
+            }
+        };
+        btnTheme.setOnClickListener(OCLThe);
+
+
+        //Sync
+        Button btnSync = view.findViewById(R.id.button_Sync_SP);
+        View.OnClickListener OCLSync = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.toSync2);
+            }
+        };
+        btnSync.setOnClickListener(OCLSync);
+
+
+
+
+
+    }
+
 }

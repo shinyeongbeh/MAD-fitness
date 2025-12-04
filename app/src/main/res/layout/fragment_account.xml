@@ -32,6 +32,7 @@
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_Accouny_Storage" />
 
@@ -42,7 +43,6 @@
             android:layout_marginStart="93dp"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
-            android:layout_marginBottom="421dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="       Storage"
             android:textAlignment="textStart"
@@ -56,7 +56,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_App_SP2" />
+            app:layout_constraintTop_toBottomOf="@+id/button_Account_Profile"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/button_Account_Profile"
@@ -65,7 +66,6 @@
             android:layout_marginStart="93dp"
             android:layout_marginTop="83dp"
             android:layout_marginEnd="94dp"
-            android:layout_marginBottom="28dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="      Profile"
             android:textAlignment="textStart"
@@ -76,10 +76,11 @@
             app:iconSize="30dp"
             app:iconTint="@color/iconTintPrimary"
             app:iconTintMode="multiply"
-            app:layout_constraintBottom_toTopOf="@+id/button_Accouny_Storage"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TV_Account" />
+            app:layout_constraintTop_toBottomOf="@+id/TV_Account"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/TV_Account"
@@ -92,5 +93,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

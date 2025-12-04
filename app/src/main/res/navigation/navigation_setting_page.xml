@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_setting_page"
+    app:startDestination="@id/settingPage">
+
+    <fragment
+        android:id="@+id/settingPage"
+        android:name="com.example.mad.SettingPage"
+        android:label="     Setting"
+        tools:layout="@layout/fragment_setting_page"
+        >
+        <action
+            android:id="@+id/toApp"
+            app:destination="@id/app" />
+        <action
+            android:id="@+id/toAccount"
+            app:destination="@id/account" />
+        <action
+            android:id="@+id/toNotification2"
+            app:destination="@id/notification" />
+        <action
+            android:id="@+id/toPrivacy"
+            app:destination="@id/privacy" />
+        <action
+            android:id="@+id/toTheme"
+            app:destination="@id/theme" />
+        <action
+            android:id="@+id/toSync2"
+            app:destination="@id/sync" />
+    </fragment>
+    <fragment
+        android:id="@+id/account"
+        android:name="com.example.mad.Account"
+        android:label="Account"
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/accToSetting"
+            app:destination="@id/settingPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/app"
+        android:name="com.example.mad.App"
+        android:label="App"
+        tools:layout="@layout/fragment_app" >
+        <action
+            android:id="@+id/appToSetting"
+            app:destination="@id/settingPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/notification"
+        android:name="com.example.mad.Notification"
+        android:label="Notification"
+        tools:layout="@layout/fragment_notification" >
+        <action
+            android:id="@+id/nocToSetting"
+            app:destination="@id/settingPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/privacy"
+        android:name="com.example.mad.Privacy"
+        android:label="Privacy"
+        tools:layout="@layout/fragment_privacy" >
+        <action
+            android:id="@+id/priToSetting"
+            app:destination="@id/settingPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/sync"
+        android:label="Sync"
+
+        android:name="com.example.mad.Sync"
+
+        tools:layout="@layout/fragment_sync" >
+        <action
+            android:id="@+id/syncToSetting"
+            app:destination="@id/settingPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/theme"
+        android:name="com.example.mad.Theme"
+        android:label="Theme"
+        tools:layout="@layout/fragment_theme" >
+        <action
+            android:id="@+id/themeToSetting"
+            app:destination="@id/settingPage" />
+    </fragment>
+</navigation>

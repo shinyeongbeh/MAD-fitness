@@ -18,6 +18,7 @@
             android:layout_marginStart="93dp"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
+            android:layout_marginBottom="411dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="    Location"
             android:textAlignment="textStart"
@@ -28,6 +29,7 @@
             app:iconSize="30dp"
             app:iconTint="@color/iconTintPrimary"
             app:iconTintMode="multiply"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_Privacy_ARP" />

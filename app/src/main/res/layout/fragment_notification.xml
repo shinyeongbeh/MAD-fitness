@@ -90,7 +90,6 @@
             android:layout_width="224dp"
             android:layout_height="54dp"
             android:layout_marginStart="93dp"
-            android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="    Daily Goals"
@@ -102,7 +101,9 @@
             app:iconSize="30dp"
             app:iconTint="@color/iconTintPrimary"
             app:iconTintMode="multiply"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TV_Reminder" />
 
@@ -122,8 +123,6 @@
             android:id="@+id/TV_Reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginBottom="29dp"
             android:text="Reminder"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/button_Notification_DG"

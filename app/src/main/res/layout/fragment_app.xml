@@ -19,7 +19,6 @@
             android:layout_marginStart="93dp"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
-            android:layout_marginBottom="421dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="       Feedback"
             android:textAlignment="textStart"
@@ -32,26 +31,10 @@
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_App_SP2" />
-
-        <Button
-            android:id="@+id/button_App_SP2"
-            android:layout_width="224dp"
-            android:layout_height="54dp"
-            android:layout_marginTop="83dp"
-            android:backgroundTint="#F8E9E9"
-            android:text="           App"
-            android:textAlignment="textStart"
-            android:textColor="#020000"
-            android:textColorLink="#BC8787"
-            app:icon="@drawable/ic_launcher_foreground"
-            app:iconGravity="textStart"
-            app:iconSize="30dp"
-            app:iconTint="#0F0101"
-            app:iconTintMode="multiply"
-            app:layout_constraintTop_toBottomOf="@+id/TV_app"
-            tools:layout_editor_absoluteX="93dp" />
+            app:layout_constraintTop_toBottomOf="@+id/button_App_AppVersion"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/button_App_AppVersion"
@@ -60,7 +43,6 @@
             android:layout_marginStart="93dp"
             android:layout_marginTop="83dp"
             android:layout_marginEnd="94dp"
-            android:layout_marginBottom="28dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="      AppVersion"
             android:textAlignment="textStart"
@@ -71,16 +53,20 @@
             app:iconSize="30dp"
             app:iconTint="@color/iconTintPrimary"
             app:iconTintMode="multiply"
-            app:layout_constraintBottom_toTopOf="@+id/button_App_Feedback"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TV_app" />
+            app:layout_constraintTop_toBottomOf="@+id/TV_app"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/TV_app"
             android:layout_width="130dp"
             android:layout_height="59dp"
+            android:layout_marginStart="93dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="94dp"
             android:text="App"
             android:textColor="@color/textColorPrimary"
             android:textSize="34sp"
