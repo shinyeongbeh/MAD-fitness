@@ -8,7 +8,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        android:backgroundTint="@color/backgroundColor">
 
         <Button
             android:id="@+id/button_Account_Friends"
@@ -18,7 +20,7 @@
             android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
             android:layout_marginBottom="338dp"
-            android:backgroundTint="#F8E9E9"
+            android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="      Friends"
             android:textAlignment="textStart"
             android:textColor="#020000"
@@ -26,7 +28,7 @@
             app:icon="@drawable/ic_launcher_foreground"
             app:iconGravity="textStart"
             app:iconSize="30dp"
-            app:iconTint="#0F0101"
+            app:iconTint="@color/iconTintPrimary"
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +43,7 @@
             android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
             android:layout_marginBottom="421dp"
-            android:backgroundTint="#F8E9E9"
+            android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="       Storage"
             android:textAlignment="textStart"
             android:textColor="#020000"
@@ -49,7 +51,7 @@
             app:icon="@drawable/ic_launcher_foreground"
             app:iconGravity="textStart"
             app:iconSize="30dp"
-            app:iconTint="#0F0101"
+            app:iconTint="@color/iconTintPrimary"
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +66,7 @@
             android:layout_marginTop="83dp"
             android:layout_marginEnd="94dp"
             android:layout_marginBottom="28dp"
-            android:backgroundTint="#F8E9E9"
+            android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="      Profile"
             android:textAlignment="textStart"
             android:textColor="#020000"
@@ -72,7 +74,7 @@
             app:icon="@drawable/ic_launcher_foreground"
             app:iconGravity="textStart"
             app:iconSize="30dp"
-            app:iconTint="#0F0101"
+            app:iconTint="@color/iconTintPrimary"
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toTopOf="@+id/button_Accouny_Storage"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,10 +83,11 @@
 
         <TextView
             android:id="@+id/TV_Account"
-            android:layout_width="130dp"
-            android:layout_height="59dp"
+            android:layout_width="151dp"
+            android:layout_height="58dp"
             android:layout_marginTop="32dp"
             android:text="Account"
+            android:textColor="@color/textColorPrimary"
             android:textSize="34sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
