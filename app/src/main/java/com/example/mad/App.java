@@ -2,11 +2,15 @@ package com.example.mad;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,4 +65,29 @@ public class App extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_app, container, false);
     }
+
+    //rating bar function
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // 1. Find the RatingBar using the fragment's view
+        RatingBar ratingBar = view.findViewById(R.id.ratingBar);
+
+
+        // 2. Set a listener to detect when the rating changes
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                // 3. Check if the change was made by the user
+
+
+                if (fromUser) {
+                    // 4. Show a "Thank you" message using a Toast
+                    Toast.makeText(getContext(), "Thank you for your rating!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 }

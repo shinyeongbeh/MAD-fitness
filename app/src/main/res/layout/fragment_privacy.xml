@@ -16,7 +16,6 @@
             android:layout_width="224dp"
             android:layout_height="54dp"
             android:layout_marginStart="93dp"
-            android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
             android:layout_marginBottom="411dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
@@ -31,6 +30,7 @@
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_Privacy_ARP" />
 
@@ -67,5 +67,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="10dp"
+            android:layout_height="30dp"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="183dp"
+            tools:layout_editor_absoluteY="239dp"></LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
