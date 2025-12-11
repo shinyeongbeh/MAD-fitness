@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- 方案2：创建父子主题关系 -->
 
-    <style name="Theme.MADGroupProject" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- 基础主题 -->
+    <style name="Base.Theme.MADGroupProject" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- 基础样式 -->
+    </style>
+
+    <!-- 衍生主题1：MAD主题（带字体） -->
+    <style name="Theme.MAD" parent="Base.Theme.MADGroupProject">
+        <item name="android:fontFamily">@font/coiny</item>
+    </style>
+
+    <!-- 衍生主题2：Material Light主题 -->
+    <style name="Theme.MADGroupProject" parent="Base.Theme.MADGroupProject">
+        <!-- 可以添加其他自定义 -->
+    </style>
 </resources>

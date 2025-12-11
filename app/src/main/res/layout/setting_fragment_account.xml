@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fitness.settingpage.Account">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        android:backgroundTint="@color/backgroundColor">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="193dp"
+            android:layout_height="189dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="108dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_Account_Profile"
+            app:layout_constraintVertical_bias="0.0">
+
+            <LinearLayout
+                android:layout_width="195dp"
+                android:layout_height="44dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/user"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/puppiescouk_053399600_1663317083_2412" />
+
+                <TextView
+                    android:id="@+id/Username"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Username : Puppy"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/Email"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="Email : puppy@gmail.com"
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="Phone No. : +6011234589"
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/Birthday"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:text="Birthday : 10/10/2005"
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_Account_Friends"
+            android:layout_width="224dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="93dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="94dp"
+            android:backgroundTint="@color/buttonBackgroundColorTint"
+            android:text="      Friends"
+            android:textAlignment="textStart"
+            android:textColor="#020000"
+            android:textColorLink="#BC8787"
+            app:icon="@drawable/ic_launcher_foreground"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="@color/iconTintPrimary"
+            app:iconTintMode="multiply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_Accouny_Storage"
+            app:layout_constraintVertical_bias="0.125" />
+
+        <Button
+            android:id="@+id/button_Accouny_Storage"
+            android:layout_width="224dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="93dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="94dp"
+            android:backgroundTint="@color/buttonBackgroundColorTint"
+            android:text="       Storage"
+            android:textAlignment="textStart"
+            android:textColor="#020000"
+            android:textColorLink="#BC8787"
+            app:icon="@drawable/ic_launcher_foreground"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="@color/iconTintPrimary"
+            app:iconTintMode="multiply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="0.004" />
+
+        <Button
+            android:id="@+id/button_Account_Profile"
+            android:layout_width="224dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="93dp"
+            android:layout_marginTop="83dp"
+            android:layout_marginEnd="94dp"
+            android:backgroundTint="@color/buttonBackgroundColorTint"
+            android:text="      Profile"
+            android:textAlignment="textStart"
+            android:textColor="#020000"
+            android:textColorLink="#BC8787"
+            app:icon="@drawable/ic_launcher_foreground"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="@color/iconTintPrimary"
+            app:iconTintMode="multiply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <LinearLayout
+            android:layout_width="193dp"
+            android:layout_height="155dp"
+            android:layout_marginStart="108dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="110dp"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_Account_Friends">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/user2"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/puppiescouk_053399600_1663317083_2412"
+                    tools:src="@drawable/pngtree_a_brown_and_white_dog_is_sitting_on_the_stairs_smiling_image_13136039" />
+
+                <TextView
+                    android:id="@+id/username2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Username : Corgi"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/user3"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/puppiescouk_053399600_1663317083_2412"
+                    tools:src="@drawable/husky" />
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Username : Woof"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/storage2"
+                android:layout_width="193dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Invite Your Friend "
+                android:textAlignment="center"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/storage"
+            android:layout_width="193dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="108dp"
+            android:layout_marginBottom="10dp"
+            android:text="Used : 12MB"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/button_Account_Friends"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_Accouny_Storage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

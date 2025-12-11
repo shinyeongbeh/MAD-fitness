@@ -14,10 +14,12 @@ import com.example.madgroupproject.fitness.streakpage.StreakActivity;
 import com.example.madgroupproject.fitness.goalpage.GoalActivity;
 import com.example.madgroupproject.fitness.statspage.StatsActivity;
 import com.example.madgroupproject.fitness.gamelevelspage.MainActivity;
+import com.example.madgroupproject.fitness.settingpage.SettingMainActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
     private LinearLayout navHome, navStreak, navFlag, navStats, navMore;
+    private ImageView btnSettings;  // 设置按钮
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,19 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_home);
+
+        // 初始化设置按钮
+        btnSettings = findViewById(R.id.btnSettings);
+
+        // 设置按钮点击事件
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 跳转到设置页面
+                Intent intent = new Intent(HomeActivity.this, SettingMainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // 设置底部导航栏点击事件
         setupBottomNavigation();
@@ -67,6 +82,11 @@ public class HomeActivity extends AppCompatActivity {
 
         navMore.setOnClickListener(v -> {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
+
+        navMore.setOnClickListener(v -> {
+            startActivity(new Intent(this, SettingMainActivity.class));
             finish();
         });
     }

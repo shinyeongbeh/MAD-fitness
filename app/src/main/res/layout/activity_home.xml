@@ -6,32 +6,60 @@
     android:orientation="vertical"
     android:background="#D6DAC8">
 
-    <LinearLayout
+    <!-- 可滚动的内容区域 -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="24dp">
+        android:layout_weight="1">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Home Page"
-            android:textColor="#000000"
-            android:textSize="48sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/coiny" />
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Coming Soon..."
-            android:textColor="#666666"
-            android:textSize="24sp"
-            android:fontFamily="@font/coiny"
-            android:layout_marginTop="16dp" />
-    </LinearLayout>
+            <!-- 顶部标题栏 with 设置图标 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home Page"
+                    android:textColor="#000000"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/coiny"
+                    android:layout_centerInParent="true" />
+
+                <!-- 设置图标按钮 -->
+                <ImageView
+                    android:id="@+id/btnSettings"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_settings"
+                    android:padding="8dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="#000000" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Coming Soon..."
+                android:textColor="#666666"
+                android:textSize="24sp"
+                android:fontFamily="@font/coiny"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+    </ScrollView>
 
     <!-- Include Bottom Navigation -->
     <include layout="@layout/layout_bottom_navigation" />

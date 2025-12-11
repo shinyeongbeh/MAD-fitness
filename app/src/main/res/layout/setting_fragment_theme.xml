@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fitness.settingpage.Theme">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor">
+
+        <Button
+            android:id="@+id/button_Theme_NM"
+            android:layout_width="224dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="93dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="94dp"
+            android:layout_marginBottom="411dp"
+            android:backgroundTint="@color/buttonBackgroundColorTint"
+            android:text="       Dark Mode"
+            android:textAlignment="textStart"
+            android:textColor="#020000"
+            android:textColorLink="#BC8787"
+            app:icon="@drawable/ic_launcher_foreground"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="@color/iconTintPrimary"
+            app:iconTintMode="multiply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_Theme_LM" />
+
+        <Button
+            android:id="@+id/button_Theme_LM"
+            android:layout_width="224dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="93dp"
+            android:layout_marginTop="83dp"
+            android:layout_marginEnd="94dp"
+            android:backgroundTint="@color/buttonBackgroundColorTint"
+            android:text="      Light Mode"
+            android:textAlignment="textStart"
+            android:textColor="#020000"
+            android:textColorLink="#BC8787"
+            app:icon="@drawable/ic_launcher_foreground"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="@color/iconTintPrimary"
+            app:iconTintMode="multiply"
+            app:layout_constraintBottom_toTopOf="@+id/button_Theme_NM"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TV_Theme" />
+
+        <TextView
+            android:id="@+id/TV_Theme"
+            android:layout_width="214dp"
+            android:layout_height="68dp"
+            android:layout_marginTop="32dp"
+            android:text="   Theme"
+            android:textColor="@color/black"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
