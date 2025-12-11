@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/item_goal.xml -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#E8E8E8"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    android:layout_marginBottom="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Icon Background -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:cardBackgroundColor="#DCEFC5"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/goalIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_exercise"
+                app:tint="#000000"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Goal Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/goalName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Walk the dog"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/goalLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Label: Exercise"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:fontFamily="@font/coiny"/>
+        </LinearLayout>
+
+        <!-- Toggle Switch -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/goalSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            app:thumbTint="#FFFFFF"
+            app:trackTint="@color/switch_track_color"/>
+
+    </LinearLayout>
+
+    <!-- Green Border (when completed) -->
+    <View
+        android:id="@+id/goalBorder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/border_goal_completed"
+        android:visibility="gone"/>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.madgroupproject">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Fitness Tracker"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- Home Activity (启动页面) -->
+        <activity
+            android:name=".fitness.homepage.HomeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Streak Activity -->
+        <activity
+            android:name=".fitness.streakpage.StreakActivity"
+            android:exported="false" />
+
+        <!-- Goal Activity -->
+        <activity
+            android:name=".fitness.goalpage.GoalActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".fitness.goalpage.CreateGoalActivity"
+            android:exported="false" />
+
+        <!-- Stats Activity -->
+        <activity
+            android:name=".fitness.statspage.StatsActivity"
+            android:exported="false" />
+
+        <!-- Game Level MainActivity -->
+        <activity
+            android:name=".fitness.gamelevelspage.MainActivity"
+            android:exported="false" />
+
+        <!-- Game Level Detail Activity -->
+        <activity
+            android:name=".fitness.gamelevelspage.LevelDetailActivity"
+            android:exported="false" />
+
+        <!-- Change Goal Activity -->
+        <activity
+            android:name=".fitness.streakpage.ChangeGoalActivity"
+            android:exported="false"
+            android:parentActivityName=".fitness.streakpage.StreakActivity" />
+
+        <!-- Day Detail Activity -->
+        <activity
+            android:name=".fitness.streakpage.DayDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".fitness.streakpage.StreakActivity" />
+
+        <!-- Best Streak Detail Activity -->
+        <activity
+            android:name=".fitness.streakpage.BestStreakDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".fitness.streakpage.StreakActivity" />
+    </application>
+
+</manifest>

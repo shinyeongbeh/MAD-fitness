@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#D6DAC8">
+
+    <!-- 可滚动的内容区域 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Page Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Streak Page"
+                android:textColor="#999999"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Current Streak Title -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CURRENT STREAK:4 DAYS"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Today Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#DCEFC5"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/streak_ic_link"
+                            android:layout_marginEnd="8dp"
+                            app:tint="#000000" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Today: Feb 9"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/coiny"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/streak_ic_check"
+                            android:layout_marginEnd="8dp"
+                            app:tint="#999999" />
+
+                        <TextView
+                            android:id="@+id/tvStepsProgress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Steps: 760/1000"
+                            android:textColor="#999999"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/coiny"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Calendar Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="February"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:fontFamily="@font/coiny"
+                        android:layout_marginBottom="12dp"/>
+
+                    <!-- Calendar Header -->
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="7"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView style="@style/CalendarHeaderText" android:text="S"/>
+                        <TextView style="@style/CalendarHeaderText" android:text="M"/>
+                        <TextView style="@style/CalendarHeaderText" android:text="T"/>
+                        <TextView style="@style/CalendarHeaderText" android:text="W"/>
+                        <TextView style="@style/CalendarHeaderText" android:text="T"/>
+                        <TextView style="@style/CalendarHeaderText" android:text="F"/>
+                        <TextView style="@style/CalendarHeaderText" android:text="S"/>
+                    </GridLayout>
+
+                    <!-- Calendar Days -->
+                    <GridLayout
+                        android:id="@+id/calendarGrid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="7"
+                        android:rowCount="5">
+                    </GridLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Best Streak Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/bestStreakCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#DCEFC5"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/streak_ic_check_circle"
+                        android:layout_marginEnd="16dp"
+                        app:tint="#4CAF50" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Best Streak"
+                            android:textColor="#000000"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/coiny"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jan 1 - 30"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/coiny"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="30 days"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/coiny"/>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/streak_ic_trophy"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Change Streak Goal Button -->
+            <Button
+                android:id="@+id/btnChangeGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Change Streak Goal"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny"
+                android:backgroundTint="#4CAF50"
+                android:padding="16dp"
+                android:textAllCaps="false"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Include Bottom Navigation -->
+    <include layout="@layout/layout_bottom_navigation" />
+</LinearLayout>

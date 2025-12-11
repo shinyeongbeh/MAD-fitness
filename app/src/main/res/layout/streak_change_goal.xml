@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#D6DAC8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Page Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Streak History Page"
+            android:textColor="#999999"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change streak goal"
+            android:textColor="#000000"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/coiny"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Current Streak Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#DCEFC5"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Current Streak:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1000 steps daily"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:fontFamily="@font/coiny"/>
+        </LinearLayout>
+
+        <!-- New Streak Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#DCEFC5"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Streak:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/etNewGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Input"
+                android:textColorHint="#666666"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:fontFamily="@font/coiny"
+                android:padding="16dp"
+                android:background="#9CB1AA"
+                android:inputType="number"/>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!-- Change Button -->
+        <Button
+            android:id="@+id/btnChange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="change"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/coiny"
+            android:backgroundTint="#4CAF50"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:textAllCaps="false"/>
+
+        <!-- Cancel Button -->
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/coiny"
+            android:backgroundTint="#4CAF50"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:textAllCaps="false"/>
+
+        <!-- Warning Message -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(! you can only reset goals after 7 days of your last goal set)"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:fontFamily="@font/coiny"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- Include Bottom Navigation -->
+    <include layout="@layout/layout_bottom_navigation" />
+</LinearLayout>

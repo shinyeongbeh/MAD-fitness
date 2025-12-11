@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#D6DAC8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvDayTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Feb 2"
+            android:textColor="#000000"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/coiny"
+            android:gravity="center"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="48dp" />
+
+        <!-- Details Card -->
+        <androidx.cardview.widget.CardView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="#DCEFC5"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Daily Progress"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/coiny"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Steps: 0/1000"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/coiny"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Status: Not Completed"
+                    android:textColor="#D32F2F"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/coiny" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/coiny"
+            android:backgroundTint="#4CAF50"
+            android:padding="16dp"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+    <!-- Include Bottom Navigation -->
+    <include layout="@layout/layout_bottom_navigation" />
+</LinearLayout>
