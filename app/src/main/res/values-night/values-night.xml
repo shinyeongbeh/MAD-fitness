@@ -1,0 +1,38 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme (Dark Mode) -->
+    <style name="Base.Theme.MAD" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- 全局字体设置为 Coiny -->
+        <item name="android:fontFamily">@font/coiny</item>
+
+        <!-- Material3 深色模式颜色属性 -->
+        <item name="colorPrimary">#81C784</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorPrimaryContainer">#1B5E20</item>
+        <item name="colorOnPrimaryContainer">#FFFFFF</item>
+
+        <!-- 背景色（深色） -->
+        <item name="android:windowBackground">#1E1E1E</item>
+        <item name="colorSurface">#1E1E1E</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+
+        <!-- 状态栏颜色（深色） -->
+        <item name="android:statusBarColor">#121212</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- 导航栏颜色（深色） -->
+        <item name="android:navigationBarColor">#1E1E1E</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+
+        <!-- 文字颜色（深色模式用浅色文字） -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#B0B0B0</item>
+    </style>
+
+    <!-- Main application theme -->
+    <style name="Theme.MAD" parent="Base.Theme.MAD" />
+
+    <!-- AppTheme for dark mode -->
+    <style name="AppTheme" parent="Base.Theme.MAD" />
+
+</resources>

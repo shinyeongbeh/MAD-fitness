@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <!-- Goals Page 颜色 -->
-    <color name="background_green">#D6DAC8</color>
-    <color name="text_black">#000000</color>
-    <color name="dark_green">#9CB1AA</color>
-    <color name="light_green">#DCEFC5</color>
-    <color name="button_green">#4CAF50</color>
+    <!-- Navigation colors -->
+    <color name="nav_selected">#4CAF50</color>      <!-- 选中状态：绿色 -->
+    <color name="nav_unselected">#666666</color>    <!-- 未选中状态：灰色 -->
 
-    <!-- 底部导航颜色 -->
-    <color name="nav_selected">#4CAF50</color>
-    <color name="nav_unselected">#666666</color>
+    <!-- Main colors -->
+    <color name="background">#D6DAC8</color>        <!-- 主背景色 -->
+    <color name="backgroundColor">#D6DAC8</color>   <!-- 添加这个！与 background 相同 -->
+    <color name="button_bg">#D6DAC8</color>         <!-- 按钮背景 -->
+    <color name="card_bg">#DCEFC5</color>           <!-- 卡片背景 -->
+    <color name="backgroundColorTint">#D6DAC8</color> <!-- 如果需要的话也添加这个 -->
 
-    <color name="backgroundColor">#D6DAC8</color>
-    <color name="buttonBackgroundColorTint">#9CB1AA</color>
-    <color name="textColorPrimary">#000000</color>
-    <color name="iconTintPrimary">#DCEFC5</color>
+    <!-- Primary colors -->
+    <color name="primary">#4CAF50</color>           <!-- 主色：绿色 -->
+    <color name="primary_dark">#388E3C</color>      <!-- 深绿色 -->
+    <color name="accent">#DCEFC5</color>            <!-- 强调色 -->
+
+    <!-- Text colors -->
+    <color name="text_primary">#000000</color>      <!-- 主要文字：黑色 -->
+    <color name="text_secondary">#666666</color>    <!-- 次要文字：灰色 -->
+    <color name="text_hint">#999999</color>         <!-- 提示文字 -->
+
+    <!-- Switch colors -->
+    <color name="switch_track_color">#4CAF50</color>
+
+    <!-- Additional colors needed by layouts -->
+    <color name="buttonBackgroundColorTint">#DCEFC5</color> <!-- 按钮背景色调 -->
+    <color name="iconTintPrimary">#4CAF50</color>          <!-- 图标主色调 -->
+    <color name="textColorPrimary">#000000</color>          <!-- 主要文字颜色 -->
+
+    <!-- System colors (常用的黑白色) -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

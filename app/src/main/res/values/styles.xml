@@ -13,12 +13,7 @@
         <item name="android:fontFamily">@font/coiny</item>
     </style>
 
-    <!-- Base Application Theme - 去掉 ActionBar -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#4CAF50</item>
-        <item name="colorPrimaryDark">#388E3C</item>
-        <item name="colorAccent">#DCEFC5</item>
-        <item name="android:windowBackground">#D6DAC8</item>
-        <item name="android:statusBarColor">#D6DAC8</item>
-    </style>
+    <!-- 注意：这里已经没有 AppTheme 了！ -->
+    <!-- 可以添加其他组件样式，但不要定义主题 -->
+
 </resources>
