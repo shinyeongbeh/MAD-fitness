@@ -178,7 +178,13 @@
                 android:fontFamily="@font/coiny"
                 android:backgroundTint="#4CAF50"
                 android:padding="16dp"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- 底部空白区域，确保内容不被导航栏遮挡 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"/>
         </LinearLayout>
     </ScrollView>
 

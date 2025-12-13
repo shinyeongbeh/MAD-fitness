@@ -3,15 +3,10 @@ package com.example.madgroupproject.fitness.gamelevelspage;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.ImageViewCompat;
 
 import com.example.madgroupproject.R;
@@ -22,16 +17,17 @@ import com.example.madgroupproject.fitness.statspage.StatsActivity;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout navHome, navStreak, navFlag, navStats, navMore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+
+        // 隐藏标题栏
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         setContentView(R.layout.activity_game_level_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         // 设置底部导航栏
         setupBottomNavigation();
@@ -45,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         navStats = findViewById(R.id.navStats);
         navMore = findViewById(R.id.navMore);
 
-        // 2. 高亮当前页面（Streak）
+        // 2. 高亮当前页面（Game Level / More）
         highlightNavItem(navMore);
 
         // 3. 设置点击监听
@@ -55,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navStreak.setOnClickListener(v -> {
-            // 已经在连续记录页面
+            startActivity(new Intent(this, StreakActivity.class));
+            finish();
         });
 
         navFlag.setOnClickListener(v -> {
@@ -69,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            // 已经在当前页面
         });
     }
 

@@ -1,6 +1,7 @@
 package com.example.madgroupproject.fitness.goalpage;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
@@ -18,10 +19,11 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 
-
 import com.example.madgroupproject.R;
-
-import java.util.Calendar;
+import com.example.madgroupproject.fitness.homepage.HomeActivity;
+import com.example.madgroupproject.fitness.statspage.StatsActivity;
+import com.example.madgroupproject.fitness.streakpage.StreakActivity;
+import com.example.madgroupproject.fitness.gamelevelspage.MainActivity;
 
 public class CreateGoalActivity extends AppCompatActivity {
 
@@ -42,6 +44,12 @@ public class CreateGoalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 隐藏标题栏
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         setContentView(R.layout.activity_create_goal);
 
         initViews();
@@ -71,11 +79,31 @@ public class CreateGoalActivity extends AppCompatActivity {
         // 高亮当前页面（Goals）
         highlightNavItem(navFlag);
 
-        navHome.setOnClickListener(v -> finish());
-        navStreak.setOnClickListener(v -> finish());
-        navFlag.setOnClickListener(v -> finish());
-        navStats.setOnClickListener(v -> finish());
-        navMore.setOnClickListener(v -> finish());
+        // 设置点击监听 - 跳转到对应页面
+        navHome.setOnClickListener(v -> {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        });
+
+        navStreak.setOnClickListener(v -> {
+            startActivity(new Intent(this, StreakActivity.class));
+            finish();
+        });
+
+        navFlag.setOnClickListener(v -> {
+            startActivity(new Intent(this, GoalActivity.class));
+            finish();
+        });
+
+        navStats.setOnClickListener(v -> {
+            startActivity(new Intent(this, StatsActivity.class));
+            finish();
+        });
+
+        navMore.setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
     }
 
     private void highlightNavItem(LinearLayout selectedItem) {
@@ -121,6 +149,9 @@ public class CreateGoalActivity extends AppCompatActivity {
             etGoalName.setText(goalName);
             setSpinnerValue(goalLabel);
             btnDeleteGoal.setVisibility(View.VISIBLE);
+        } else {
+            // 新建模式下隐藏删除按钮
+            btnDeleteGoal.setVisibility(View.GONE);
         }
 
         // 检查是否是从 Suggested Goals 点击

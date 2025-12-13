@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -29,7 +30,7 @@
                 android:fontFamily="@font/coiny"
                 android:gravity="center"
                 android:layout_marginTop="32dp"
-                android:layout_marginBottom="32dp"/>
+                android:layout_marginBottom="24dp"/>
 
             <!-- Goal Name Label -->
             <TextView
@@ -37,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="Goal Name"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
                 android:layout_marginBottom="12dp"/>
@@ -47,12 +48,11 @@
                 android:id="@+id/etGoalName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="e.g: Daily 10k Steps"
-                android:textColorHint="#999999"
+                android:hint="Enter goal name"
                 android:textColor="#000000"
                 android:textSize="18sp"
                 android:fontFamily="@font/coiny"
-                android:background="@drawable/bg_edit_text"
+                android:background="@android:color/white"
                 android:padding="16dp"
                 android:layout_marginBottom="24dp"/>
 
@@ -62,67 +62,60 @@
                 android:layout_height="wrap_content"
                 android:text="Label"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Label Selection -->
+            <!-- Label Spinner -->
             <Spinner
                 android:id="@+id/spinnerLabel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_spinner"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
                 android:padding="16dp"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- Set Reminder Label -->
+            <!-- Set Reminder -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Set Reminder"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Time Picker Card -->
-            <androidx.cardview.widget.CardView
+            <!-- Time Picker -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="#9CB1AA"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                android:layout_marginBottom="32dp">
+                android:orientation="horizontal"
+                android:background="#9CB1AA"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="24dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvReminderTime"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
+                    android:layout_weight="1"
+                    android:text="18:30"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/coiny"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
-                    <TextView
-                        android:id="@+id/tvReminderTime"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="18:30"
-                        android:textColor="#000000"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/coiny"/>
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/switchReminder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="@color/switch_track_color"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"/>
+            </LinearLayout>
 
             <!-- Save Goal Button -->
             <Button
@@ -135,7 +128,7 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
                 android:backgroundTint="#4CAF50"
-                android:padding="20dp"
+                android:padding="16dp"
                 android:textAllCaps="false"
                 android:layout_marginBottom="16dp"/>
 
@@ -150,9 +143,8 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
                 android:backgroundTint="#4CAF50"
-                android:padding="20dp"
+                android:padding="16dp"
                 android:textAllCaps="false"
-                android:visibility="gone"
                 android:layout_marginBottom="16dp"/>
 
             <!-- Back Button -->
@@ -166,12 +158,18 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
                 android:backgroundTint="#4CAF50"
-                android:padding="20dp"
-                android:textAllCaps="false"/>
+                android:padding="16dp"
+                android:textAllCaps="false"
+                android:layout_marginBottom="24dp"/>
 
+            <!-- 底部空白区域，确保内容不被导航栏遮挡 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"/>
         </LinearLayout>
     </ScrollView>
 
-    <!-- Include Bottom Navigation -->
+    <!-- Fixed Bottom Navigation -->
     <include layout="@layout/layout_bottom_navigation" />
+
 </LinearLayout>

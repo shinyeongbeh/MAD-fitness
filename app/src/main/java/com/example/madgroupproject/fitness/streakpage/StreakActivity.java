@@ -24,9 +24,9 @@ import com.example.madgroupproject.fitness.gamelevelspage.MainActivity;
 public class StreakActivity extends AppCompatActivity {
 
     private GridLayout calendarGrid;
-    private Button btnChangeGoal;
-    private CardView bestStreakCard;
-    private TextView tvStepsProgress;
+    private Button btnChangeStreakGoal;
+    private CardView cardBestStreak;
+    private TextView tvTodaySteps;
     private LinearLayout navHome, navStreak, navFlag, navStats, navMore;
 
     // 记录哪些日期已完成目标（5-8号为绿色）
@@ -38,17 +38,15 @@ public class StreakActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 隐藏标题栏（如果有的话）
+        // 隐藏标题栏
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
         setContentView(R.layout.streak_main_activity);
 
-        calendarGrid = findViewById(R.id.calendarGrid);
-        btnChangeGoal = findViewById(R.id.btnChangeGoal);
-        bestStreakCard = findViewById(R.id.bestStreakCard);
-        tvStepsProgress = findViewById(R.id.tvStepsProgress);
+        // 初始化视图
+        initViews();
 
         // 设置完成的日期（5-8号）
         for (int i = 5; i <= 8; i++) {
@@ -58,11 +56,26 @@ public class StreakActivity extends AppCompatActivity {
         // 初始化日历
         initializeCalendar();
 
-        // 设置底部导航栏点击事件
+        // 更新步数显示
+        updateStepsProgress();
+
+        // 设置底部导航栏
         setupBottomNavigation();
 
-        // 设置"Change Streak Goal"按钮点击事件
-        btnChangeGoal.setOnClickListener(new View.OnClickListener() {
+        // 设置点击事件
+        setupClickListeners();
+    }
+
+    private void initViews() {
+        calendarGrid = findViewById(R.id.calendarGrid);
+        btnChangeStreakGoal = findViewById(R.id.btnChangeStreakGoal);
+        cardBestStreak = findViewById(R.id.cardBestStreak);
+        tvTodaySteps = findViewById(R.id.tvTodaySteps);
+    }
+
+    private void setupClickListeners() {
+        // "Change Streak Goal" 按钮
+        btnChangeStreakGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StreakActivity.this, ChangeGoalActivity.class);
@@ -71,8 +84,8 @@ public class StreakActivity extends AppCompatActivity {
             }
         });
 
-        // 设置"Best Streak"卡片点击事件
-        bestStreakCard.setOnClickListener(new View.OnClickListener() {
+        // "Best Streak" 卡片
+        cardBestStreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StreakActivity.this, BestStreakDetailActivity.class);
@@ -83,23 +96,27 @@ public class StreakActivity extends AppCompatActivity {
 
     private void initializeCalendar() {
         // February 2025 starts on Saturday (day 6)
-        // Add empty cells for days before the 1st
         int startDay = 6; // Saturday
+        int daysInMonth = 28; // February 2025
 
+        // 清空现有的日历内容（保留星期标题）
+        // 假设 GridLayout 已经包含了 7 个星期标题（S M T W T F S）
+        // 我们从第 8 个位置开始添加日期
+
+        // Add empty cells for days before the 1st
         for (int i = 0; i < startDay; i++) {
             TextView emptyView = new TextView(this);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0;
             params.height = GridLayout.LayoutParams.WRAP_CONTENT;
             params.columnSpec = GridLayout.spec(i, 1f);
-            params.rowSpec = GridLayout.spec(0);
+            params.rowSpec = GridLayout.spec(1); // 第二行开始（第一行是星期标题）
             emptyView.setLayoutParams(params);
             calendarGrid.addView(emptyView);
         }
 
         // Add calendar days
-        int daysInMonth = 28; // February 2025
-        int currentRow = 0;
+        int currentRow = 1; // 从第二行开始
         int currentCol = startDay;
 
         for (int day = 1; day <= daysInMonth; day++) {
@@ -133,29 +150,31 @@ public class StreakActivity extends AppCompatActivity {
 
         // 设置背景颜色
         if (completedDays[day - 1]) {
-            // 已完成的日期显示为深绿色
-            dayView.setBackground(getResources().getDrawable(R.drawable.streak_calendar_day_completed));
+            // 已完成的日期显示为绿色圆角背景
+            dayView.setBackgroundResource(R.drawable.streak_calendar_day_completed);
             dayView.setTextColor(Color.WHITE);
+        } else if (day == 1) {
+            // 今天（第1天）显示为灰色圆角背景
+            dayView.setBackgroundResource(R.drawable.streak_calendar_day_normal);
+            dayView.setTextColor(Color.BLACK);
         } else {
-            // 其他日期显示为灰色背景
-            dayView.setBackground(getResources().getDrawable(R.drawable.streak_calendar_day_inactive));
+            // 其他日期显示为浅色背景
+            dayView.setBackgroundResource(R.drawable.streak_calendar_day_inactive);
             dayView.setTextColor(Color.BLACK);
         }
 
-        // 设置点击事件（仅对第2天）
-        if (day == 2) {
-            dayView.setClickable(true);
-            dayView.setFocusable(true);
-            dayView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(StreakActivity.this, DayDetailActivity.class);
-                    intent.putExtra("day", day);
-                    intent.putExtra("month", "Feb");
-                    startActivity(intent);
-                }
-            });
-        }
+        // 设置点击事件（可点击所有日期查看详情）
+        dayView.setClickable(true);
+        dayView.setFocusable(true);
+        dayView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StreakActivity.this, DayDetailActivity.class);
+                intent.putExtra("day", day);
+                intent.putExtra("month", "Feb");
+                startActivity(intent);
+            }
+        });
 
         return dayView;
     }
@@ -170,21 +189,22 @@ public class StreakActivity extends AppCompatActivity {
     }
 
     private void updateStepsProgress() {
-        tvStepsProgress.setText("Steps: " + currentSteps + "/" + currentGoal);
+        // 使用反斜杠显示步数进度
+        tvTodaySteps.setText("Steps: " + currentSteps + "\\" + currentGoal);
     }
 
     private void setupBottomNavigation() {
-        // 1. 获取所有导航项
+        // 获取所有导航项
         navHome = findViewById(R.id.navHome);
         navStreak = findViewById(R.id.navStreak);
         navFlag = findViewById(R.id.navFlag);
         navStats = findViewById(R.id.navStats);
         navMore = findViewById(R.id.navMore);
 
-        // 2. 高亮当前页面（Streak）
+        // 高亮当前页面（Streak）
         highlightNavItem(navStreak);
 
-        // 3. 设置点击监听
+        // 设置点击监听
         navHome.setOnClickListener(v -> {
             startActivity(new Intent(this, HomeActivity.class));
             finish();
@@ -210,12 +230,8 @@ public class StreakActivity extends AppCompatActivity {
         });
     }
 
-    // 高亮选中的导航项
     private void highlightNavItem(LinearLayout selectedItem) {
-        // 先重置所有导航项为灰色
         resetNavItems();
-
-        // 将选中项的图标设置为绿色
         ImageView imageView = (ImageView) selectedItem.getChildAt(0);
         ImageViewCompat.setImageTintList(
                 imageView,
@@ -223,7 +239,6 @@ public class StreakActivity extends AppCompatActivity {
         );
     }
 
-    // 重置所有导航项为灰色
     private void resetNavItems() {
         LinearLayout[] navItems = {navHome, navStreak, navFlag, navStats, navMore};
         ColorStateList grayColor = ColorStateList.valueOf(

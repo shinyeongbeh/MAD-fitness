@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -21,7 +22,8 @@ import com.example.madgroupproject.fitness.statspage.StatsActivity;
 
 public class ChangeGoalActivity extends AppCompatActivity {
 
-    private EditText etNewGoal;
+    private TextView tvCurrentStreak;
+    private EditText etNewStreak;
     private Button btnChange;
     private Button btnCancel;
     private int currentGoal;
@@ -31,20 +33,43 @@ public class ChangeGoalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 隐藏标题栏
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         setContentView(R.layout.streak_change_goal);
 
-        etNewGoal = findViewById(R.id.etNewGoal);
-        btnChange = findViewById(R.id.btnChange);
-        btnCancel = findViewById(R.id.btnCancel);
+        // 初始化视图
+        initViews();
 
         // 获取当前目标
         currentGoal = getIntent().getIntExtra("currentGoal", 1000);
 
+        // 显示当前目标
+        tvCurrentStreak.setText(currentGoal + " steps daily");
+
+        // 设置点击事件
+        setupClickListeners();
+
+        // 设置底部导航
+        setupBottomNavigation();
+    }
+
+    private void initViews() {
+        tvCurrentStreak = findViewById(R.id.tvCurrentStreak);
+        etNewStreak = findViewById(R.id.etNewStreak);
+        btnChange = findViewById(R.id.btnChange);
+        btnCancel = findViewById(R.id.btnCancel);
+    }
+
+    private void setupClickListeners() {
         // 设置Change按钮点击事件
         btnChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String newGoalText = etNewGoal.getText().toString().trim();
+                String newGoalText = etNewStreak.getText().toString().trim();
 
                 if (newGoalText.isEmpty()) {
                     Toast.makeText(ChangeGoalActivity.this,
@@ -65,7 +90,7 @@ public class ChangeGoalActivity extends AppCompatActivity {
                             "Goal changed to " + newGoal + " steps daily",
                             Toast.LENGTH_SHORT).show();
 
-                    // 返回结果给MainActivity
+                    // 返回结果给StreakActivity
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("newGoal", newGoal);
                     setResult(RESULT_OK, resultIntent);
@@ -84,7 +109,6 @@ public class ChangeGoalActivity extends AppCompatActivity {
                 finish(); // 返回上一个界面
             }
         });
-        setupBottomNavigation();
     }
 
     private void setupBottomNavigation() {
@@ -94,14 +118,34 @@ public class ChangeGoalActivity extends AppCompatActivity {
         navStats = findViewById(R.id.navStats);
         navMore = findViewById(R.id.navMore);
 
-        // 高亮当前页面（Goals）
+        // 高亮当前页面（Streak）
         highlightNavItem(navStreak);
 
-        navHome.setOnClickListener(v -> finish());
-        navStreak.setOnClickListener(v -> finish());
-        navFlag.setOnClickListener(v -> finish());
-        navStats.setOnClickListener(v -> finish());
-        navMore.setOnClickListener(v -> finish());
+        // 设置点击监听 - 跳转到对应页面
+        navHome.setOnClickListener(v -> {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        });
+
+        navStreak.setOnClickListener(v -> {
+            // 返回到 Streak 页面
+            finish();
+        });
+
+        navFlag.setOnClickListener(v -> {
+            startActivity(new Intent(this, GoalActivity.class));
+            finish();
+        });
+
+        navStats.setOnClickListener(v -> {
+            startActivity(new Intent(this, StatsActivity.class));
+            finish();
+        });
+
+        navMore.setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
     }
 
     private void highlightNavItem(LinearLayout selectedItem) {
@@ -124,5 +168,4 @@ public class ChangeGoalActivity extends AppCompatActivity {
             ImageViewCompat.setImageTintList(imageView, grayColor);
         }
     }
-
 }
