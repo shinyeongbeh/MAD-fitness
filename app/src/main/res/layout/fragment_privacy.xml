@@ -17,12 +17,12 @@
             android:layout_height="54dp"
             android:layout_marginStart="93dp"
             android:layout_marginEnd="94dp"
-            android:layout_marginBottom="411dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="    Location"
             android:textAlignment="textStart"
             android:textColor="#020000"
             android:textColorLink="#BC8787"
+            android:visibility="invisible"
             app:icon="@drawable/ic_launcher_foreground"
             app:iconGravity="textStart"
             app:iconSize="30dp"
@@ -32,7 +32,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_Privacy_ARP" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.55" />
 
         <Button
             android:id="@+id/button_Privacy_ARP"
@@ -53,26 +54,42 @@
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toTopOf="@+id/button_Privacy_Location"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TV_Privacy" />
-
-        <TextView
-            android:id="@+id/TV_Privacy"
-            android:layout_width="214dp"
-            android:layout_height="68dp"
-            android:layout_marginTop="32dp"
-            android:text="   Privacy"
-            android:textColor="@color/black"
-            android:textSize="34sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <LinearLayout
-            android:layout_width="10dp"
-            android:layout_height="30dp"
+            android:layout_width="182dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="114dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="115dp"
+            android:layout_marginBottom="26dp"
             android:orientation="vertical"
-            tools:layout_editor_absoluteX="183dp"
-            tools:layout_editor_absoluteY="239dp"></LinearLayout>
+            app:layout_constraintBottom_toTopOf="@+id/button_Privacy_Location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_Privacy_ARP">
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="Location" />
+
+            <Switch
+                android:id="@+id/switch2"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="Camera" />
+
+            <Switch
+                android:id="@+id/switch3"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="Internal Storage" />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
