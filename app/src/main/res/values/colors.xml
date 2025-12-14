@@ -6,10 +6,11 @@
 
     <!-- Main colors -->
     <color name="background">#D6DAC8</color>        <!-- 主背景色 -->
-    <color name="backgroundColor">#D6DAC8</color>   <!-- 添加这个！与 background 相同 -->
+    <color name="backgroundColor">#D6DAC8</color>   <!-- 背景色 -->
     <color name="button_bg">#D6DAC8</color>         <!-- 按钮背景 -->
     <color name="card_bg">#DCEFC5</color>           <!-- 卡片背景 -->
-    <color name="backgroundColorTint">#D6DAC8</color> <!-- 如果需要的话也添加这个 -->
+    <color name="backgroundColorTint">#D6DAC8</color> <!-- 背景色调 -->
+    <color name="buttonBackgroundColorTint">#DCEFC5</color> <!-- 按钮背景色调 -->
 
     <!-- Primary colors -->
     <color name="primary">#4CAF50</color>           <!-- 主色：绿色 -->
@@ -20,16 +21,14 @@
     <color name="text_primary">#000000</color>      <!-- 主要文字：黑色 -->
     <color name="text_secondary">#666666</color>    <!-- 次要文字：灰色 -->
     <color name="text_hint">#999999</color>         <!-- 提示文字 -->
+    <color name="textColorPrimary">#000000</color>  <!-- 主要文字颜色 -->
 
-    <!-- Switch colors -->
-    <color name="switch_track_color">#4CAF50</color>
+    <!-- Icon colors -->
+    <color name="iconTintPrimary">#4CAF50</color>   <!-- 图标主色调 -->
 
-    <!-- Additional colors needed by layouts -->
-    <color name="buttonBackgroundColorTint">#DCEFC5</color> <!-- 按钮背景色调 -->
-    <color name="iconTintPrimary">#4CAF50</color>          <!-- 图标主色调 -->
-    <color name="textColorPrimary">#000000</color>          <!-- 主要文字颜色 -->
-
-    <!-- System colors (常用的黑白色) -->
+    <!-- System colors -->
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+
+    <!-- 注意：switch_track_color 已移到 res/color/switch_track_color.xml -->
 </resources>

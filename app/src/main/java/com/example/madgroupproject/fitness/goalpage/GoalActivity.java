@@ -1,6 +1,7 @@
 package com.example.madgroupproject.fitness.goalpage;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,18 +17,27 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 
 import com.example.madgroupproject.R;
+import com.example.madgroupproject.fitness.gamelevelspage.MainActivity;
 import com.example.madgroupproject.fitness.homepage.HomeActivity;
 import com.example.madgroupproject.fitness.streakpage.StreakActivity;
 import com.example.madgroupproject.fitness.statspage.StatsActivity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GoalActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CREATE_GOAL = 100;
+    private static final int REQUEST_EDIT_GOAL = 101;
+
     private LinearLayout goalsContainer;
     private Button btnCreateGoal;
     private List<Goal> goalsList;
+    private SharedPreferences sharedPreferences;
+    private Gson gson;
 
     // Bottom Navigation
     private LinearLayout navHome, navStreak, navFlag, navStats, navMore;
@@ -35,6 +45,12 @@ public class GoalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 隐藏标题栏
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         setContentView(R.layout.activity_goals);
 
         initViews();
@@ -47,6 +63,8 @@ public class GoalActivity extends AppCompatActivity {
         goalsContainer = findViewById(R.id.goalsContainer);
         btnCreateGoal = findViewById(R.id.btnCreateGoal);
         goalsList = new ArrayList<>();
+        sharedPreferences = getSharedPreferences("GoalsData", MODE_PRIVATE);
+        gson = new Gson();
     }
 
     private void setupBottomNavigation() {
@@ -79,8 +97,8 @@ public class GoalActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            // 跳转到 More 页面（如果有的话）
-            // startActivity(new Intent(this, MoreActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         });
     }
 
@@ -106,15 +124,27 @@ public class GoalActivity extends AppCompatActivity {
     }
 
     private void loadGoals() {
-        // 清空现有列表，避免重复
-        goalsList.clear();
+        // 从 SharedPreferences 加载保存的 Goals
+        String goalsJson = sharedPreferences.getString("goals_list", null);
 
-        // 示例数据 - 你可以从数据库或 SharedPreferences 加载
-        goalsList.add(new Goal("Walk the dog", "Exercise", R.drawable.ic_exercise, false));
-        goalsList.add(new Goal("Drink 8 glass water", "Habit", R.drawable.ic_water, false));
-        goalsList.add(new Goal("Listening to Podcast", "Relax", R.drawable.ic_podcast, false));
+        if (goalsJson != null) {
+            Type type = new TypeToken<ArrayList<Goal>>(){}.getType();
+            goalsList = gson.fromJson(goalsJson, type);
+        } else {
+            // 如果没有保存的数据，使用默认数据
+            goalsList = new ArrayList<>();
+            goalsList.add(new Goal("Walk the dog", "Exercise", getIconForLabel("Exercise"), false));
+            goalsList.add(new Goal("Drink 8 glass water", "Habit", getIconForLabel("Habit"), false));
+            goalsList.add(new Goal("Listening to Podcast", "Relax", getIconForLabel("Relax"), false));
+            saveGoals();
+        }
 
         displayGoals();
+    }
+
+    private void saveGoals() {
+        String goalsJson = gson.toJson(goalsList);
+        sharedPreferences.edit().putString("goals_list", goalsJson).apply();
     }
 
     private void displayGoals() {
@@ -154,6 +184,7 @@ public class GoalActivity extends AppCompatActivity {
             } else {
                 goalBorder.setVisibility(View.GONE);
             }
+            saveGoals();
         });
 
         // 点击整个卡片跳转到编辑页面
@@ -162,7 +193,7 @@ public class GoalActivity extends AppCompatActivity {
             intent.putExtra("goal_position", position);
             intent.putExtra("goal_name", goal.getName());
             intent.putExtra("goal_label", goal.getLabel());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_EDIT_GOAL);
         });
 
         return view;
@@ -171,7 +202,7 @@ public class GoalActivity extends AppCompatActivity {
     private void setupListeners() {
         btnCreateGoal.setOnClickListener(v -> {
             Intent intent = new Intent(this, CreateGoalActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CREATE_GOAL);
         });
 
         // Suggested Goals
@@ -192,14 +223,74 @@ public class GoalActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateGoalActivity.class);
         intent.putExtra("suggested_name", name);
         intent.putExtra("suggested_label", label);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CREATE_GOAL);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // 从其他页面返回时重新显示现有数据，而不是重新加载
-        displayGoals();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == REQUEST_CREATE_GOAL) {
+                // 创建新 Goal
+                String goalName = data.getStringExtra("goal_name");
+                String goalLabel = data.getStringExtra("goal_label");
+
+                if (goalName != null && goalLabel != null) {
+                    int iconRes = getIconForLabel(goalLabel);
+                    Goal newGoal = new Goal(goalName, goalLabel, iconRes, false);
+                    goalsList.add(newGoal);
+                    saveGoals();
+                    displayGoals();
+                }
+            } else if (requestCode == REQUEST_EDIT_GOAL) {
+                // 检查是否是删除操作
+                boolean isDeleted = data.getBooleanExtra("goal_deleted", false);
+
+                if (isDeleted) {
+                    int position = data.getIntExtra("goal_position", -1);
+                    if (position >= 0 && position < goalsList.size()) {
+                        goalsList.remove(position);
+                        saveGoals();
+                        displayGoals();
+                    }
+                } else {
+                    // 更新 Goal
+                    int position = data.getIntExtra("goal_position", -1);
+                    String goalName = data.getStringExtra("goal_name");
+                    String goalLabel = data.getStringExtra("goal_label");
+
+                    if (position >= 0 && position < goalsList.size() && goalName != null && goalLabel != null) {
+                        Goal goal = goalsList.get(position);
+                        goal.setName(goalName);
+                        goal.setLabel(goalLabel);
+                        goal.setIconRes(getIconForLabel(goalLabel));
+                        saveGoals();
+                        displayGoals();
+                    }
+                }
+            }
+        }
+    }
+
+    // 根据 Label 获取对应的图标
+    private int getIconForLabel(String label) {
+        switch (label) {
+            case "Exercise":
+                return R.drawable.ic_exercise;
+            case "Habit":
+                return R.drawable.ic_water;
+            case "Relax":
+                return R.drawable.ic_podcast;
+            case "Work":
+                return R.drawable.ic_work;
+            case "Study":
+                return R.drawable.ic_study;
+            case "Health":
+                return R.drawable.ic_health;
+            default:
+                return R.drawable.ic_exercise; // 默认图标
+        }
     }
 
     // Goal Model Class
@@ -217,8 +308,14 @@ public class GoalActivity extends AppCompatActivity {
         }
 
         public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+
         public String getLabel() { return label; }
+        public void setLabel(String label) { this.label = label; }
+
         public int getIconRes() { return iconRes; }
+        public void setIconRes(int iconRes) { this.iconRes = iconRes; }
+
         public boolean isCompleted() { return completed; }
         public void setCompleted(boolean completed) { this.completed = completed; }
     }

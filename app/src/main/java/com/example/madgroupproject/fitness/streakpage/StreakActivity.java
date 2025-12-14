@@ -78,7 +78,7 @@ public class StreakActivity extends AppCompatActivity {
         btnChangeStreakGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StreakActivity.this, ChangeGoalActivity.class);
+                Intent intent = new Intent(StreakActivity.this, ChangeStreakActivity.class);
                 intent.putExtra("currentGoal", currentGoal);
                 startActivityForResult(intent, 1);
             }

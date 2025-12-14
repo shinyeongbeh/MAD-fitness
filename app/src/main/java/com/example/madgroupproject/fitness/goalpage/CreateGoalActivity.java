@@ -216,17 +216,28 @@ public class CreateGoalActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: 这里你需要实现保存逻辑（数据库或 SharedPreferences）
-        // 示例：保存到 SharedPreferences 或者数据库
+        // 返回结果
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("goal_name", goalName);
+        resultIntent.putExtra("goal_label", label);
+
+        if (isEditMode) {
+            resultIntent.putExtra("goal_position", goalPosition);
+        }
 
         Toast.makeText(this, "Goal saved!", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 
     private void deleteGoal() {
-        // TODO: 这里你需要实现删除逻辑
+        // 返回删除标记
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("goal_deleted", true);
+        resultIntent.putExtra("goal_position", goalPosition);
 
         Toast.makeText(this, "Goal deleted!", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 }

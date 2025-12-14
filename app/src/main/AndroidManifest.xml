@@ -56,7 +56,7 @@
 
         <!-- Change Goal Activity -->
         <activity
-            android:name=".fitness.streakpage.ChangeGoalActivity"
+            android:name=".fitness.streakpage.ChangeStreakActivity"
             android:exported="false"
             android:parentActivityName=".fitness.streakpage.StreakActivity" />
 

@@ -171,7 +171,7 @@
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/puppiescouk_053399600_1663317083_2412"
+                    android:src="@drawable/pngtree_a_brown_and_white_dog_is_sitting_on_the_stairs_smiling_image_13136039"
                     tools:src="@drawable/pngtree_a_brown_and_white_dog_is_sitting_on_the_stairs_smiling_image_13136039" />
 
                 <TextView
@@ -196,7 +196,7 @@
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/puppiescouk_053399600_1663317083_2412"
+                    android:src="@drawable/husky"
                     tools:src="@drawable/husky" />
 
                 <TextView

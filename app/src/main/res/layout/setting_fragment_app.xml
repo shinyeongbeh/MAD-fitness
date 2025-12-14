@@ -116,14 +116,16 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/black" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/update"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:fontFamily="@font/coiny"
                 android:text="Auto - update"
                 android:textAlignment="textStart"
-                android:textColor="@color/textColorPrimary" />
+                android:textColor="@color/textColorPrimary"
+                app:thumbTint="@color/switch_thumb_color"
+                app:trackTint="@color/switch_track_color"/>
 
         </LinearLayout>
 
