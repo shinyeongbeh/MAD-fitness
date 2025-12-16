@@ -1,4 +1,4 @@
-package com.example.madgroupproject.fitness.settingpage;
+package com.example.madgroupproject.settingpage;
 
 import android.os.Bundle;
 

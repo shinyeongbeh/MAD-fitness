@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#D6DAC8"
-    tools:context=".fitness.gamelevelspage.MainActivity">
+    tools:context=".gamelevelspage.MainActivity">
 
     <!-- 可滚动的内容区域 -->
     <ScrollView

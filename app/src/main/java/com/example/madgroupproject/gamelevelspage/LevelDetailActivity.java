@@ -1,36 +1,37 @@
-package com.example.madgroupproject.fitness.statspage;
+package com.example.madgroupproject.gamelevelspage;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.ImageViewCompat;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.fitness.homepage.HomeActivity;
-import com.example.madgroupproject.fitness.streakpage.StreakActivity;
-import com.example.madgroupproject.fitness.goalpage.GoalActivity;
-import com.example.madgroupproject.fitness.gamelevelspage.MainActivity;
+import com.example.madgroupproject.homepage.HomeActivity;
+import com.example.madgroupproject.goalpage.GoalActivity;
+import com.example.madgroupproject.statspage.StatsActivity;
 
-public class StatsActivity extends AppCompatActivity {
+public class LevelDetailActivity extends AppCompatActivity {
     private LinearLayout navHome, navStreak, navFlag, navStats, navMore;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_level_detail);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
-        // 隐藏标题栏
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-
-        setContentView(R.layout.activity_stats);
-
-        // 设置底部导航栏点击事件
+        // 设置底部导航栏
         setupBottomNavigation();
     }
 
@@ -43,7 +44,7 @@ public class StatsActivity extends AppCompatActivity {
         navMore = findViewById(R.id.navMore);
 
         // 2. 高亮当前页面（Streak）
-        highlightNavItem(navStats);
+        highlightNavItem(navMore);
 
         // 3. 设置点击监听
         navHome.setOnClickListener(v -> {

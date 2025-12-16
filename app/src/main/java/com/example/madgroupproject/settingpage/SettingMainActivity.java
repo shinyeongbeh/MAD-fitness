@@ -1,4 +1,4 @@
-package com.example.madgroupproject.fitness.settingpage;
+package com.example.madgroupproject.settingpage;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,11 +24,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.fitness.gamelevelspage.MainActivity;
-import com.example.madgroupproject.fitness.goalpage.GoalActivity;
-import com.example.madgroupproject.fitness.homepage.HomeActivity;
-import com.example.madgroupproject.fitness.statspage.StatsActivity;
-import com.example.madgroupproject.fitness.streakpage.StreakActivity;
+import com.example.madgroupproject.goalpage.GoalActivity;
+import com.example.madgroupproject.homepage.HomeActivity;
+import com.example.madgroupproject.statspage.StatsActivity;
+import com.example.madgroupproject.streakpage.StreakActivity;
 
 public class SettingMainActivity extends AppCompatActivity {
 

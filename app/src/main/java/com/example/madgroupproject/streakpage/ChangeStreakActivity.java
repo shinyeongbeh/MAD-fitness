@@ -1,4 +1,4 @@
-package com.example.madgroupproject.fitness.streakpage;
+package com.example.madgroupproject.streakpage;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -15,10 +15,10 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.fitness.gamelevelspage.MainActivity;
-import com.example.madgroupproject.fitness.goalpage.GoalActivity;
-import com.example.madgroupproject.fitness.homepage.HomeActivity;
-import com.example.madgroupproject.fitness.statspage.StatsActivity;
+import com.example.madgroupproject.gamelevelspage.MainActivity;
+import com.example.madgroupproject.goalpage.GoalActivity;
+import com.example.madgroupproject.homepage.HomeActivity;
+import com.example.madgroupproject.statspage.StatsActivity;
 
 public class ChangeStreakActivity extends AppCompatActivity {
 

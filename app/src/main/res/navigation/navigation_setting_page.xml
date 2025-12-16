@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/settingPage"
-        android:name="com.example.madgroupproject.fitness.settingpage.SettingPage"
+        android:name="com.example.madgroupproject.settingpage.SettingPage"
         android:label="     Setting"
         tools:layout="@layout/fragment_setting_page"
         >
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/account"
-        android:name="com.example.madgroupproject.fitness.settingpage.Account"
+        android:name="com.example.madgroupproject.settingpage.Account"
         android:label="Account"
         tools:layout="@layout/setting_fragment_account" >
         <action
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/app"
-        android:name="com.example.madgroupproject.fitness.settingpage.App"
+        android:name="com.example.madgroupproject.settingpage.App"
         android:label="App"
         tools:layout="@layout/setting_fragment_app" >
         <action
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/notification"
-        android:name="com.example.madgroupproject.fitness.settingpage.Notification"
+        android:name="com.example.madgroupproject.settingpage.Notification"
         android:label="Notification"
         tools:layout="@layout/setting_fragment_notification" >
         <action
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/privacy"
-        android:name="com.example.madgroupproject.fitness.settingpage.Privacy"
+        android:name="com.example.madgroupproject.settingpage.Privacy"
         android:label="Privacy"
         tools:layout="@layout/setting_fragment_privacy" >
         <action
@@ -70,7 +70,7 @@
         android:id="@+id/sync"
         android:label="Sync"
 
-        android:name="com.example.madgroupproject.fitness.settingpage.Sync"
+        android:name="com.example.madgroupproject.settingpage.Sync"
 
         tools:layout="@layout/setting_fragment_sync" >
         <action
@@ -79,7 +79,7 @@
     </fragment>
     <fragment
         android:id="@+id/theme"
-        android:name="com.example.madgroupproject.fitness.settingpage.Theme"
+        android:name="com.example.madgroupproject.settingpage.Theme"
         android:label="Theme"
         tools:layout="@layout/setting_fragment_theme" >
         <action

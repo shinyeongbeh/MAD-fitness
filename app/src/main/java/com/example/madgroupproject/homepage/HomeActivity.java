@@ -1,22 +1,25 @@
-package com.example.madgroupproject.fitness.gamelevelspage;
+package com.example.madgroupproject.homepage;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
-
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.fitness.homepage.HomeActivity;
-import com.example.madgroupproject.fitness.streakpage.StreakActivity;
-import com.example.madgroupproject.fitness.goalpage.GoalActivity;
-import com.example.madgroupproject.fitness.statspage.StatsActivity;
+import com.example.madgroupproject.streakpage.StreakActivity;
+import com.example.madgroupproject.goalpage.GoalActivity;
+import com.example.madgroupproject.statspage.StatsActivity;
+import com.example.madgroupproject.gamelevelspage.MainActivity;
+import com.example.madgroupproject.settingpage.SettingMainActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
+
     private LinearLayout navHome, navStreak, navFlag, navStats, navMore;
+    private ImageView btnSettings;  // 设置按钮
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +30,22 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        setContentView(R.layout.activity_game_level_main);
+        setContentView(R.layout.activity_home);
 
-        // 设置底部导航栏
+        // 初始化设置按钮
+        btnSettings = findViewById(R.id.btnSettings);
+
+        // 设置按钮点击事件
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 跳转到设置页面
+                Intent intent = new Intent(HomeActivity.this, SettingMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // 设置底部导航栏点击事件
         setupBottomNavigation();
     }
 
@@ -41,13 +57,12 @@ public class MainActivity extends AppCompatActivity {
         navStats = findViewById(R.id.navStats);
         navMore = findViewById(R.id.navMore);
 
-        // 2. 高亮当前页面（Game Level / More）
-        highlightNavItem(navMore);
+        // 2. 高亮当前页面（Home）
+        highlightNavItem(navHome);
 
         // 3. 设置点击监听
         navHome.setOnClickListener(v -> {
-            startActivity(new Intent(this, HomeActivity.class));
-            finish();
+            // 已经在首页，不需要操作
         });
 
         navStreak.setOnClickListener(v -> {
@@ -66,7 +81,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            // 已经在当前页面
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
+
+        navMore.setOnClickListener(v -> {
+            startActivity(new Intent(this, SettingMainActivity.class));
+            finish();
         });
     }
 
