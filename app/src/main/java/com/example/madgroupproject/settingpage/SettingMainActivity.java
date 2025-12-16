@@ -86,7 +86,7 @@ public class SettingMainActivity extends AppCompatActivity {
         navMore = findViewById(R.id.navMore);
 
         // 高亮当前页面（Settings/More）
-        highlightNavItem(navMore);
+        //highlightNavItem(navMore);
 
         // 设置点击监听
         navHome.setOnClickListener(v -> {
@@ -110,7 +110,8 @@ public class SettingMainActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            // 已经在设置页面
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         });
     }
 
