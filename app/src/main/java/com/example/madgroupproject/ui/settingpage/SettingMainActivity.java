@@ -1,4 +1,4 @@
-package com.example.madgroupproject.settingpage;
+package com.example.madgroupproject.ui.settingpage;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,10 +24,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.goalpage.GoalActivity;
-import com.example.madgroupproject.homepage.HomeActivity;
-import com.example.madgroupproject.statspage.StatsActivity;
-import com.example.madgroupproject.streakpage.StreakActivity;
+import com.example.madgroupproject.ui.goalpage.GoalActivity;
+import com.example.madgroupproject.ui.homepage.HomeActivity;
+import com.example.madgroupproject.ui.statspage.StatsActivity;
+import com.example.madgroupproject.ui.streakpage.StreakActivity;
 
 public class SettingMainActivity extends AppCompatActivity {
 
@@ -45,7 +45,7 @@ public class SettingMainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // enable back arrow
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.game_level_main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             toolbar.setPadding(toolbar.getPaddingLeft(), systemBars.top, toolbar.getPaddingRight(), toolbar.getPaddingBottom());
             return insets;
@@ -110,7 +110,7 @@ public class SettingMainActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, SettingMainActivity.class));
             finish();
         });
     }

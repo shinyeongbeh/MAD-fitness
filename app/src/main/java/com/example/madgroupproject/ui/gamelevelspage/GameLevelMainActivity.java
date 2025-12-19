@@ -1,4 +1,4 @@
-package com.example.madgroupproject.statspage;
+package com.example.madgroupproject.ui.gamelevelspage;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -10,11 +10,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.homepage.HomeActivity;
-import com.example.madgroupproject.goalpage.GoalActivity;
-import com.example.madgroupproject.gamelevelspage.MainActivity;
+import com.example.madgroupproject.ui.homepage.HomeActivity;
+import com.example.madgroupproject.ui.streakpage.StreakActivity;
+import com.example.madgroupproject.ui.goalpage.GoalActivity;
+import com.example.madgroupproject.ui.statspage.StatsActivity;
 
-public class StatsActivity extends AppCompatActivity {
+public class GameLevelMainActivity extends AppCompatActivity {
     private LinearLayout navHome, navStreak, navFlag, navStats, navMore;
 
     @Override
@@ -26,9 +27,9 @@ public class StatsActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        setContentView(R.layout.activity_stats);
+        setContentView(R.layout.activity_game_level_main);
 
-        // 设置底部导航栏点击事件
+        // 设置底部导航栏
         setupBottomNavigation();
     }
 
@@ -40,8 +41,8 @@ public class StatsActivity extends AppCompatActivity {
         navStats = findViewById(R.id.navStats);
         navMore = findViewById(R.id.navMore);
 
-        // 2. 高亮当前页面（Streak）
-        highlightNavItem(navStats);
+        // 2. 高亮当前页面（Game Level / More）
+        highlightNavItem(navMore);
 
         // 3. 设置点击监听
         navHome.setOnClickListener(v -> {
@@ -50,7 +51,8 @@ public class StatsActivity extends AppCompatActivity {
         });
 
         navStreak.setOnClickListener(v -> {
-            // 已经在连续记录页面
+            startActivity(new Intent(this, StreakActivity.class));
+            finish();
         });
 
         navFlag.setOnClickListener(v -> {
@@ -64,8 +66,7 @@ public class StatsActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            // 已经在当前页面
         });
     }
 

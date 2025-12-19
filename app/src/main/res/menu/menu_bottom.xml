@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Home"
+        android:icon="@drawable/ic_home"
+        android:id="@+id/homeFragment"
+        />
+    <item
+        android:title="Streak"
+        android:icon="@drawable/ic_flame"
+        android:id="@+id/navStreak"
+        />
+    <item
+        android:title="Goal"
+        android:icon="@drawable/ic_flag"
+        android:id="@+id/navGoal"
+        />
+    <item
+        android:title="Stats"
+        android:icon="@drawable/ic_stats"
+        android:id="@+id/statsFragment"/>
+
+
+    <item
+        android:title="Game Levels"
+        android:icon="@drawable/ic_gamelevel"
+        android:id="@+id/navLevels"
+        />
+
+</menu>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.madgroupproject">
+    package="com.example.madgroupproject" >
 
     <application
         android:allowBackup="true"
@@ -8,50 +8,58 @@
         android:label="Fitness Tracker"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <!-- Home Activity (启动页面) -->
+        android:theme="@style/Base.Theme.MAD"
+        >
         <activity
-            android:name=".homepage.HomeActivity"
+            android:name=".main.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <!-- Home Activity (启动页面) -->
+        <activity
+            android:name=".ui.homepage.HomeActivity"
+            android:exported="false" >
+
         </activity> <!-- SettingMainActivity -->
         <activity
-            android:name=".settingpage.SettingMainActivity"
+            android:name=".ui.settingpage.SettingMainActivity"
             android:exported="false" /> <!-- Streak Activity -->
         <activity
-            android:name=".streakpage.StreakActivity"
+            android:name=".ui.streakpage.StreakActivity"
             android:exported="false" /> <!-- Goal Activity -->
         <activity
-            android:name=".goalpage.GoalActivity"
+            android:name=".ui.goalpage.GoalActivity"
             android:exported="false" />
         <activity
-            android:name=".goalpage.CreateGoalActivity"
+            android:name=".ui.goalpage.CreateGoalActivity"
             android:exported="false" /> <!-- Stats Activity -->
         <activity
-            android:name=".statspage.StatsActivity"
+            android:name=".ui.statspage.StatsActivity"
             android:exported="false" /> <!-- Game Level MainActivity -->
         <activity
-            android:name=".gamelevelspage.MainActivity"
+            android:name=".ui.gamelevelspage.GameLevelMainActivity"
             android:exported="false" /> <!-- Game Level Detail Activity -->
         <activity
-            android:name=".gamelevelspage.LevelDetailActivity"
+            android:name=".ui.gamelevelspage.LevelDetailActivity"
             android:exported="false" /> <!-- Change Goal Activity -->
         <activity
-            android:name=".streakpage.ChangeStreakActivity"
+            android:name=".ui.streakpage.ChangeStreakActivity"
             android:exported="false"
-            android:parentActivityName=".streakpage.StreakActivity" /> <!-- Day Detail Activity -->
+            android:parentActivityName=".ui.streakpage.StreakActivity" /> <!-- Day Detail Activity -->
         <activity
-            android:name=".streakpage.DayDetailActivity"
+            android:name=".ui.streakpage.DayDetailActivity"
             android:exported="false"
-            android:parentActivityName=".streakpage.StreakActivity" /> <!-- Best Streak Detail Activity -->
+            android:parentActivityName=".ui.streakpage.StreakActivity" /> <!-- Best Streak Detail Activity -->
         <activity
-            android:name=".streakpage.BestStreakDetailActivity"
+            android:name=".ui.streakpage.BestStreakDetailActivity"
             android:exported="false"
-            android:parentActivityName=".streakpage.StreakActivity" />
+            android:parentActivityName=".ui.streakpage.StreakActivity" />
     </application>
 
 </manifest>

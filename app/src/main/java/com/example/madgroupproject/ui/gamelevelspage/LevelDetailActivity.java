@@ -1,4 +1,4 @@
-package com.example.madgroupproject.gamelevelspage;
+package com.example.madgroupproject.ui.gamelevelspage;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -14,9 +14,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.ImageViewCompat;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.homepage.HomeActivity;
-import com.example.madgroupproject.goalpage.GoalActivity;
-import com.example.madgroupproject.statspage.StatsActivity;
+import com.example.madgroupproject.ui.homepage.HomeActivity;
+import com.example.madgroupproject.ui.goalpage.GoalActivity;
+import com.example.madgroupproject.ui.statspage.StatsActivity;
 
 public class LevelDetailActivity extends AppCompatActivity {
     private LinearLayout navHome, navStreak, navFlag, navStats, navMore;
@@ -25,7 +25,7 @@ public class LevelDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_level_detail);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.game_level_main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -67,7 +67,7 @@ public class LevelDetailActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, GameLevelMainActivity.class));
             finish();
         });
     }

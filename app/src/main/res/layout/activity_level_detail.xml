@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".gamelevelspage.LevelDetailActivity">
+    tools:context=".ui.gamelevelspage.LevelDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+        android:id="@+id/game_level_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">

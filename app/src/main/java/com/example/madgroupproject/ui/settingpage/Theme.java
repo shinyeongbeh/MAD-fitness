@@ -1,25 +1,21 @@
-package com.example.madgroupproject.settingpage;
+package com.example.madgroupproject.ui.settingpage;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
-import android.widget.Toast;
 
 import com.example.madgroupproject.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link App#newInstance} factory method to
+ * Use the {@link Theme#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class App extends Fragment {
+public class Theme extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,7 +26,7 @@ public class App extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public App() {
+    public Theme() {
         // Required empty public constructor
     }
 
@@ -40,11 +36,11 @@ public class App extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment App.
+     * @return A new instance of fragment Theme.
      */
     // TODO: Rename and change types and number of parameters
-    public static App newInstance(String param1, String param2) {
-        App fragment = new App();
+    public static Theme newInstance(String param1, String param2) {
+        Theme fragment = new Theme();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,31 +61,6 @@ public class App extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.setting_fragment_app, container, false);
+        return inflater.inflate(R.layout.setting_fragment_theme, container, false);
     }
-
-    //rating bar function
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // 1. Find the RatingBar using the fragment's view
-        RatingBar ratingBar = view.findViewById(R.id.ratingBar);
-
-
-        // 2. Set a listener to detect when the rating changes
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                // 3. Check if the change was made by the user
-
-
-                if (fromUser) {
-                    // 4. Show a "Thank you" message using a Toast
-                    Toast.makeText(getContext(), "Thank you for your rating!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
 }

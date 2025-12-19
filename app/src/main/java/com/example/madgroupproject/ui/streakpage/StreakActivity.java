@@ -1,4 +1,4 @@
-package com.example.madgroupproject.streakpage;
+package com.example.madgroupproject.ui.streakpage;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -16,10 +16,10 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.homepage.HomeActivity;
-import com.example.madgroupproject.goalpage.GoalActivity;
-import com.example.madgroupproject.statspage.StatsActivity;
-import com.example.madgroupproject.gamelevelspage.MainActivity;
+import com.example.madgroupproject.ui.homepage.HomeActivity;
+import com.example.madgroupproject.ui.goalpage.GoalActivity;
+import com.example.madgroupproject.ui.statspage.StatsActivity;
+import com.example.madgroupproject.ui.gamelevelspage.GameLevelMainActivity;
 
 public class StreakActivity extends AppCompatActivity {
 
@@ -225,7 +225,7 @@ public class StreakActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, GameLevelMainActivity.class));
             finish();
         });
     }

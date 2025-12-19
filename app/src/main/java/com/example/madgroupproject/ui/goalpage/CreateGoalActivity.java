@@ -1,4 +1,4 @@
-package com.example.madgroupproject.goalpage;
+package com.example.madgroupproject.ui.goalpage;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -20,10 +20,10 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.homepage.HomeActivity;
-import com.example.madgroupproject.statspage.StatsActivity;
-import com.example.madgroupproject.streakpage.StreakActivity;
-import com.example.madgroupproject.gamelevelspage.MainActivity;
+import com.example.madgroupproject.ui.homepage.HomeActivity;
+import com.example.madgroupproject.ui.statspage.StatsActivity;
+import com.example.madgroupproject.ui.streakpage.StreakActivity;
+import com.example.madgroupproject.ui.gamelevelspage.GameLevelMainActivity;
 
 public class CreateGoalActivity extends AppCompatActivity {
 
@@ -101,7 +101,7 @@ public class CreateGoalActivity extends AppCompatActivity {
         });
 
         navMore.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, GameLevelMainActivity.class));
             finish();
         });
     }

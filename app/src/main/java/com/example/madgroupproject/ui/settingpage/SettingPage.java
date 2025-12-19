@@ -1,4 +1,4 @@
-package com.example.madgroupproject.settingpage;
+package com.example.madgroupproject.ui.settingpage;
 
 import android.os.Bundle;
 

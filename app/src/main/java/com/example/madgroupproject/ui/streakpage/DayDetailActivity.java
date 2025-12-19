@@ -1,4 +1,4 @@
-package com.example.madgroupproject.streakpage;
+package com.example.madgroupproject.ui.streakpage;
 
 import android.os.Bundle;
 import android.view.View;
