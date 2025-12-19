@@ -9,13 +9,41 @@
         android:id="@+id/homeFragment"
         android:name="com.example.madgroupproject.ui.homepage.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_settingMainActivity"
+            app:destination="@id/settingMainActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/streakFragment"
         android:name="com.example.madgroupproject.ui.streakpage.StreakFragment"
         android:label="fragment_streak"
-        tools:layout="@layout/fragment_streak" />
+        tools:layout="@layout/fragment_streak">
+        <action
+            android:id="@+id/action_streakFragment_to_changeStreakFragment"
+            app:destination="@id/changeStreakFragment" />
+        <action
+            android:id="@+id/action_streakFragment_to_dayDetailFragment"
+            app:destination="@id/dayDetailFragment" />
+        <action
+            android:id="@+id/action_streakFragment_to_bestStreakDetailFragment"
+            app:destination="@id/bestStreakDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeStreakFragment"
+        android:name="com.example.madgroupproject.ui.streakpage.ChangeStreakFragment"
+        android:label="Change Goal" />
+
+    <fragment
+        android:id="@+id/dayDetailFragment"
+        android:name="com.example.madgroupproject.ui.streakpage.DayDetailFragment"
+        android:label="Day Detail" />
+
+    <fragment
+        android:id="@+id/bestStreakDetailFragment"
+        android:name="com.example.madgroupproject.ui.streakpage.BestStreakDetailFragment"
+        android:label="Best Streak" />
     <fragment
         android:id="@+id/goalFragment"
         android:name="com.example.madgroupproject.ui.goalpage.GoalFragment"
@@ -33,4 +61,9 @@
         android:name="com.example.madgroupproject.ui.gamelevelspage.GameLevelFragment"
         android:label="fragment_game_level"
         tools:layout="@layout/fragment_game_level" />
+    <fragment
+        android:id="@+id/settingMainActivity"
+        android:name="com.example.madgroupproject.ui.settingpage.SettingsFragment"
+        android:label="fragment_settings_main"
+        tools:layout="@layout/setting_main" />
 </navigation>

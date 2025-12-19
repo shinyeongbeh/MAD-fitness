@@ -13,8 +13,9 @@
 
         <!-- 背景色 -->
         <item name="android:windowBackground">@color/background</item>
+<!--        <item name="android:windowBackground">#D6DAC8</item>-->
         <item name="colorSurface">#D6DAC8</item>
-        <item name="colorSurfaceVariant">#D6DAC8</item>
+        <item name="colorSurfaceVariant">#614E4E4E</item>
         <item name="colorOnSurface">#000000</item>
         <item name="colorOnSurfaceVariant">#614E4E4E</item>
 

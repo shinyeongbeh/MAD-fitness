@@ -1,66 +1,154 @@
 package com.example.madgroupproject.ui.streakpage;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.madgroupproject.R;
+import com.example.madgroupproject.data.StreakPreferenceManager;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link StreakFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class StreakFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private GridLayout calendarGrid;
+    private Button btnChangeStreakGoal;
+    private CardView cardBestStreak;
+    private TextView tvTodaySteps;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private StreakPreferenceManager streakManager;
+    private int currentSteps = 760; // Simulated; in real app, get from sensor or API
 
-    public StreakFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StreakFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StreakFragment newInstance(String param1, String param2) {
-        StreakFragment fragment = new StreakFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    // Hardcoded completed days (5-8 Feb)
+    private boolean[] completedDays = new boolean[29];
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        streakManager = new StreakPreferenceManager(requireContext());
+        for (int i = 5; i <= 8; i++) {
+            completedDays[i - 1] = true;
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_streak, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initViews(view);
+        initializeCalendar();
+        updateStepsProgress();
+
+        // Set up navigation
+        btnChangeStreakGoal.setOnClickListener(v ->
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_streakFragment_to_changeStreakFragment)
+        );
+
+        cardBestStreak.setOnClickListener(v ->
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_streakFragment_to_bestStreakDetailFragment)
+        );
+
+        // Listen for goal update from ChangeStreakFragment
+        getParentFragmentManager().setFragmentResultListener("streak_goal_update", this, (key, bundle) -> {
+            updateStepsProgress(); // Refresh UI
+        });
+    }
+
+    private void initViews(View view) {
+        calendarGrid = view.findViewById(R.id.calendarGrid);
+        btnChangeStreakGoal = view.findViewById(R.id.btnChangeStreakGoal);
+        cardBestStreak = view.findViewById(R.id.cardBestStreak);
+        tvTodaySteps = view.findViewById(R.id.tvTodaySteps);
+    }
+
+    private void initializeCalendar() {
+        calendarGrid.removeAllViews();
+
+        // Add weekday headers (S M T W T F S) — assume already in XML
+        // Or add programmatically if needed
+
+        int startDay = 6; // Feb 2025 starts on Saturday
+        int daysInMonth = 28;
+
+        // Add empty cells before day 1
+        for (int i = 0; i < startDay; i++) {
+            TextView empty = new TextView(requireContext());
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.columnSpec = GridLayout.spec(i, 1f);
+            params.rowSpec = GridLayout.spec(1);
+            empty.setLayoutParams(params);
+            calendarGrid.addView(empty);
+        }
+
+        int row = 1, col = startDay;
+        for (int day = 1; day <= daysInMonth; day++) {
+            TextView dayView = createDayView(day);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.columnSpec = GridLayout.spec(col, 1f);
+            params.rowSpec = GridLayout.spec(row);
+            params.setMargins(4, 4, 4, 4);
+            dayView.setLayoutParams(params);
+            calendarGrid.addView(dayView);
+
+            if (++col == 7) {
+                col = 0;
+                row++;
+            }
+        }
+    }
+
+    private TextView createDayView(int day) {
+        TextView view = new TextView(requireContext());
+        view.setText(String.valueOf(day));
+        view.setGravity(Gravity.CENTER);
+        view.setPadding(16, 16, 16, 16);
+        view.setTextSize(16);
+
+        if (completedDays[day - 1]) {
+            view.setBackgroundResource(R.drawable.streak_calendar_day_completed);
+            view.setTextColor(android.graphics.Color.WHITE);
+        } else if (day == 1) {
+            view.setBackgroundResource(R.drawable.streak_calendar_day_normal);
+            view.setTextColor(android.graphics.Color.BLACK);
+        } else {
+            view.setBackgroundResource(R.drawable.streak_calendar_day_inactive);
+            view.setTextColor(android.graphics.Color.BLACK);
+        }
+
+        view.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putInt("day", day);
+            args.putString("month", "Feb");
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_streakFragment_to_dayDetailFragment, args);
+        });
+
+        return view;
+    }
+
+    public void updateStepsProgress() {
+        int goal = streakManager.getDailyGoal();
+        tvTodaySteps.setText("Steps: " + currentSteps + "\\" + goal);
     }
 }

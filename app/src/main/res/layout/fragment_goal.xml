@@ -1,14 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.goalpage.GoalFragment">
+    android:orientation="vertical"
+    android:background="#D6DAC8">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- 可滚动的内容区域 -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Goal Fragment" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Today Goals Title -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Today Goals"
+                android:textColor="#000000"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Goals List Container -->
+            <LinearLayout
+                android:id="@+id/goalsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Goal items will be added here dynamically -->
+
+            </LinearLayout>
+
+            <!-- Create New Goal Button -->
+            <Button
+                android:id="@+id/btnCreateGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create New Goal"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny"
+                android:backgroundTint="#4CAF50"
+                android:padding="20dp"
+                android:textAllCaps="false"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"/>
+
+            <!-- Suggested Goals Title -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Suggested Goals"
+                android:textColor="#000000"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/coiny"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Suggested Goals Container -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <!-- Exercise 30min -->
+                <LinearLayout
+                    android:id="@+id/suggestedExercise"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_suggested_goal"
+                    android:padding="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_exercise"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Exercise 30min"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/coiny"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <!-- Early Wake-up -->
+                <LinearLayout
+                    android:id="@+id/suggestedWakeup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_suggested_goal"
+                    android:padding="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_wakeup"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Early Wake-up"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/coiny"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <!-- Sleep 8hours -->
+                <LinearLayout
+                    android:id="@+id/suggestedSleep"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_suggested_goal"
+                    android:padding="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_sleep"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sleep 8hours"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/coiny"
+                        android:gravity="center"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

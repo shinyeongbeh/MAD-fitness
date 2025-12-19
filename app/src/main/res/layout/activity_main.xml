@@ -7,16 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".main.MainActivity">
 
-
-<!--    <FrameLayout-->
-<!--        android:id="@+id/main_fragment_area"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_view"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
-
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/main_fragment_area"
         android:name="androidx.navigation.fragment.NavHostFragment"

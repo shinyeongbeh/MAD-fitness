@@ -13,53 +13,12 @@
         <activity
             android:name=".main.MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <!-- Home Activity (启动页面) -->
-        <activity
-            android:name=".ui.homepage.HomeActivity"
-            android:exported="false" >
-
-        </activity> <!-- SettingMainActivity -->
-        <activity
-            android:name=".ui.settingpage.SettingMainActivity"
-            android:exported="false" /> <!-- Streak Activity -->
-        <activity
-            android:name=".ui.streakpage.StreakActivity"
-            android:exported="false" /> <!-- Goal Activity -->
-        <activity
-            android:name=".ui.goalpage.GoalActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.goalpage.CreateGoalActivity"
-            android:exported="false" /> <!-- Stats Activity -->
-        <activity
-            android:name=".ui.statspage.StatsActivity"
-            android:exported="false" /> <!-- Game Level MainActivity -->
-        <activity
-            android:name=".ui.gamelevelspage.GameLevelMainActivity"
-            android:exported="false" /> <!-- Game Level Detail Activity -->
-        <activity
-            android:name=".ui.gamelevelspage.LevelDetailActivity"
-            android:exported="false" /> <!-- Change Goal Activity -->
-        <activity
-            android:name=".ui.streakpage.ChangeStreakActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.streakpage.StreakActivity" /> <!-- Day Detail Activity -->
-        <activity
-            android:name=".ui.streakpage.DayDetailActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.streakpage.StreakActivity" /> <!-- Best Streak Detail Activity -->
-        <activity
-            android:name=".ui.streakpage.BestStreakDetailActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.streakpage.StreakActivity" />
     </application>
 
 </manifest>
