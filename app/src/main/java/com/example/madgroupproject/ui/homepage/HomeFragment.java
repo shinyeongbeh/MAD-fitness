@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import com.example.madgroupproject.R;
 
 public class HomeFragment extends Fragment {
+    private boolean childFragmentadded = false;
 
     public HomeFragment() {
         super(R.layout.fragment_home);
@@ -46,5 +47,10 @@ public class HomeFragment extends Fragment {
         btnSettings.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_settingMainActivity);
         });
+
+        if(!childFragmentadded && getChildFragmentManager().findFragmentById(R.id.dashboardContainer) == null) {
+            getChildFragmentManager().beginTransaction().add(R.id.dashboardContainer, new FitnessDashboard()).commit();
+            childFragmentadded = true;
+        }
     }
 }
