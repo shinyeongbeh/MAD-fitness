@@ -10,12 +10,12 @@
     <item
         android:title="Streak"
         android:icon="@drawable/ic_flame"
-        android:id="@+id/navStreak"
+        android:id="@+id/streakFragment"
         />
     <item
         android:title="Goal"
         android:icon="@drawable/ic_flag"
-        android:id="@+id/navGoal"
+        android:id="@+id/goalFragment"
         />
     <item
         android:title="Stats"
@@ -26,7 +26,7 @@
     <item
         android:title="Game Levels"
         android:icon="@drawable/ic_gamelevel"
-        android:id="@+id/navLevels"
+        android:id="@+id/gameLevelFragment"
         />
 
 </menu>

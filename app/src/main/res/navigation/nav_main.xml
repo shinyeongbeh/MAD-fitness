@@ -10,9 +10,27 @@
         android:name="com.example.madgroupproject.ui.homepage.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/streakFragment"
+        android:name="com.example.madgroupproject.ui.streakpage.StreakFragment"
+        android:label="fragment_streak"
+        tools:layout="@layout/fragment_streak" />
+    <fragment
+        android:id="@+id/goalFragment"
+        android:name="com.example.madgroupproject.ui.goalpage.GoalFragment"
+        android:label="fragment_goal"
+        tools:layout="@layout/fragment_goal" />
+
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.example.madgroupproject.ui.statspage.StatsFragment"
         android:label="fragment_stats"
         tools:layout="@layout/fragment_stats" />
+
+    <fragment
+        android:id="@+id/gameLevelFragment"
+        android:name="com.example.madgroupproject.ui.gamelevelspage.GameLevelFragment"
+        android:label="fragment_game_level"
+        tools:layout="@layout/fragment_game_level" />
 </navigation>
