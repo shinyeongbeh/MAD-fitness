@@ -2,11 +2,16 @@ package com.example.madgroupproject.ui.settingpage;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.madgroupproject.R;
 
@@ -63,4 +68,69 @@ public class Account extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.setting_fragment_account, container, false);
     }
+
+    private EditText etName, etEmail, etPhone, etBirthday, etWeight, etHeight;
+    private Button btnEdit;
+    private boolean isEditing = false;
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        etName = view.findViewById(R.id.Username);
+        etEmail = view.findViewById(R.id.Email);
+        etPhone = view.findViewById(R.id.phone);
+        etBirthday = view.findViewById(R.id.Age);
+        etWeight = view.findViewById(R.id.Weight);
+        etHeight = view.findViewById(R.id.Height);
+        btnEdit = view.findViewById(R.id.button_Account_Edit);
+
+        //load current profile
+        //etName.setText();
+
+        btnEdit.setOnClickListener(v -> {
+            if (!isEditing) {
+                //save changes
+                etName.setEnabled(true);
+                etEmail.setEnabled(true);
+                etPhone.setEnabled(true);
+                etBirthday.setEnabled(true);
+                etWeight.setEnabled(true);
+                etHeight.setEnabled(true);
+                isEditing = true;
+                btnEdit.setText("Save");
+            } else {
+                //enter edit mode
+
+                etName.setEnabled(false);
+                etEmail.setEnabled(false);
+                etPhone.setEnabled(false);
+                etBirthday.setEnabled(false);
+                etWeight.setEnabled(false);
+                etHeight.setEnabled(false);
+                btnEdit.setText("Edit");
+
+                //TODO: Call your backend API to save changes
+
+                //saveProfileToBackend(newName,newEmail,NewPhone,NewBirthday,NewWeight,NewHeight);
+                isEditing = false;
+            }
+
+        });
+
+    }
+    private void saveProfileToBackend(String name, String email) {
+        // Example pseudo-code
+        // You can use Retrofit, Volley, or any HTTP client
+        Log.d("ProfileFragment", "Saving profile: Name=" + name + ", Email=" + email);
+
+        // Show success message
+        Toast.makeText(requireContext(), "Profile saved!", Toast.LENGTH_SHORT).show();
+    }
 }
+
+
+
+
+
+
