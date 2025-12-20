@@ -1,5 +1,7 @@
 package com.example.madgroupproject.ui.settingpage;
 
+import static kotlinx.serialization.descriptors.ContextAwareKt.withContext;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.madgroupproject.R;
+import com.example.madgroupproject.data.local.AppDatabase;
+import com.example.madgroupproject.data.local.entity.UserProfile;
+
+import java.util.concurrent.Executors;
+
+import kotlinx.coroutines.Dispatchers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,6 +80,8 @@ public class Account extends Fragment {
     private EditText etName, etEmail, etPhone, etBirthday, etWeight, etHeight;
     private Button btnEdit;
     private boolean isEditing = false;
+    private AppDatabase db;
+    private UserProfile profile;
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -85,8 +95,46 @@ public class Account extends Fragment {
         etHeight = view.findViewById(R.id.Height);
         btnEdit = view.findViewById(R.id.button_Account_Edit);
 
+        db = AppDatabase.getDatabase(requireContext());
+
+
+
         //load current profile
-        //etName.setText();
+
+        /*profile = db.userProfileDao().getProfile();
+        if (profile != null) {
+            etName.setText(profile.getName());
+            etEmail.setText(profile.getEmail());
+        } else {
+            // First time, create empty profile
+            profile = new UserProfile(" ", " ", " ", " ", " ", "");
+            db.userProfileDao().insert(profile);
+
+        }*/
+
+        // Run Room query on background thread
+        Executors.newSingleThreadExecutor().execute(() -> {
+             profile = db.userProfileDao().getProfile();
+
+            if (profile == null) {
+                profile = new UserProfile("", "", "", "", "", "");
+                db.userProfileDao().insert(profile);
+            }
+
+
+
+            // Update UI on main thread
+            requireActivity().runOnUiThread(() -> {
+                etName.setText(profile.getName());
+                etEmail.setText(profile.getEmail());
+                etPhone.setText(profile.getPhone());
+                etBirthday.setText(profile.getBirthday());
+                etWeight.setText(profile.getWeight());
+                etHeight.setText(profile.getHeight());
+            });
+        });
+
+
 
         btnEdit.setOnClickListener(v -> {
             if (!isEditing) {
@@ -97,10 +145,25 @@ public class Account extends Fragment {
                 etBirthday.setEnabled(true);
                 etWeight.setEnabled(true);
                 etHeight.setEnabled(true);
-                isEditing = true;
+
                 btnEdit.setText("Save");
+
+                isEditing = true;
+
             } else {
                 //enter edit mode
+
+                // Save changes to Room
+                profile.setName(etName.getText().toString().trim());
+                profile.setEmail(etEmail.getText().toString().trim());
+                profile.setPhone(etPhone.getText().toString().trim());
+                profile.setBirthday(etBirthday.getText().toString().trim());
+                profile.setWeight(etWeight.getText().toString().trim());
+                profile.setHeight(etHeight.getText().toString().trim());
+
+                // Run DB update on background thread
+                Executors.newSingleThreadExecutor().execute(() -> db.userProfileDao().update(profile));
+
 
                 etName.setEnabled(false);
                 etEmail.setEnabled(false);
@@ -110,22 +173,13 @@ public class Account extends Fragment {
                 etHeight.setEnabled(false);
                 btnEdit.setText("Edit");
 
-                //TODO: Call your backend API to save changes
-
-                //saveProfileToBackend(newName,newEmail,NewPhone,NewBirthday,NewWeight,NewHeight);
                 isEditing = false;
+
+                Toast.makeText(requireContext(), "Profile saved locally!", Toast.LENGTH_SHORT).show();
             }
 
         });
 
-    }
-    private void saveProfileToBackend(String name, String email) {
-        // Example pseudo-code
-        // You can use Retrofit, Volley, or any HTTP client
-        Log.d("ProfileFragment", "Saving profile: Name=" + name + ", Email=" + email);
-
-        // Show success message
-        Toast.makeText(requireContext(), "Profile saved!", Toast.LENGTH_SHORT).show();
     }
 }
 

@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.madgroupproject"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -67,4 +67,25 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
 
     implementation("com.google.code.gson:gson:2.10.1")
+
+    val room_version = "2.8.4"
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+//    ksp("androidx.room:room-compiler:$room_version")
+
+    // If this project only uses Java source, use the Java annotationProcessor
+    // No additional plugins are necessary
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+
+    // Google Play Services - Recording API (The core tracker)
+    implementation("com.google.android.gms:play-services-fitness:21.2.0")
+
+    // WorkManager (Java support)
+    val workVersion = "2.9.1"
+    implementation("androidx.work:work-runtime:$workVersion")
+
 }
