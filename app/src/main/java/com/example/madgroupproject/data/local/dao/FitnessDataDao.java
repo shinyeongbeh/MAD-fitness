@@ -1,6 +1,5 @@
 package com.example.madgroupproject.data.local.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -12,7 +11,7 @@ import com.example.madgroupproject.data.local.entity.FitnessDataEntity;
 public interface FitnessDataDao {
     // Return daily statistics
     @Query("SELECT * FROM fitness_data WHERE date = :date")
-    LiveData<FitnessDataEntity> getStatsLive(String date);
+    FitnessDataEntity getByDate(String date);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertOrUpdate(FitnessDataEntity data);

@@ -27,11 +27,11 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-public class FitnessManager {
-    private static final String TAG = "FitnessManager";
+public class RecordingAPIManager {
+    private static final String TAG = "RecordingAPIManager";
     private final LocalRecordingClient recordingClient;
 
-    public FitnessManager(Context context) {
+    public RecordingAPIManager(Context context) {
         this.recordingClient = FitnessLocal.getLocalRecordingClient(context);
     }
 
@@ -63,7 +63,7 @@ public class FitnessManager {
     }
 
     // 2. Read Data synchronously (Must be called from background thread)
-    public DailyData readDailyTotals() {
+    public DataRecordingAPI readDailyTotals() {
         long endTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond();
         long startTime = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
 
@@ -125,16 +125,16 @@ public class FitnessManager {
             Log.e(TAG, "Error reading data", e);
         }
 
-        return new DailyData(steps, distance, calories);
+        return new DataRecordingAPI(steps, distance, calories);
     }
 
     // Simple POJO holder
-    public static class DailyData {
+    public static class DataRecordingAPI {
         public int steps;
         public float distance;
         public float calories;
 
-        public DailyData(int steps, float distance, float calories) {
+        public DataRecordingAPI(int steps, float distance, float calories) {
             this.steps = steps;
             this.distance = distance;
             this.calories = calories;

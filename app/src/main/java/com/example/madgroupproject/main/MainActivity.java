@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,9 +17,20 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.madgroupproject.R;
+import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
+import com.example.madgroupproject.fitnessmanager.FitnessSyncWorker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.fitness.LocalRecordingClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,24 +53,67 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        checkPermissionAndStart();
-
         //bottom navigation bar
         BottomNavigationView bottomBar = findViewById(R.id.bottom_nav_view);
         NavHostFragment mainFragmentSection = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment_area);
         NavController navController = mainFragmentSection.getNavController();
 
         NavigationUI.setupWithNavController(bottomBar, navController);
+
+        checkGooglePlayService();
+        checkPermissionAndStartTracking();
     }
 
-    private void checkPermissionAndStart() {
+    private void checkGooglePlayService() {
+        int minVersion = LocalRecordingClient.LOCAL_RECORDING_CLIENT_MIN_VERSION_CODE;
+        int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this, minVersion);
+
+        if (result != ConnectionResult.SUCCESS) {
+            // this dialog will ask the user to update Google Play Services
+            GoogleApiAvailability.getInstance()
+                    .getErrorDialog(this, result, 9000)
+                    .show();
+        }
+    }
+    private void checkPermissionAndStartTracking() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
                     != PackageManager.PERMISSION_GRANTED) {
                 requestPermissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION);
             } else {
-                return;
+                startTracking();
             }
+        } else {
+            startTracking();
         }
+    }
+
+    private void startTracking() {
+        RecordingAPIManager recordingAPIManager = new RecordingAPIManager(this);
+        recordingAPIManager.subscribeToRecording(this);
+
+        scheduleFitnessSync();
+    }
+
+    //background sync to database every 30 min
+    private void scheduleFitnessSync() {
+        PeriodicWorkRequest work =
+                new PeriodicWorkRequest.Builder(
+                        FitnessSyncWorker.class,
+                        30,
+                        TimeUnit.MINUTES
+                )
+                        .setConstraints(
+                                new Constraints.Builder()
+                                        .setRequiresBatteryNotLow(true)
+                                        .build()
+                        )
+                        .build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "fitness_sync_work",
+                ExistingPeriodicWorkPolicy.KEEP,
+                work
+        );
     }
 }
