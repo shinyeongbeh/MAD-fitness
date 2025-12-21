@@ -6,8 +6,10 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.madgroupproject.data.local.dao.FitnessDataDao;
+import com.example.madgroupproject.data.local.dao.UserProfileDAO;
 import com.example.madgroupproject.data.local.dao.StreakHistoryDao;
 import com.example.madgroupproject.data.local.entity.FitnessDataEntity;
+import com.example.madgroupproject.data.local.entity.UserProfile;
 import com.example.madgroupproject.data.local.entity.StreakHistoryEntity;
 
 import java.util.concurrent.ExecutorService;
@@ -18,11 +20,14 @@ import java.util.concurrent.Executors;
                 FitnessDataEntity.class,
                 StreakHistoryEntity.class,
 //                GameLevelEntity.class,
-//                GoalEntity.class
+//                GoalEntity.class,
+                UserProfile.class
         },
         version = 1,
         exportSchema = false
 )
+
+
 public abstract class AppDatabase extends RoomDatabase{
     // Singleton instance (only one instance allowed in the app)
     private static volatile AppDatabase INSTANCE;
@@ -31,6 +36,9 @@ public abstract class AppDatabase extends RoomDatabase{
     public abstract StreakHistoryDao streakHistoryDao();
 //    public abstract GameLevelDao gameLevelDao();
 //    public abstract GoalDao goalDao();
+
+
+    public abstract UserProfileDAO userProfileDao();
 
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(4);
