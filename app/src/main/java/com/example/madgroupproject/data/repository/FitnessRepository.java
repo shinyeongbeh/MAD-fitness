@@ -22,7 +22,7 @@ public class FitnessRepository {
 
 
 //    // used to sync to the database entity
-    public void syncTodayFitnessData() {
+    public int syncTodayFitnessData() {
 
         RecordingAPIManager.DataRecordingAPI data =
                 recordingAPIManager.readDailyTotals();
@@ -44,6 +44,7 @@ public class FitnessRepository {
         Log.i("SYNC DATA", "\tlastUpdated: "+entity.lastUpdated);
 
         fitnessDataDao.insertOrUpdate(entity);
+        return data.steps;
     }
 
     // date in yyyy-MM-dd, String
@@ -51,6 +52,4 @@ public class FitnessRepository {
     public FitnessDataEntity fetchDailyData(String date) {
         return fitnessDataDao.getByDate(date);
     }
-
-    //return
 }

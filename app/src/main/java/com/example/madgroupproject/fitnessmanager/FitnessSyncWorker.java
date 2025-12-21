@@ -6,6 +6,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.madgroupproject.data.repository.FitnessRepository;
+import com.example.madgroupproject.data.repository.StreakRepository;
 
 public class FitnessSyncWorker extends Worker {
 
@@ -18,8 +19,11 @@ public class FitnessSyncWorker extends Worker {
     @Override
     public Result doWork() {
         try {
-            FitnessRepository repository = new FitnessRepository(getApplicationContext());
-            repository.syncTodayFitnessData();
+            FitnessRepository fitnessRepository = new FitnessRepository(getApplicationContext());
+            int steps = fitnessRepository.syncTodayFitnessData();
+
+            StreakRepository streakRepository = new StreakRepository(getApplicationContext());
+            streakRepository.insertOrUpdateSteps(steps);
             return Result.success();
         } catch (Exception e) {
             return Result.retry();

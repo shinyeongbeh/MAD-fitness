@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,17 +24,37 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.example.madgroupproject.R;
+import com.example.madgroupproject.data.local.AppDatabase;
+import com.example.madgroupproject.data.repository.FitnessRepository;
 import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
 import com.example.madgroupproject.fitnessmanager.FitnessSyncWorker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.LocalRecordingClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
+    // for debugging only, may delete later
+    // used so that the db is shown in Android Studio's Database Inspector
+    private void triggerDatabaseInspectorRoom() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                FitnessRepository repository = new FitnessRepository(getApplicationContext());
+                repository.fetchDailyData("2025-12-21");
+                Log.i("DEBUG DB", "successfully fetch");
+            } catch(Exception e) {
+                e.printStackTrace();
+                Log.e("DEBUG DB", e.toString());
+            }
+        }
+        );
+
+    }
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (!isGranted) {
@@ -92,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         RecordingAPIManager recordingAPIManager = new RecordingAPIManager(this);
         recordingAPIManager.subscribeToRecording(this);
 
+        triggerDatabaseInspectorRoom();
         scheduleFitnessSync();
     }
 

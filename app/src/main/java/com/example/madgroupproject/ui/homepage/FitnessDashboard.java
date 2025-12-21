@@ -68,24 +68,32 @@ public class FitnessDashboard extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         stopLiveUpdateLoop();
-        backgroundExecutor.shutdownNow(); // Prevent leaks
     }
 
     private void startLiveUpdateLoop() {
         liveUpdateRunnable = new Runnable() {
             @Override
             public void run() {
+                //if fragment is not shown in the UI
+                // only allow live UI updates when fragment is shown in UI
+                if(!isAdded()) {
+                    return;
+                }
                 backgroundExecutor.execute(() -> {
                     //read from Fitness Manager Recording API
                     RecordingAPIManager.DataRecordingAPI data = recordingAPIManager.readDailyTotals();
 
-                    handler.post(() -> {
-                        tvSteps.setText("Steps: " + data.steps);
-                        tvDistance.setText(String.format("Distance: %.2f m", data.distance));
-                        tvCalories.setText(String.format("Calories: %.2f kcal", data.calories));
-                    });
+                    if(isAdded()) {
+                        handler.post(() -> {
+                            tvSteps.setText("Steps: " + data.steps);
+                            tvDistance.setText(String.format("Distance: %.2f m", data.distance));
+                            tvCalories.setText(String.format("Calories: %.2f kcal", data.calories));
+                        });
+                    }
                 });
-                handler.postDelayed(this, 60 * 1000); //update every min
+                if(isAdded()){
+                    handler.postDelayed(this, 60 * 1000); //update every min
+                }
             }
         };
         handler.post(liveUpdateRunnable);

@@ -20,6 +20,7 @@
 
             <!-- Current Streak Title -->
             <TextView
+                android:id="@+id/tvCurrentStreak"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="CURRENT STREAK: 4 DAYS"
@@ -61,6 +62,7 @@
                             android:layout_marginEnd="8dp"/>
 
                         <TextView
+                            android:id="@+id/tvStreakDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Today: Feb 9"
@@ -88,7 +90,7 @@
                             android:id="@+id/tvTodaySteps"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Steps: 760\1000"
+                            android:text="Steps: 760/1000"
                             android:textColor="#999999"
                             android:textSize="16sp"
                             android:fontFamily="@font/coiny"/>
