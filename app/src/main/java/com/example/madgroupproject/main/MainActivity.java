@@ -11,6 +11,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -24,16 +25,13 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.data.local.AppDatabase;
 import com.example.madgroupproject.data.repository.FitnessRepository;
-import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
 import com.example.madgroupproject.fitnessmanager.FitnessSyncWorker;
+import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.LocalRecordingClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -43,18 +41,20 @@ public class MainActivity extends AppCompatActivity {
     // used so that the db is shown in Android Studio's Database Inspector
     private void triggerDatabaseInspectorRoom() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            try {
-                FitnessRepository repository = new FitnessRepository(getApplicationContext());
-                repository.fetchDailyData("2025-12-21");
-                Log.i("DEBUG DB", "successfully fetch");
-            } catch(Exception e) {
-                e.printStackTrace();
-                Log.e("DEBUG DB", e.toString());
-            }
-        }
+                    try {
+                        FitnessRepository repository = new FitnessRepository(getApplicationContext());
+                        repository.fetchDailyData("2025-12-21");
+                        Log.i("DEBUG DB", "successfully fetch");
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                        Log.e("DEBUG DB", e.toString());
+                    }
+                }
         );
 
     }
+
+
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (!isGranted) {
@@ -74,6 +74,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        NotificationUtil.createNotificationChannel(this);
+
+        //checkPermissionAndStart();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+
         //bottom navigation bar
         BottomNavigationView bottomBar = findViewById(R.id.bottom_nav_view);
         NavHostFragment mainFragmentSection = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment_area);
@@ -83,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
         checkGooglePlayService();
         checkPermissionAndStartTracking();
+
+
+
     }
 
     private void checkGooglePlayService() {

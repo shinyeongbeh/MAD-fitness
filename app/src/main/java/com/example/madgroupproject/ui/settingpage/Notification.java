@@ -1,12 +1,17 @@
 package com.example.madgroupproject.ui.settingpage;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 
 import com.example.madgroupproject.R;
 
@@ -15,6 +20,7 @@ import com.example.madgroupproject.R;
  * Use the {@link Notification#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class Notification extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -48,19 +54,30 @@ public class Notification extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.setting_fragment_notification, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.setting_fragment_notification, container, false);
+
+        Switch switchNotification = view.findViewById(R.id.switch1);
+
+        SharedPreferences prefs =
+                requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE);
+
+        // Load saved value
+        boolean enabled = prefs.getBoolean("notifications_enabled", true);
+        switchNotification.setChecked(enabled);
+
+        // Save when toggled
+        switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit()
+                    .putBoolean("notifications_enabled", isChecked)
+                    .apply();
+        });
+
+        return view;
     }
 }
