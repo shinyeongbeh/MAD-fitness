@@ -3,7 +3,11 @@
     package="com.example.madgroupproject" >
 
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <application
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+
+`   <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Fitness Tracker"
@@ -11,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.MAD"
         >
+
         <activity
             android:name=".main.MainActivity"
             android:exported="true">
