@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
 
-`   <application
+
+    `   <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Fitness Tracker"
@@ -25,6 +26,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+   <!-- ✅ BROADCAST RECEIVER GOES HERE -->
+ <!--   <receiver
+        android:name="GoalNotificationReceiver"
+        android:exported="false"/>
+-->
+
+    <receiver
+        android:name=".main.DummyNotificationReceiver"
+        android:exported="false" />
+
+
     </application>
 
 </manifest>

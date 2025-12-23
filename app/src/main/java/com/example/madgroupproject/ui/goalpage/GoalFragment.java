@@ -1,5 +1,6 @@
 package com.example.madgroupproject.ui.goalpage;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -84,6 +85,20 @@ public class GoalFragment extends Fragment {
                         int iconRes = goalManager.getIconForLabel(goalLabel);
                         goalsList.add(new Goal(goalName, goalLabel, iconRes, false));
                     }
+
+
+                    //For Notification Part
+                    // Save this goal as today's notification goal
+                    SharedPreferences prefs =
+                            requireContext().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+
+                    prefs.edit()
+                            .putString("daily_goal", goalName)
+                            .apply();
+
+
+
+
                     goalManager.saveGoals(goalsList);
                     displayGoals();
                     Toast.makeText(requireContext(), "Goal saved!", Toast.LENGTH_SHORT).show();

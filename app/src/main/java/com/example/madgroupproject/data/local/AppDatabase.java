@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 //                GoalEntity.class,
                 UserProfile.class
         },
-        version = 1,
+        version = 2, //change from 1 to 2
         exportSchema = false
 )
 

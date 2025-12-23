@@ -1,9 +1,16 @@
 package com.example.madgroupproject.main;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,6 +39,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.fitness.LocalRecordingClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -74,8 +83,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        // Create notification channel
         NotificationUtil.createNotificationChannel(this);
 
+        // Show dummy notification
+        NotificationUtil.showNotification(this);
+
+     /*   // 🔔 DEMO: Show notification on app open
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (NotificationUtil.isNotificationEnabled(this)) {
+                showDemoGoalNotification();
+            }
+        }, 3000);
+*/
         //checkPermissionAndStart();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -155,4 +175,18 @@ public class MainActivity extends AppCompatActivity {
                 work
         );
     }
+
+
+   /* private void showDemoGoalNotification() {
+        SharedPreferences prefs =
+                getSharedPreferences("user_data", MODE_PRIVATE);
+
+        String goal = prefs.getString("daily_goal", "No goal set");
+
+        NotificationUtil.showNotification(
+                this);
+
+    }*/
+
+
 }

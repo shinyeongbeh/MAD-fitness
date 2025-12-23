@@ -24,6 +24,9 @@ import com.example.madgroupproject.main.MainActivity;
 
 public class SettingsFragment extends Fragment {
 
+
+
+
     private NavController settingsNavController;
 
     @Override
@@ -56,6 +59,11 @@ public class SettingsFragment extends Fragment {
         } else {
             Log.w("SettingsFragment", "NFMainSetting fragment not found or is not NavHostFragment");
         }
+
     }
+
+
+
+
 }
 
