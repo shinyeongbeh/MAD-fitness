@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#D6DAC8">
+    android:background="#D6DAC8"
+    android:fitsSystemWindows="true">
 
     <!-- 可滚动的内容区域 -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -164,10 +165,10 @@
                 android:textAllCaps="false"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- 底部空白区域，确保内容不被导航栏遮挡 -->
+            <!-- 底部空白区域，确保内容不被底部导航栏遮挡 -->
             <View
                 android:layout_width="match_parent"
-                android:layout_height="80dp"/>
+                android:layout_height="100dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

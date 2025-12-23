@@ -1,8 +1,5 @@
 package com.example.madgroupproject.ui.goalpage;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -20,29 +17,21 @@ import android.widget.Toast;
 
 import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.GoalPreferenceManager;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GoalFragment extends Fragment {
-
-//    private static final int REQUEST_CREATE_GOAL = 100;
-//    private static final int REQUEST_EDIT_GOAL = 101;
 
     private LinearLayout goalsContainer;
     private Button btnCreateGoal;
     private List<Goal> goalsList;
     private GoalPreferenceManager goalManager;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         goalManager = new GoalPreferenceManager(requireContext());
-        //goals data are fetched when the fragment is on create
+        // goals数据在fragment创建时获取
         goalsList = goalManager.loadGoals();
     }
 
@@ -59,7 +48,7 @@ public class GoalFragment extends Fragment {
         displayGoals();
         setupListeners(view);
 
-        // Listen for results from CreateGoalDialogFragment
+        // 监听来自CreateGoalDialogFragment的结果
         getParentFragmentManager().setFragmentResultListener("goal_request", this, (requestKey, result) -> {
             if (result.containsKey("goal_deleted")) {
                 int position = result.getInt("goal_position", -1);
@@ -75,30 +64,16 @@ public class GoalFragment extends Fragment {
                 if (goalName != null && goalLabel != null) {
                     int position = result.getInt("goal_position", -1);
                     if (position >= 0 && position < goalsList.size()) {
-                        // Edit existing goal
+                        // 编辑现有目标
                         Goal goal = goalsList.get(position);
                         goal.setName(goalName);
                         goal.setLabel(goalLabel);
                         goal.setIconRes(goalManager.getIconForLabel(goalLabel));
                     } else {
-                        // Create new goal
+                        // 创建新目标
                         int iconRes = goalManager.getIconForLabel(goalLabel);
                         goalsList.add(new Goal(goalName, goalLabel, iconRes, false));
                     }
-
-
-                    //For Notification Part
-                    // Save this goal as today's notification goal
-                    SharedPreferences prefs =
-                            requireContext().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-
-                    prefs.edit()
-                            .putString("daily_goal", goalName)
-                            .apply();
-
-
-
-
                     goalManager.saveGoals(goalsList);
                     displayGoals();
                     Toast.makeText(requireContext(), "Goal saved!", Toast.LENGTH_SHORT).show();
@@ -111,30 +86,6 @@ public class GoalFragment extends Fragment {
         goalsContainer = view.findViewById(R.id.goalsContainer);
         btnCreateGoal = view.findViewById(R.id.btnCreateGoal);
     }
-
-//    private void loadGoals() {
-//        // 从 SharedPreferences 加载保存的 Goals
-//        String goalsJson = sharedPreferences.getString("goals_list", null);
-//
-//        if (goalsJson != null) {
-//            Type type = new TypeToken<ArrayList<GoalActivity.Goal>>(){}.getType();
-//            goalsList = gson.fromJson(goalsJson, type);
-//        } else {
-//            // 如果没有保存的数据，使用默认数据
-//            goalsList = new ArrayList<>();
-//            goalsList.add(new GoalActivity.Goal("Walk the dog", "Exercise", getIconForLabel("Exercise"), false));
-//            goalsList.add(new GoalActivity.Goal("Drink 8 glass water", "Habit", getIconForLabel("Habit"), false));
-//            goalsList.add(new GoalActivity.Goal("Listening to Podcast", "Relax", getIconForLabel("Relax"), false));
-//            saveGoals();
-//        }
-//
-//        displayGoals();
-//    }
-
-//    private void saveGoals() {
-//        String goalsJson = gson.toJson(goalsList);
-//        sharedPreferences.edit().putString("goals_list", goalsJson).apply();
-//    }
 
     private void displayGoals() {
         goalsContainer.removeAllViews();
@@ -188,7 +139,7 @@ public class GoalFragment extends Fragment {
             new CreateGoalDialogFragment().show(getParentFragmentManager(), "create_goal");
         });
 
-        // Suggested Goals
+        // 建议的目标
         root.findViewById(R.id.suggestedExercise).setOnClickListener(v -> {
             CreateGoalDialogFragment.newSuggestedInstance("Exercise 30min", "Exercise")
                     .show(getParentFragmentManager(), "suggested");
@@ -205,10 +156,7 @@ public class GoalFragment extends Fragment {
         });
     }
 
-
-
-
-    // Goal Model Class
+    // Goal模型类
     public static class Goal {
         private String name;
         private String label;
@@ -234,5 +182,4 @@ public class GoalFragment extends Fragment {
         public boolean isCompleted() { return completed; }
         public void setCompleted(boolean completed) { this.completed = completed; }
     }
-
 }
