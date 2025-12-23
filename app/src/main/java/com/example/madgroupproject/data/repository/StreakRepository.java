@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.madgroupproject.data.local.AppDatabase;
 import com.example.madgroupproject.data.local.dao.StreakHistoryDao;
@@ -22,8 +22,8 @@ public class StreakRepository {
         AppDatabase db = AppDatabase.getDatabase(context);
         streakHistoryDao = db.streakHistoryDao();
     }
-    // result format with list of the streak histories and streak count [etc. 8 days]
-    public class StreakResult {
+
+    public static class StreakResult {
         public List<StreakHistoryEntity> streakDays;
         public int streakCount;
 
@@ -33,24 +33,20 @@ public class StreakRepository {
         }
     }
 
-    // fetch the steps from streak entity [Steps: 120/200]
-    // does not observe from Recording API, so UI takes 30 minutes to change, bcs it is sync with FitnessSyncWorker
+    // ✅ 获取今日步数 - LiveData 会自动监听数据库变化
     public LiveData<StreakHistoryEntity> getLiveStepsFromStreakEntity() {
         return streakHistoryDao.observeByDate(LocalDate.now().toString());
     }
 
-    //Using LiveData will allow automatically notify the fragment when DB on change
-    // fetch the current streak day [Current Streak: 4 Days]
+    // ✅ 获取当前 streak - LiveData 会自动更新
     public LiveData<StreakResult> getCurrentStreakLive() {
         MediatorLiveData<StreakResult> resultLiveData = new MediatorLiveData<>();
 
         LiveData<List<StreakHistoryEntity>> source = streakHistoryDao.getAchievedDaysDescLive();
 
         resultLiveData.addSource(source, historyList -> {
-            // This runs on MAIN THREAD, but streak logic may be heavy → offload
             Executors.newSingleThreadExecutor().execute(() -> {
-                StreakResult result = calculateCurrentStreak(historyList); // ✅ Pass actual list
-                // Post result back to main thread
+                StreakResult result = calculateCurrentStreak(historyList);
                 resultLiveData.postValue(result);
             });
         });
@@ -58,97 +54,141 @@ public class StreakRepository {
         return resultLiveData;
     }
 
-    // helper method called in getCurrentStreakLive
-    // used to calculate streak from today
-    public StreakResult calculateCurrentStreak(List<StreakHistoryEntity> achievedDays) {
+    private StreakResult calculateCurrentStreak(List<StreakHistoryEntity> achievedDays) {
         String today = LocalDate.now().toString();
         String yesterday = LocalDate.now().minusDays(1).toString();
 
-        if(achievedDays.isEmpty()) {
+        if (achievedDays == null || achievedDays.isEmpty()) {
             return new StreakResult(null, 0);
         }
-        // if achieved days has not contain today
-        if(!achievedDays.get(0).date.equals(today)) {
-            // check if achieved days contain yesterday or not
-            if(!achievedDays.get(0).date.equals(yesterday)) {
-                // today dont have, yesterday also no achieve -> streak = 0
+
+        // 检查今天或昨天是否达标
+        if (!achievedDays.get(0).date.equals(today)) {
+            if (!achievedDays.get(0).date.equals(yesterday)) {
                 return new StreakResult(null, 0);
             }
         }
 
-        // now only left cases:
-        // today achieve, yesterday achieve / no achieve
-        // today no achieve, yesterday achieve
+        // 计算连续 streak
         int streak = 0;
         int endCounter = 0;
-        for(int i=0; i<achievedDays.size(); i++) {
+        for (int i = 0; i < achievedDays.size(); i++) {
             StreakHistoryEntity currentRecord = achievedDays.get(i);
-            if(i>0) {
-                // check if the day is 连续跟上个记录
+            if (i > 0) {
                 LocalDate currentRecordDate = LocalDate.parse(currentRecord.date);
-                LocalDate lastRecordDate = LocalDate.parse(achievedDays.get(i-1).date);
-//                Log.i("CALCSTREAK","Date: "+currentRecord.date);
-                if(!currentRecordDate.equals(lastRecordDate.minusDays(1))) {
+                LocalDate lastRecordDate = LocalDate.parse(achievedDays.get(i - 1).date);
+                if (!currentRecordDate.equals(lastRecordDate.minusDays(1))) {
                     break;
                 }
             }
             streak++;
-            endCounter=i;
-            Log.i("CALCSTREAK","Date: "+currentRecord.date);
-            Log.i("CALCSTREAK","Current streak: "+streak);
+            endCounter = i;
         }
-        List<StreakHistoryEntity> result = achievedDays.subList(0, endCounter+1);
+
+        List<StreakHistoryEntity> result = achievedDays.subList(0, endCounter + 1);
         return new StreakResult(result, streak);
     }
 
-    //TODO: Jiayi
-    //create methods for features
-    //example method below, can change the data type of the argument or the return variable, I simply create one only hahaha
-    public List<StreakHistoryEntity> getLongestStreak(List<StreakHistoryEntity> achievedDays) {
-        return null;
-    }
+    // ✅ 获取最长 streak - LiveData 会自动重新计算
+    public LiveData<Integer> getLongestStreakLiveData() {
+        return Transformations.map(
+                streakHistoryDao.getAchievedDaysDescLive(),
+                achievedList -> {
+                    if (achievedList == null || achievedList.isEmpty()) {
+                        return 0;
+                    }
 
-    // used to update the steps when syncing from Recording API to database happens
-    // used in FitnessSyncWorker
-    public void insertOrUpdateSteps(int steps) {
-        StreakHistoryEntity streakData = new StreakHistoryEntity(
-                LocalDate.now().toString(),
-                steps,
-                checkAchieved(steps),
-                getMinSteps(),
-                System.currentTimeMillis()
+                    int longest = 1;
+                    int current = 1;
+
+                    for (int i = 0; i < achievedList.size() - 1; i++) {
+                        LocalDate d1 = LocalDate.parse(achievedList.get(i).date);
+                        LocalDate d2 = LocalDate.parse(achievedList.get(i + 1).date);
+
+                        // 检查是否连续
+                        if (d1.minusDays(1).equals(d2)) {
+                            current++;
+                            longest = Math.max(longest, current);
+                        } else {
+                            current = 1;
+                        }
+                    }
+                    return longest;
+                }
         );
-        Executors.newSingleThreadExecutor().execute(()->streakHistoryDao.insertOrUpdate(streakData));
     }
 
-    private boolean checkAchieved(int steps) {
-        StreakHistoryEntity dataToday = streakHistoryDao.getByDate(LocalDate.now().toString());
-        // case where today's record hasnt been recorded
-        if(dataToday==null) {
-            return false;
-        }
-        if(dataToday.achieved) {
-            return true;
-        }
-        // in the case where today has record
-        // check whether the new steps can achieve streak
-        if(steps>=dataToday.minStepsRequired) {
-            return true;
-        } else {
-            return false;
-        }
+    // ✅ 插入或更新步数 - 会触发 LiveData 更新
+    public void insertOrUpdateSteps(int steps) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            String today = LocalDate.now().toString();
+            StreakHistoryEntity todayData = streakHistoryDao.getByDate(today);
+
+            int minSteps;
+            boolean achieved;
+
+            if (todayData == null) {
+                StreakHistoryEntity yesterday =
+                        streakHistoryDao.getByDate(LocalDate.now().minusDays(1).toString());
+
+                minSteps = (yesterday != null) ? yesterday.minStepsRequired : 0;
+                achieved = steps >= minSteps;
+            } else {
+                minSteps = todayData.minStepsRequired;
+                achieved = todayData.achieved || steps >= minSteps;
+            }
+
+            StreakHistoryEntity entity = new StreakHistoryEntity(
+                    today,
+                    steps,
+                    achieved,
+                    minSteps,
+                    System.currentTimeMillis()
+            );
+
+            streakHistoryDao.insertOrUpdate(entity);
+            Log.d("StreakRepository", "Updated today's data: steps=" + steps + ", achieved=" + achieved);
+        });
     }
 
-    private int getMinSteps() {
-        StreakHistoryEntity dataToday = streakHistoryDao.getByDate(LocalDate.now().toString());
-        // case where today's record hasnt been recorded
-        if(dataToday==null) {
-            //check for yesterday's min steps
-            StreakHistoryEntity dataYesterday = streakHistoryDao.getByDate(LocalDate.now().minusDays(1).toString());
-            return dataYesterday.minStepsRequired;
-        }
+    // ✅ 获取某日 streak - LiveData 会监听变化
+    public LiveData<StreakHistoryEntity> getStreakByDateLive(String date) {
+        return streakHistoryDao.observeByDate(date);
+    }
 
-        //case where today has record
-        return dataToday.minStepsRequired;
+    // ✅ 更新最小步数目标 - 会触发 LiveData 更新并重新计算所有天数的 achieved 状态
+    public void updateMinSteps(String date, int newGoal) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // 获取所有历史数据
+            List<StreakHistoryEntity> allData = streakHistoryDao.getAll();
+
+            // 更新所有天数的 minStepsRequired 和 achieved 状态
+            for (StreakHistoryEntity entity : allData) {
+                // 重新计算 achieved 状态
+                boolean newAchieved = entity.steps >= newGoal;
+
+                StreakHistoryEntity updated = new StreakHistoryEntity(
+                        entity.date,
+                        entity.steps,
+                        newAchieved,
+                        newGoal,
+                        System.currentTimeMillis()
+                );
+
+                streakHistoryDao.insertOrUpdate(updated);
+            }
+
+            Log.d("StreakRepository", "Updated min steps for all dates to: " + newGoal);
+        });
+    }
+
+    // ✅ 获取当月数据 - LiveData 会监听变化
+    public LiveData<List<StreakHistoryEntity>> getMonthStreakLive(String yearMonth) {
+        return streakHistoryDao.observeMonthData(yearMonth);
+    }
+
+    // 获取所有数据（用于调试或导出）
+    public List<StreakHistoryEntity> getAll() {
+        return streakHistoryDao.getAll();
     }
 }

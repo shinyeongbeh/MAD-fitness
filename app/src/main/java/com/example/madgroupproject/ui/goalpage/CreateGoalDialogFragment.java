@@ -2,11 +2,11 @@ package com.example.madgroupproject.ui.goalpage;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +14,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.madgroupproject.R;
@@ -34,7 +34,7 @@ public class CreateGoalDialogFragment extends DialogFragment {
     private Spinner spinnerLabel;
     private TextView tvReminderTime;
     private SwitchCompat switchReminder;
-    private Button btnSaveGoal, btnDeleteGoal;
+    private Button btnSaveGoal, btnDeleteGoal, btnBack;
 
     private int selectedHour = 18;
     private int selectedMinute = 30;
@@ -67,7 +67,39 @@ public class CreateGoalDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme); // Optional: custom style
+        // 设置为全屏样式，完全填充父容器
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle);
+
+        // 使用新的 OnBackPressedCallback 处理返回按钮
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                dismiss();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        return new Dialog(requireActivity(), getTheme());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            Window window = dialog.getWindow();
+            if (window != null) {
+                // 设置对话框完全填充屏幕，但不覆盖底部导航栏
+                window.setLayout(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                );
+            }
+        }
     }
 
     @Nullable
@@ -93,8 +125,9 @@ public class CreateGoalDialogFragment extends DialogFragment {
         switchReminder = view.findViewById(R.id.switchReminder);
         btnSaveGoal = view.findViewById(R.id.btnSaveGoal);
         btnDeleteGoal = view.findViewById(R.id.btnDeleteGoal);
+        btnBack = view.findViewById(R.id.btnBack);
 
-        // Hide delete button by default
+        // 默认隐藏删除按钮
         btnDeleteGoal.setVisibility(View.GONE);
     }
 
@@ -144,12 +177,7 @@ public class CreateGoalDialogFragment extends DialogFragment {
         tvReminderTime.setOnClickListener(v -> showTimePicker());
         btnSaveGoal.setOnClickListener(v -> saveGoal());
         btnDeleteGoal.setOnClickListener(v -> deleteGoal());
-
-        // Optional: close on back icon if you add one
-        View btnBack = getView().findViewById(R.id.btnBack);
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> dismiss());
-        }
+        btnBack.setOnClickListener(v -> dismiss());
     }
 
     private void showTimePicker() {

@@ -9,8 +9,9 @@
     <!-- 可滚动的内容区域 -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,6 +28,7 @@
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"/>
 
             <!-- Goals List Container -->
@@ -163,6 +165,11 @@
                         android:gravity="center"/>
                 </LinearLayout>
             </LinearLayout>
+
+            <!-- 底部空白区域，确保内容不被导航栏遮挡 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"/>
 
         </LinearLayout>
     </ScrollView>
