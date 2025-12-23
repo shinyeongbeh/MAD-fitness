@@ -57,6 +57,8 @@ public class StreakFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(StreakViewModel.class);
 
+        viewModel.autoInitTodayRecord();
+
         // ✅ 观察 Best Streak - 数据库变化时自动更新
         viewModel.getBestStreakLiveData()
                 .observe(getViewLifecycleOwner(), best -> {

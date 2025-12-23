@@ -191,4 +191,40 @@ public class StreakRepository {
     public List<StreakHistoryEntity> getAll() {
         return streakHistoryDao.getAll();
     }
+
+    /**
+     * ✅ 安全初始化当天记录（自动版）
+     * - 如果今天已有记录，不做任何操作
+     * - 如果今天没有记录，生成默认步数 0
+     * - 自动继承昨天的 minStepsRequired
+     */
+    public void autoInitTodayRecord() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            String today = LocalDate.now().toString();
+            StreakHistoryEntity todayData = streakHistoryDao.getByDate(today);
+
+            if (todayData != null) {
+                // 今天已有记录，直接返回
+                return;
+            }
+
+            // 获取昨天的 minStepsRequired
+            StreakHistoryEntity yesterdayData =
+                    streakHistoryDao.getByDate(LocalDate.now().minusDays(1).toString());
+            int minSteps = (yesterdayData != null) ? yesterdayData.minStepsRequired : 10000; // 默认目标
+
+            // 创建今天的新记录
+            StreakHistoryEntity newToday = new StreakHistoryEntity(
+                    today,
+                    0,          // 默认步数
+                    false,      // 未达标
+                    minSteps,
+                    System.currentTimeMillis()
+            );
+
+            streakHistoryDao.insertOrUpdate(newToday);
+            Log.d("StreakRepository", "Auto-initialized today's record: " + today);
+        });
+    }
+
 }

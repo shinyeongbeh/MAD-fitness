@@ -1,4 +1,5 @@
 package com.example.madgroupproject.data.local;
+
 import android.content.Context;
 
 import androidx.room.Database;
@@ -6,11 +7,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.madgroupproject.data.local.dao.FitnessDataDao;
-import com.example.madgroupproject.data.local.dao.UserProfileDAO;
 import com.example.madgroupproject.data.local.dao.StreakHistoryDao;
+import com.example.madgroupproject.data.local.dao.UserProfileDAO;
 import com.example.madgroupproject.data.local.entity.FitnessDataEntity;
-import com.example.madgroupproject.data.local.entity.UserProfile;
 import com.example.madgroupproject.data.local.entity.StreakHistoryEntity;
+import com.example.madgroupproject.data.local.entity.UserProfile;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,31 +20,24 @@ import java.util.concurrent.Executors;
         entities = {
                 FitnessDataEntity.class,
                 StreakHistoryEntity.class,
-//                GameLevelEntity.class,
-//                GoalEntity.class,
                 UserProfile.class
         },
-        version = 2, //change from 1 to 2
+        version = 2, // ✅ 一定要升版本
         exportSchema = false
 )
+public abstract class AppDatabase extends RoomDatabase {
 
-
-public abstract class AppDatabase extends RoomDatabase{
-    // Singleton instance (only one instance allowed in the app)
     private static volatile AppDatabase INSTANCE;
+
+    private static final int NUMBER_OF_THREADS = 4;
+    public static final ExecutorService databaseWriteExecutor =
+            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public abstract FitnessDataDao fitnessDataDao();
     public abstract StreakHistoryDao streakHistoryDao();
-//    public abstract GameLevelDao gameLevelDao();
-//    public abstract GoalDao goalDao();
-
-
     public abstract UserProfileDAO userProfileDao();
 
-    public static final ExecutorService databaseWriteExecutor =
-            Executors.newFixedThreadPool(4);
-    // Singleton getInstance method
-    public static AppDatabase getDatabase(Context context) {
+    public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
@@ -52,6 +46,8 @@ public abstract class AppDatabase extends RoomDatabase{
                                     AppDatabase.class,
                                     "fitness_app_db"
                             )
+                            // ✅ 关键修复：允许删库重建
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
@@ -59,3 +55,4 @@ public abstract class AppDatabase extends RoomDatabase{
         return INSTANCE;
     }
 }
+

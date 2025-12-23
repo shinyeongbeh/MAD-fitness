@@ -59,6 +59,11 @@ public class StreakViewModel extends AndroidViewModel {
     public List<StreakHistoryEntity> getAllStreakData() {
         return repository.getAll();
     }
+
+    public void autoInitTodayRecord() {
+        repository.autoInitTodayRecord();
+    }
+
 }
 
 
