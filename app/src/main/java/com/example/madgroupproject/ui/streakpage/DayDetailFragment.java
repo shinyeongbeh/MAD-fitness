@@ -1,3 +1,6 @@
+// ========================================
+// 6. DayDetailFragment.java (完整改进版)
+// ========================================
 package com.example.madgroupproject.ui.streakpage;
 
 import android.os.Bundle;
@@ -21,8 +24,11 @@ import com.example.madgroupproject.data.viewmodel.StreakViewModel;
 import java.time.LocalDate;
 
 public class DayDetailFragment extends Fragment {
+    private static final String TAG = "DayDetailFragment";
 
     private StreakViewModel viewModel;
+    private TextView title, tvSteps, tvGoal, tvStatus;
+    private Button btnBack;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,43 +39,63 @@ public class DayDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView title = view.findViewById(R.id.tvDayTitle);
-        Button back = view.findViewById(R.id.btnBack);
-
-        TextView tvSteps = view.findViewById(R.id.tvSteps);
-        TextView tvGoal = view.findViewById(R.id.tvGoal);
-        TextView tvStatus = view.findViewById(R.id.tvStatus);
-
-        // 检查控件是否为 null
-        if (title == null) Log.e("DayDetailFragment", "tvDayTitle is null!");
-        if (tvSteps == null) Log.e("DayDetailFragment", "tvSteps is null!");
-        if (tvGoal == null) Log.e("DayDetailFragment", "tvGoal is null!");
-        if (tvStatus == null) Log.e("DayDetailFragment", "tvStatus is null!");
-        if (back == null) Log.e("DayDetailFragment", "btnBack is null!");
-
+        initViews(view);
         viewModel = new ViewModelProvider(this).get(StreakViewModel.class);
 
+        // 获取传递的日期参数
         Bundle args = getArguments();
-        String dateStr = (args != null) ? args.getString("date", LocalDate.now().toString()) : LocalDate.now().toString();
+        String dateStr = (args != null) ? args.getString("date", LocalDate.now().toString())
+                : LocalDate.now().toString();
 
-        LocalDate parsedDate;
+        setupUI(dateStr);
+        setupObserver(dateStr);
+    }
+
+    private void initViews(View view) {
+        title = view.findViewById(R.id.tvDayTitle);
+        tvSteps = view.findViewById(R.id.tvSteps);
+        tvGoal = view.findViewById(R.id.tvGoal);
+        tvStatus = view.findViewById(R.id.tvStatus);
+        btnBack = view.findViewById(R.id.btnBack);
+
+        // 检查控件是否为 null
+        if (title == null) Log.e(TAG, "tvDayTitle is null!");
+        if (tvSteps == null) Log.e(TAG, "tvSteps is null!");
+        if (tvGoal == null) Log.e(TAG, "tvGoal is null!");
+        if (tvStatus == null) Log.e(TAG, "tvStatus is null!");
+        if (btnBack == null) Log.e(TAG, "btnBack is null!");
+
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+        }
+    }
+
+    private void setupUI(String dateStr) {
         try {
-            parsedDate = LocalDate.parse(dateStr);
+            LocalDate parsedDate = LocalDate.parse(dateStr);
+            if (title != null) {
+                String monthName = parsedDate.getMonth().getDisplayName(
+                        java.time.format.TextStyle.FULL,
+                        java.util.Locale.ENGLISH
+                );
+                title.setText(monthName + " " + parsedDate.getDayOfMonth());
+            }
         } catch (Exception e) {
-            parsedDate = LocalDate.now();
+            Log.e(TAG, "Error parsing date: " + dateStr, e);
+            if (title != null) {
+                title.setText("Invalid Date");
+            }
         }
+    }
 
-        if (title != null) {
-            title.setText(parsedDate.getMonth().getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH)
-                    + " " + parsedDate.getDayOfMonth());
-        }
-
-        if (back != null) {
-            back.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
-        }
-
+    private void setupObserver(String dateStr) {
         viewModel.getStreakByDate(dateStr).observe(getViewLifecycleOwner(), streak -> {
-            if (tvSteps != null && tvGoal != null && tvStatus != null) {
+            try {
+                if (tvSteps == null || tvGoal == null || tvStatus == null) {
+                    Log.e(TAG, "One or more TextViews are null");
+                    return;
+                }
+
                 if (streak == null) {
                     tvSteps.setText("Steps: 0");
                     tvGoal.setText("Goal: -");
@@ -88,6 +114,8 @@ public class DayDetailFragment extends Fragment {
                     tvStatus.setText("Not achieved ❌");
                     tvStatus.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark));
                 }
+            } catch (Exception e) {
+                Log.e(TAG, "Error updating UI with streak data", e);
             }
         });
     }

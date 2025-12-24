@@ -19,8 +19,6 @@ import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.StreakPreferenceManager;
 import com.example.madgroupproject.data.viewmodel.StreakViewModel;
 
-import java.time.LocalDate;
-
 public class ChangeStreakFragment extends Fragment {
 
     private TextView tvCurrentStreak;
@@ -28,6 +26,7 @@ public class ChangeStreakFragment extends Fragment {
     private Button btnChange, btnCancel;
 
     private StreakPreferenceManager streakManager;
+    private StreakViewModel viewModel;
     private int currentGoal;
 
     @Override
@@ -51,44 +50,58 @@ public class ChangeStreakFragment extends Fragment {
         btnChange = view.findViewById(R.id.btnChange);
         btnCancel = view.findViewById(R.id.btnCancel);
 
+        viewModel = new ViewModelProvider(this).get(StreakViewModel.class);
+
         tvCurrentStreak.setText(currentGoal + " steps daily");
 
-        btnChange.setOnClickListener(v -> {
-            String input = etNewStreak.getText().toString().trim();
-            if (input.isEmpty()) {
-                Toast.makeText(requireContext(), "Please enter a goal", Toast.LENGTH_SHORT).show();
+        btnChange.setOnClickListener(v -> handleChangeGoal());
+        btnCancel.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+    }
+
+    private void handleChangeGoal() {
+        String input = etNewStreak.getText().toString().trim();
+
+        if (input.isEmpty()) {
+            Toast.makeText(requireContext(), "Please enter a goal", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            int newGoal = Integer.parseInt(input);
+
+            if (newGoal <= 0) {
+                Toast.makeText(requireContext(), "Goal must be greater than 0", Toast.LENGTH_SHORT).show();
                 return;
             }
-            try {
-                int newGoal = Integer.parseInt(input);
-                if (newGoal <= 0) throw new NumberFormatException();
 
-                // ✅ 保存新目标到 SharedPreferences
-                streakManager.setDailyGoal(newGoal);
+            // 禁用按钮防止重复点击
+            btnChange.setEnabled(false);
+            btnCancel.setEnabled(false);
 
-                StreakViewModel viewModel = new ViewModelProvider(this).get(StreakViewModel.class);
+            // ✅ 使用回调确认操作完成
+            viewModel.updateMinSteps(newGoal, (success, errorMessage) -> {
+                requireActivity().runOnUiThread(() -> {
+                    if (success) {
+                        Toast.makeText(requireContext(),
+                                "Goal updated successfully!",
+                                Toast.LENGTH_SHORT).show();
 
-                // ✅ 更新数据库中所有天数的目标和 achieved 状态
-                // 注意：这里不传 date，而是更新所有记录
-                viewModel.updateMinSteps(LocalDate.now().toString(), newGoal);
+                        // LiveData 会自动更新，直接返回
+                        NavHostFragment.findNavController(this).navigateUp();
+                    } else {
+                        Toast.makeText(requireContext(),
+                                "Failed to update goal: " + (errorMessage != null ? errorMessage : "Unknown error"),
+                                Toast.LENGTH_LONG).show();
 
-                Toast.makeText(requireContext(), "Goal updated! Recalculating all streaks...", Toast.LENGTH_SHORT).show();
+                        // 重新启用按钮
+                        btnChange.setEnabled(true);
+                        btnCancel.setEnabled(true);
+                    }
+                });
+            });
 
-                // ✅ 发送结果回 StreakFragment
-                Bundle result = new Bundle();
-                result.putInt("newGoal", newGoal);
-                getParentFragmentManager().setFragmentResult("streak_goal_update", result);
-
-                // ✅ 延迟返回，给数据库时间更新
-                view.postDelayed(() -> {
-                    NavHostFragment.findNavController(this).navigateUp();
-                }, 500);
-
-            } catch (NumberFormatException e) {
-                Toast.makeText(requireContext(), "Enter a valid number", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnCancel.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
+        } catch (NumberFormatException e) {
+            Toast.makeText(requireContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
+        }
     }
 }

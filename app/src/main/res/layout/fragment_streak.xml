@@ -79,7 +79,6 @@
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
 
-                        <!-- ✅ 添加 id 给这个 ImageView -->
                         <ImageView
                             android:id="@+id/ivTodayCheck"
                             android:layout_width="32dp"
@@ -114,17 +113,47 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Month Header -->
-                    <TextView
+                    <!-- ✅ Month Header with Navigation -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="December"
-                        android:textColor="#000000"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/coiny"
-                        android:gravity="center"
-                        android:layout_marginBottom="16dp"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <!-- Previous Month Button -->
+                        <ImageButton
+                            android:id="@+id/btnPrevMonth"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@android:drawable/ic_media_previous"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Previous Month"
+                            app:tint="#000000" />
+
+                        <!-- Month Title -->
+                        <TextView
+                            android:id="@+id/tvMonthTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="December 2024"
+                            android:textColor="#000000"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/coiny"
+                            android:gravity="center"/>
+
+                        <!-- Next Month Button -->
+                        <ImageButton
+                            android:id="@+id/btnNextMonth"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@android:drawable/ic_media_next"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Next Month"
+                            app:tint="#000000" />
+                    </LinearLayout>
 
                     <!-- Calendar Grid -->
                     <GridLayout
