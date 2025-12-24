@@ -1,7 +1,43 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MadMerge" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.MAD" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
+        <!-- Font (same as light) -->
+        <item name="android:fontFamily">@font/coiny</item>
+
+        <!-- Primary (Green stays, but deeper) -->
+        <item name="colorPrimary">#81C784</item>
+        <item name="colorOnPrimary">#003300</item>
+        <item name="colorPrimaryContainer">#1B5E20</item>
+        <item name="colorOnPrimaryContainer">#E8F5E9</item>
+
+        <!-- Background / Surface -->
+        <item name="android:windowBackground">#121212</item>
+        <item name="colorSurface">#1E1E1E</item>
+        <item name="colorSurfaceVariant">#3A3A3A</item>
+        <item name="colorSurface">#3A3A3A</item>
+
+        <!-- On Surface (text/icons) -->
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorOnSurfaceVariant">#BDBDBD</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">#121212</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">#121212</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- Text -->
+        <item name="android:textColorPrimary">#000000</item>
+
+        <item name="bottomNavigationStyle">
+            @style/Widget.Material3.BottomNavigationView
+        </item>
+
+
+
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 </resources>

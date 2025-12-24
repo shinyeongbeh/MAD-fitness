@@ -91,56 +91,20 @@
             android:layout_width="198dp"
             android:layout_height="35dp"
             android:layout_marginStart="106dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="107dp"
             android:text="Notification Bar"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_Notification_Storage" />
-
-        <Button
-            android:id="@+id/button_Notification_HT"
-            android:layout_width="224dp"
-            android:layout_height="54dp"
-            android:layout_marginStart="93dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="94dp"
-            android:layout_marginBottom="336dp"
-            android:backgroundTint="@color/buttonBackgroundColorTint"
-            android:text="    Health Tips"
-            android:textAlignment="textStart"
-            android:textColor="#020000"
-            android:textColorLink="#BC8787"
-            app:icon="@drawable/ic_launcher_foreground"
-            app:iconGravity="textStart"
-            app:iconSize="30dp"
-            app:iconTint="@color/iconTintPrimary"
-            app:iconTintMode="multiply"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch2"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <Switch
-            android:id="@+id/switch3"
-            android:layout_width="198dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="106dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
-            android:text="Notification Bar"
-            app:layout_constraintBottom_toTopOf="@+id/button_Notification_SMA"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_Notification_HT" />
 
         <Button
             android:id="@+id/button_Notification_SMA"
             android:layout_width="224dp"
             android:layout_height="54dp"
             android:layout_marginStart="93dp"
-            android:layout_marginTop="53dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="94dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="Step Milestone Alerts"
@@ -154,10 +118,10 @@
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_Notification_HT"
-            app:layout_constraintVertical_bias="0.086" />
+            app:layout_constraintTop_toBottomOf="@+id/switch2"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Switch
             android:id="@+id/switch4"
