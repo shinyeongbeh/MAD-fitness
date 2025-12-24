@@ -49,7 +49,7 @@
     - `minStepsRequired` — the target steps for that day.
     - `lastUpdated` — timestamp when record was last changed.
 - **`FitnessSyncWorker.java`:** FitnessSyncWorker.java  
-  - Worker (background job) that runs periodic sync (30 min). The streak entity is updated every 30 min with the latest step count fetched from Recording API. 
+  - Worker (background job) that runs periodic sync (15 min). The streak entity is updated every 15 min with the latest step count fetched from Recording API. 
 - **`StreakHistoryDao.java`:** StreakHistoryDao.java  
   - DAO = Data Access Object. This interface contains the SQL queries the app uses to read and write streak records. Key methods:
     - `observeByDate(String date)` — returns a LiveData-wrapped `StreakHistoryEntity` for a date (UI can observe changes automatically).

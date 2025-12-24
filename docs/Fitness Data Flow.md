@@ -4,7 +4,7 @@ This document explains how fitness data moves through the app, which components 
 
 ## Summary
 1. UI layer: UI directly fetch data from Recording API for live updates
-2. Background sync: a WorkManager worker periodically reads from Recording API and writes to Room DB (FitnessDataEntity). DB is synced every 30 minutes. 
+2. Background sync: a WorkManager worker periodically reads from Recording API and writes to Room DB (FitnessDataEntity). DB is synced every 15 minutes. 
 3. **Other modules can read persisted data from Room via FitnessRepository, using `fetchDailyData(date)`**.
 
 ## Components (source files)
@@ -22,7 +22,7 @@ This document explains how fitness data moves through the app, which components 
    - `subscribeToRecording(...)`: subscribes to continuous recording (called from `MainActivity.startTracking()`).
    - `readDailyTotals()`: reads aggregated totals for the day from Recording API.
 3. `MainActivity` calls `RecordingAPIManager.subscribeToRecording()` and schedules a periodic WorkManager job:
-   - `MainActivity.scheduleFitnessSync()` enqueues a `PeriodicWorkRequest` for `FitnessSyncWorker` every 30 minutes with `setRequiresBatteryNotLow(true)`.
+   - `MainActivity.scheduleFitnessSync()` enqueues a `PeriodicWorkRequest` for `FitnessSyncWorker` every 15 minutes with `setRequiresBatteryNotLow(true)`.
 4. `FitnessSyncWorker` runs on a background thread (WorkManager) and calls into `FitnessRepository.syncTodayFitnessData()`.
 5. `FitnessRepository.syncTodayFitnessData()` calls `RecordingAPIManager.readDailyTotals()`, constructs a `FitnessDataEntity` (date, steps, distanceMeters, calories, lastUpdated), and writes it to the Room DB via `FitnessDataDao.insertOrUpdate(...)` (OnConflictStrategy.REPLACE).
 6. Current app behavior: the on-screen UI reads live data directly from the Recording API (not the DB). For example, `FitnessDashboard` calls `RecordingAPIManager.readDailyTotals()` on a periodic loop and updates the TextViews.
@@ -47,7 +47,7 @@ This document explains how fitness data moves through the app, which components 
 
 ## Quick sequence diagram (text)
 - MainActivity -> RecordingAPIManager: subscribeToRecording()
-- MainActivity -> WorkManager: enqueueUniquePeriodicWork(fitness_sync_work, 30min)
+- MainActivity -> WorkManager: enqueueUniquePeriodicWork(fitness_sync_work, 15min)
 - WorkManager -> FitnessSyncWorker: doWork()
 - FitnessSyncWorker -> FitnessRepository: syncTodayFitnessData()
 - FitnessRepository -> RecordingAPIManager: readDailyTotals()

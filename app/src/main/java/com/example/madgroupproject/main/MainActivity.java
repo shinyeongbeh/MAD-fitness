@@ -156,12 +156,12 @@ public class MainActivity extends AppCompatActivity {
         scheduleFitnessSync();
     }
 
-    //background sync to database every 30 min
+    //background sync to database every 15 min
     private void scheduleFitnessSync() {
         PeriodicWorkRequest work =
                 new PeriodicWorkRequest.Builder(
                         FitnessSyncWorker.class,
-                        30,
+                        15,
                         TimeUnit.MINUTES
                 )
                         .setConstraints(
@@ -189,10 +189,4 @@ public class MainActivity extends AppCompatActivity {
                 this);
 
     }*/
-
-
-
-
-
-
 }
