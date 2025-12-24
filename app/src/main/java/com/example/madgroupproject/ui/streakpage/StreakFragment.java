@@ -2,32 +2,39 @@ package com.example.madgroupproject.ui.streakpage;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.entity.StreakHistoryEntity;
+import com.example.madgroupproject.data.repository.StreakRepository;
 import com.example.madgroupproject.data.viewmodel.StreakViewModel;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 
 public class StreakFragment extends Fragment {
+    private static final String TAG = "StreakFragment";
 
     private GridLayout calendarGrid;
     private Button btnChangeStreakGoal;
@@ -36,13 +43,18 @@ public class StreakFragment extends Fragment {
     private TextView tvCurrentStreak;
     private TextView tvStreakDate;
     private TextView tvBestStreak;
-    private TextView tvBestStreakDates; // ✅ 新增：Best Streak 日期范围
-    private ImageView ivTodayCheck; // ✅ Today 区域的勾
+    private TextView tvBestStreakDates;
+    private TextView tvMonthTitle;
+    private ImageView ivTodayCheck;
+    private ImageButton btnPrevMonth, btnNextMonth;
 
     private StreakViewModel viewModel;
     private List<StreakHistoryEntity> monthData;
-    private int currentYear = LocalDate.now().getYear();
-    private int currentMonth = LocalDate.now().getMonthValue();
+
+    // ✅ 从 ViewModel 获取当前月份（不再是 Fragment 的成员变量）
+    private YearMonth currentYearMonth;
+
+    private LiveData<List<StreakHistoryEntity>> currentMonthLiveData;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,82 +65,18 @@ public class StreakFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initViews(view);
-
+        // ✅ 先初始化 ViewModel
         viewModel = new ViewModelProvider(this).get(StreakViewModel.class);
-
         viewModel.autoInitTodayRecord();
 
-        // ✅ 观察 Best Streak - 数据库变化时自动更新
-        viewModel.getBestStreakLiveData()
-                .observe(getViewLifecycleOwner(), best -> {
-                    if (best != null && best > 0) {
-                        tvBestStreak.setText(best + " days");
-                    } else {
-                        tvBestStreak.setText("0 days");
-                    }
-                });
+        // ✅ 从 ViewModel 恢复月份（ViewModel 在 Fragment 重建时会保留）
+        currentYearMonth = viewModel.getCurrentViewingMonthValue();
+        Log.d(TAG, "Restored month from ViewModel: " + currentYearMonth);
 
-        // ✅ 观察并计算 Best Streak 的日期范围
-        loadBestStreakDateRange();
-
-        String yearMonth = String.format("%04d-%02d", currentYear, currentMonth);
-
-        // ✅ 观察当月数据 - 日历会实时更新颜色
-        viewModel.getMonthStreakLive(yearMonth).observe(getViewLifecycleOwner(), list -> {
-            monthData = list != null ? list : List.of();
-            initializeCalendar(); // 重绘日历
-            loadBestStreakDateRange(); // ✅ 同时更新 Best Streak 日期范围
-        });
-
-        // ✅ 观察 Current Streak - 实时更新
-        viewModel.getStreakLiveData().observe(getViewLifecycleOwner(), currentResult -> {
-            if (currentResult != null && currentResult.streakCount > 0) {
-                tvCurrentStreak.setText(String.format("CURRENT STREAK: %d DAYS", currentResult.streakCount));
-            } else {
-                tvCurrentStreak.setText("CURRENT STREAK: 0 DAYS");
-            }
-        });
-
-        // ✅ 观察今日步数 - 实时更新步数和勾的图标
-        viewModel.getLiveStepsFromStreakEntity().observe(getViewLifecycleOwner(), result -> {
-            if (result != null) {
-                // 更新步数显示
-                tvTodaySteps.setText(String.format("Steps: %d/%d", result.steps, result.minStepsRequired));
-
-                // ✅ 根据达标状态切换图标
-                if (result.achieved) {
-                    // 达标：显示绿色圆底白勾
-                    ivTodayCheck.setImageResource(R.drawable.streak_ic_check_green_circle);
-                    tvTodaySteps.setTextColor(Color.parseColor("#4CAF50")); // 绿色文字
-                } else {
-                    // 未达标：显示灰色圆底白勾
-                    ivTodayCheck.setImageResource(R.drawable.streak_ic_check_gray_circle);
-                    tvTodaySteps.setTextColor(Color.parseColor("#999999")); // 灰色文字
-                }
-            } else {
-                tvTodaySteps.setText("Steps: 0/0");
-                ivTodayCheck.setImageResource(R.drawable.streak_ic_check_gray_circle);
-                tvTodaySteps.setTextColor(Color.parseColor("#999999"));
-            }
-        });
-
-        // 按钮导航
-        btnChangeStreakGoal.setOnClickListener(v ->
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_streakFragment_to_changeStreakFragment)
-        );
-
-        cardBestStreak.setOnClickListener(v ->
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_streakFragment_to_bestStreakDetailFragment)
-        );
-
-        // ✅ 监听从 ChangeStreakFragment 返回的数据
-        getParentFragmentManager().setFragmentResultListener("streak_goal_update",
-                getViewLifecycleOwner(), (requestKey, bundle) -> {
-                    // LiveData 会自动触发更新，这里不需要额外操作
-                });
+        initViews(view);
+        setupObservers();
+        setupClickListeners();
+        setupMonthNavigation();
     }
 
     private void initViews(View view) {
@@ -139,55 +87,198 @@ public class StreakFragment extends Fragment {
         tvCurrentStreak = view.findViewById(R.id.tvCurrentStreak);
         tvStreakDate = view.findViewById(R.id.tvStreakDate);
         tvBestStreak = view.findViewById(R.id.tvBestStreak);
-        tvBestStreakDates = view.findViewById(R.id.tvBestStreakDates); // ✅ 新增
-        ivTodayCheck = view.findViewById(R.id.ivTodayCheck); // ✅ 直接通过 id 获取
+        tvBestStreakDates = view.findViewById(R.id.tvBestStreakDates);
+        tvMonthTitle = view.findViewById(R.id.tvMonthTitle);
+        ivTodayCheck = view.findViewById(R.id.ivTodayCheck);
+        btnPrevMonth = view.findViewById(R.id.btnPrevMonth);
+        btnNextMonth = view.findViewById(R.id.btnNextMonth);
 
-        // 设置今天的日期显示
+        updateTodayDateDisplay();
+        updateMonthTitle();
+    }
+
+    private void updateTodayDateDisplay() {
         LocalDate today = LocalDate.now();
         String monthName = today.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
         tvStreakDate.setText(String.format("Today: %s %d", monthName, today.getDayOfMonth()));
     }
 
-    private void initializeCalendar() {
-        // 保留前 7 个 header（星期标题），移除其他日期格子
-        int childCount = calendarGrid.getChildCount();
-        if (childCount > 7) {
-            calendarGrid.removeViews(7, childCount - 7);
+    private void updateMonthTitle() {
+        if (tvMonthTitle != null) {
+            String monthName = currentYearMonth.getMonth()
+                    .getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+            tvMonthTitle.setText(String.format("%s %d", monthName, currentYearMonth.getYear()));
+            Log.d(TAG, "Updated month title to: " + monthName + " " + currentYearMonth.getYear());
+        }
+    }
+
+    private void setupMonthNavigation() {
+        if (btnPrevMonth != null) {
+            btnPrevMonth.setOnClickListener(v -> {
+                Log.d(TAG, "Previous month clicked. Current: " + currentYearMonth);
+                currentYearMonth = currentYearMonth.minusMonths(1);
+                // ✅ 保存到 ViewModel
+                viewModel.setCurrentViewingMonth(currentYearMonth);
+                updateMonthTitle();
+                loadMonthData();
+            });
         }
 
-        LocalDate firstOfMonth = LocalDate.of(currentYear, currentMonth, 1);
-        int startDay = firstOfMonth.getDayOfWeek().getValue() % 7; // Sunday = 0
-        int daysInMonth = firstOfMonth.lengthOfMonth();
+        if (btnNextMonth != null) {
+            btnNextMonth.setOnClickListener(v -> {
+                YearMonth now = YearMonth.now();
+                Log.d(TAG, "Next month clicked. Current: " + currentYearMonth + ", Now: " + now);
+                if (currentYearMonth.isBefore(now)) {
+                    currentYearMonth = currentYearMonth.plusMonths(1);
+                    // ✅ 保存到 ViewModel
+                    viewModel.setCurrentViewingMonth(currentYearMonth);
+                    updateMonthTitle();
+                    loadMonthData();
+                } else {
+                    Toast.makeText(requireContext(),
+                            "Cannot view future months",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
 
-        // 添加空白格子（第一天之前）
-        for (int i = 0; i < startDay; i++) {
-            TextView empty = new TextView(requireContext());
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.height = 120; // 固定高度
-            params.columnSpec = GridLayout.spec(i, 1f);
-            params.rowSpec = GridLayout.spec(1);
-            empty.setLayoutParams(params);
-            calendarGrid.addView(empty);
+    private void loadMonthData() {
+        String yearMonth = String.format("%04d-%02d",
+                currentYearMonth.getYear(),
+                currentYearMonth.getMonthValue());
+
+        Log.d(TAG, "Loading month data for: " + yearMonth);
+
+        if (currentMonthLiveData != null) {
+            currentMonthLiveData.removeObservers(getViewLifecycleOwner());
+            Log.d(TAG, "Removed previous observer");
         }
 
-        // 添加日期格子
-        int row = 1, col = startDay;
-        for (int day = 1; day <= daysInMonth; day++) {
-            TextView dayView = createDayView(day);
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.height = 120; // 固定高度
-            params.columnSpec = GridLayout.spec(col, 1f);
-            params.rowSpec = GridLayout.spec(row);
-            params.setMargins(4, 4, 4, 4);
-            dayView.setLayoutParams(params);
-            calendarGrid.addView(dayView);
+        currentMonthLiveData = viewModel.getMonthStreakLive(yearMonth);
+        currentMonthLiveData.observe(getViewLifecycleOwner(), list -> {
+            monthData = list != null ? list : List.of();
+            Log.d(TAG, "Month data loaded: " + monthData.size() + " records for " + yearMonth);
+            initializeCalendar();
+        });
+    }
 
-            if (++col == 7) {
-                col = 0;
-                row++;
+    private void setupObservers() {
+        viewModel.getLongestStreakWithDetailsLiveData().observe(getViewLifecycleOwner(), result -> {
+            try {
+                if (result != null && !result.isEmpty()) {
+                    tvBestStreak.setText(result.count + " days");
+                    String dateRange = formatDateRange(result.startDate, result.endDate);
+                    tvBestStreakDates.setText(dateRange);
+                } else {
+                    tvBestStreak.setText("0 days");
+                    tvBestStreakDates.setText("No streak");
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error updating best streak UI", e);
+                tvBestStreak.setText("0 days");
+                tvBestStreakDates.setText("Error loading");
             }
+        });
+
+        loadMonthData();
+
+        viewModel.getCurrentStreakLiveData().observe(getViewLifecycleOwner(), currentResult -> {
+            try {
+                if (currentResult != null && currentResult.streakCount > 0) {
+                    tvCurrentStreak.setText(String.format("CURRENT STREAK: %d DAYS", currentResult.streakCount));
+                } else {
+                    tvCurrentStreak.setText("CURRENT STREAK: 0 DAYS");
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error updating current streak UI", e);
+                tvCurrentStreak.setText("CURRENT STREAK: 0 DAYS");
+            }
+        });
+
+        viewModel.getTodayStepsLiveData().observe(getViewLifecycleOwner(), result -> {
+            try {
+                if (result != null) {
+                    tvTodaySteps.setText(String.format("Steps: %d/%d", result.steps, result.minStepsRequired));
+
+                    if (result.achieved) {
+                        ivTodayCheck.setImageResource(R.drawable.streak_ic_check_green_circle);
+                        tvTodaySteps.setTextColor(Color.parseColor("#4CAF50"));
+                    } else {
+                        ivTodayCheck.setImageResource(R.drawable.streak_ic_check_gray_circle);
+                        tvTodaySteps.setTextColor(Color.parseColor("#999999"));
+                    }
+                } else {
+                    tvTodaySteps.setText("Steps: 0/0");
+                    ivTodayCheck.setImageResource(R.drawable.streak_ic_check_gray_circle);
+                    tvTodaySteps.setTextColor(Color.parseColor("#999999"));
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error updating today steps UI", e);
+            }
+        });
+    }
+
+    private void setupClickListeners() {
+        btnChangeStreakGoal.setOnClickListener(v -> {
+            Log.d(TAG, "Navigating to change goal. Current month: " + currentYearMonth);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_streakFragment_to_changeStreakFragment);
+        });
+
+        cardBestStreak.setOnClickListener(v -> {
+            Log.d(TAG, "Navigating to best streak detail. Current month: " + currentYearMonth);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_streakFragment_to_bestStreakDetailFragment);
+        });
+    }
+
+    private void initializeCalendar() {
+        try {
+            int childCount = calendarGrid.getChildCount();
+            if (childCount > 7) {
+                calendarGrid.removeViews(7, childCount - 7);
+            }
+
+            LocalDate firstOfMonth = currentYearMonth.atDay(1);
+            int startDay = firstOfMonth.getDayOfWeek().getValue() % 7;
+            int daysInMonth = currentYearMonth.lengthOfMonth();
+
+            Log.d(TAG, "Initializing calendar for " + currentYearMonth +
+                    ", days: " + daysInMonth + ", start day: " + startDay);
+
+            // 添加空白格子
+            for (int i = 0; i < startDay; i++) {
+                TextView empty = new TextView(requireContext());
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.width = 0;
+                params.height = 120;
+                params.columnSpec = GridLayout.spec(i, 1f);
+                params.rowSpec = GridLayout.spec(1);
+                empty.setLayoutParams(params);
+                calendarGrid.addView(empty);
+            }
+
+            // 添加日期格子
+            int row = 1, col = startDay;
+            for (int day = 1; day <= daysInMonth; day++) {
+                TextView dayView = createDayView(day);
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.width = 0;
+                params.height = 120;
+                params.columnSpec = GridLayout.spec(col, 1f);
+                params.rowSpec = GridLayout.spec(row);
+                params.setMargins(4, 4, 4, 4);
+                dayView.setLayoutParams(params);
+                calendarGrid.addView(dayView);
+
+                if (++col == 7) {
+                    col = 0;
+                    row++;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error initializing calendar", e);
         }
     }
 
@@ -197,14 +288,16 @@ public class StreakFragment extends Fragment {
         view.setGravity(Gravity.CENTER);
         view.setPadding(16, 16, 16, 16);
         view.setTextSize(16);
-        view.setTypeface(null, android.graphics.Typeface.BOLD); // ✅ 修复：使用 setTypeface
+        view.setTypeface(null, android.graphics.Typeface.BOLD);
 
-        String date = String.format("%04d-%02d-%02d", currentYear, currentMonth, day);
+        String date = String.format("%04d-%02d-%02d",
+                currentYearMonth.getYear(),
+                currentYearMonth.getMonthValue(),
+                day);
 
         boolean achieved = false;
         boolean hasData = false;
 
-        // ✅ 检查这一天是否有数据和是否达标
         if (monthData != null) {
             for (StreakHistoryEntity e : monthData) {
                 if (e.date.equals(date)) {
@@ -215,23 +308,19 @@ public class StreakFragment extends Fragment {
             }
         }
 
-        // ✅ 根据状态设置颜色
         if (!hasData) {
-            // 没有数据：灰色背景
             view.setBackgroundResource(R.drawable.streak_calendar_day_inactive);
             view.setTextColor(Color.parseColor("#999999"));
         } else if (achieved) {
-            // 达标：绿色背景
             view.setBackgroundResource(R.drawable.streak_calendar_day_completed);
             view.setTextColor(Color.WHITE);
         } else {
-            // 有数据但未达标：灰色背景
             view.setBackgroundResource(R.drawable.streak_calendar_day_inactive);
             view.setTextColor(Color.parseColor("#999999"));
         }
 
-        // 点击跳转到详情页
         view.setOnClickListener(v -> {
+            Log.d(TAG, "Date clicked: " + date + ", current month: " + currentYearMonth);
             Bundle args = new Bundle();
             args.putString("date", date);
             NavHostFragment.findNavController(this)
@@ -241,100 +330,41 @@ public class StreakFragment extends Fragment {
         return view;
     }
 
-    /**
-     * ✅ 加载 Best Streak 的日期范围
-     */
-    private void loadBestStreakDateRange() {
-        java.util.concurrent.Executors.newSingleThreadExecutor().execute(() -> {
-            List<StreakHistoryEntity> allData = viewModel.getAllStreakData();
+    private String formatDateRange(String startDateStr, String endDateStr) {
+        try {
+            LocalDate start = LocalDate.parse(startDateStr);
+            LocalDate end = LocalDate.parse(endDateStr);
 
-            if (allData == null || allData.isEmpty()) {
-                requireActivity().runOnUiThread(() -> {
-                    tvBestStreakDates.setText("No records");
-                });
-                return;
-            }
+            String startMonth = start.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+            String endMonth = end.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
 
-            // 按日期排序
-            allData.sort((a, b) -> a.date.compareTo(b.date));
-
-            // 找出最长连续 streak
-            int maxCount = 0;
-            int maxStartIndex = 0;
-            int maxEndIndex = 0;
-            int currentCount = 0;
-            int currentStartIndex = 0;
-
-            for (int i = 0; i < allData.size(); i++) {
-                StreakHistoryEntity current = allData.get(i);
-
-                if (current.achieved) {
-                    if (currentCount == 0) {
-                        currentStartIndex = i;
-                    }
-                    currentCount++;
-
-                    boolean isLastDay = (i == allData.size() - 1);
-                    boolean nextDayNotConsecutive = false;
-
-                    if (!isLastDay) {
-                        try {
-                            LocalDate currentDate = LocalDate.parse(current.date);
-                            LocalDate nextDate = LocalDate.parse(allData.get(i + 1).date);
-                            nextDayNotConsecutive = !nextDate.equals(currentDate.plusDays(1))
-                                    || !allData.get(i + 1).achieved;
-                        } catch (Exception e) {
-                            nextDayNotConsecutive = true;
-                        }
-                    }
-
-                    if (isLastDay || nextDayNotConsecutive) {
-                        if (currentCount > maxCount) {
-                            maxCount = currentCount;
-                            maxStartIndex = currentStartIndex;
-                            maxEndIndex = i;
-                        }
-                        currentCount = 0;
-                    }
-                } else {
-                    currentCount = 0;
-                }
-            }
-
-            if (maxCount > 0) {
-                String startDate = allData.get(maxStartIndex).date;
-                String endDate = allData.get(maxEndIndex).date;
-
-                try {
-                    LocalDate start = LocalDate.parse(startDate);
-                    LocalDate end = LocalDate.parse(endDate);
-
-                    String startMonth = start.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-                    String endMonth = end.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-
-                    String dateRange;
-                    if (start.getMonth() == end.getMonth()) {
-                        dateRange = String.format("%s %d - %d", startMonth, start.getDayOfMonth(), end.getDayOfMonth());
-                    } else {
-                        dateRange = String.format("%s %d - %s %d",
-                                startMonth, start.getDayOfMonth(),
-                                endMonth, end.getDayOfMonth());
-                    }
-
-                    String finalDateRange = dateRange;
-                    requireActivity().runOnUiThread(() -> {
-                        tvBestStreakDates.setText(finalDateRange);
-                    });
-                } catch (Exception e) {
-                    requireActivity().runOnUiThread(() -> {
-                        tvBestStreakDates.setText(startDate + " - " + endDate);
-                    });
-                }
+            if (start.getMonth() == end.getMonth() && start.getYear() == end.getYear()) {
+                return String.format("%s %d - %d", startMonth, start.getDayOfMonth(), end.getDayOfMonth());
+            } else if (start.getYear() == end.getYear()) {
+                return String.format("%s %d - %s %d",
+                        startMonth, start.getDayOfMonth(),
+                        endMonth, end.getDayOfMonth());
             } else {
-                requireActivity().runOnUiThread(() -> {
-                    tvBestStreakDates.setText("No streak");
-                });
+                return String.format("%s %d, %d - %s %d, %d",
+                        startMonth, start.getDayOfMonth(), start.getYear(),
+                        endMonth, end.getDayOfMonth(), end.getYear());
             }
-        });
+        } catch (Exception e) {
+            Log.e(TAG, "Error formatting date range", e);
+            return startDateStr + " - " + endDateStr;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume called. Current month: " + currentYearMonth);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause called. Current month: " + currentYearMonth);
     }
 }
+
