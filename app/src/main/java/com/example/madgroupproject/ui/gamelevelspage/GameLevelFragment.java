@@ -1,8 +1,15 @@
 package com.example.madgroupproject.ui.gamelevelspage;
 
+/* references
+recyclerView: https://www.geeksforgeeks.org/android/android-recyclerview/
+
+ */
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,57 +17,46 @@ import android.view.ViewGroup;
 
 import com.example.madgroupproject.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GameLevelFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class GameLevelFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView levelRV;
+    private ArrayList<LevelsRVModel> levelsRVModelArrayList;
+    private LevelRVAdapter levelRVAdapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public GameLevelFragment() {
-        // Required empty public constructor
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view = getLayoutInflater().inflate(R.layout.fragment_game_level, container,false);
+
+        levelRV = view.findViewById(R.id.RVLevels);
+        levelsRVModelArrayList = new ArrayList<>();
+
+        levelRVAdapter = new LevelRVAdapter(getContext(), levelsRVModelArrayList);
+        levelRV.setLayoutManager(new LinearLayoutManager(getContext()));
+        levelRV.setAdapter(levelRVAdapter);
+
+        addDataToList();
+        levelRVAdapter.notifyDataSetChanged();
+
+        return view;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GameLevelFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GameLevelFragment newInstance(String param1, String param2) {
-        GameLevelFragment fragment = new GameLevelFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private void addDataToList(){
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","1", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","2", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","3", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","4", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","5", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","6", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","7", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","8", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","9", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","10", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","11", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Beginner Steps","12", "Walk 100 steps",R.drawable.husky)));
+
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game_level, container, false);
-    }
 }
