@@ -1,8 +1,7 @@
 package com.example.madgroupproject.ui.gamelevelspage;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madgroupproject.R;
@@ -41,16 +41,24 @@ public class LevelRVAdapter extends RecyclerView.Adapter<LevelRVAdapter.ViewHold
         holder.levelDetailTV.setText(levelsRVModelArrayList.get(position).getLevelDetail());
         holder.levelImg.setImageResource(levelsRVModelArrayList.get(position).getLevelImg());
 
-//        holder.itemView.setOnClickListener(new View.OnClickListener()){
-//            @Override
-//            public void onClick(View v){
-//            Intent i = new Intent(Intent.ACTION_VIEW);
-//            i.setData(Uri.parse(levelsRVModelArrayList.get(position).getLevelUrl());
-//            context.startActivity(i);
-//            }
-//        }
+        LevelsRVModel level = levelsRVModelArrayList.get(position);
+
+        //onclick
+        holder.itemView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+
+            bundle.putString("LEVEL_NUMBER", level.getLevelNum());
+            bundle.putString("LEVEL_TITLE", level.getLevelName());
+            bundle.putString("LEVEL_DESC", level.getLevelDetail());
+            bundle.putInt("LEVEL_IMG", level.getLevelImg());
 
 
+            Navigation.findNavController(v)
+                    .navigate(
+                            R.id.action_gameLevelFragment_to_levelDetailFragment,
+                            bundle
+                    );
+        });
     }
 
     @Override
@@ -59,7 +67,7 @@ public class LevelRVAdapter extends RecyclerView.Adapter<LevelRVAdapter.ViewHold
     }
 
 
-    //viewholder class
+    //ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView levelNameTV, levelDetailTV,levelNum;

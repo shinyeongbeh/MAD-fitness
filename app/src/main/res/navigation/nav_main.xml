@@ -60,10 +60,22 @@
         android:id="@+id/gameLevelFragment"
         android:name="com.example.madgroupproject.ui.gamelevelspage.GameLevelFragment"
         android:label="fragment_game_level"
-        tools:layout="@layout/fragment_game_level" />
+        tools:layout="@layout/fragment_game_level" >
+
+    <action
+        android:id="@+id/action_gameLevelFragment_to_levelDetailFragment"
+        app:destination="@id/levelDetailFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/settingMainActivity"
         android:name="com.example.madgroupproject.ui.settingpage.SettingsFragment"
         android:label="fragment_settings_main"
         tools:layout="@layout/setting_main" />
+
+    <fragment
+        android:id="@+id/levelDetailFragment"
+        android:name="com.example.madgroupproject.ui.gamelevelspage.LevelDetailFragment"
+        android:label="Level Detail"
+        tools:layout="@layout/level_details" />
 </navigation>
