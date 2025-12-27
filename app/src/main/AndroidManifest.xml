@@ -2,15 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.madgroupproject" >
 
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="Fitness Tracker"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Base.Theme.MAD"
-        >
-        <activity
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+
+
+    `   <application
+            android:name=".main.MyApplication"
+            android:theme="@style/Theme.MAD"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Fitness Tracker"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true">
+
+
+         <activity
             android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -19,6 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+   <!-- ✅ BROADCAST RECEIVER GOES HERE -->
+ <!--   <receiver
+        android:name="GoalNotificationReceiver"
+        android:exported="false"/>
+-->
+
+    <receiver
+        android:name=".main.DummyNotificationReceiver"
+        android:exported="false" />
+
+
     </application>
 
 </manifest>

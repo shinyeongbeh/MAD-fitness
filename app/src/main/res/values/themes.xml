@@ -5,31 +5,30 @@
         <!-- 全局字体设置为 Coiny -->
         <item name="android:fontFamily">@font/coiny</item>
 
-        <!-- Material3 颜色属性 -->
-        <item name="colorPrimary">#4CAF50</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorPrimaryContainer">#DCEFC5</item>
-        <item name="colorOnPrimaryContainer">#000000</item>
+        <!-- Primary Colors -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/accent</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
 
-        <!-- 背景色 -->
+        <!-- Backgrounds -->
         <item name="android:windowBackground">@color/background</item>
-<!--        <item name="android:windowBackground">#D6DAC8</item>-->
-        <item name="colorSurface">#D6DAC8</item>
-        <item name="colorSurfaceVariant">#614E4E4E</item>
-        <item name="colorOnSurface">#000000</item>
-        <item name="colorOnSurfaceVariant">#614E4E4E</item>
+        <item name="colorSurface">@color/card_bg</item>
+        <item name="colorSurfaceVariant">@color/button_bg</item>
+        <item name="colorSurface">@color/buttonBackgroundColorTint</item>
+        <item name="colorOnSurface">@color/text_primary</item>
 
-        <!-- 状态栏颜色 -->
-        <item name="android:statusBarColor">#D6DAC8</item>
+        <!-- Text -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+
+        <!-- Status and navigation bars -->
+        <item name="android:statusBarColor">@color/background</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
 
-        <!-- 导航栏颜色 -->
-        <item name="android:navigationBarColor">#FFFFFF</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
 
-        <!-- 文字颜色 -->
-        <item name="android:textColorPrimary">#000000</item>
-<!--        <item name="android:textColorSecondary">#666666</item>-->
     </style>
 
     <!-- Main application theme -->

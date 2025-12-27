@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/notification"
-        android:name="com.example.madgroupproject.ui.settingpage.Notification"
+        android:name="com.example.madgroupproject.ui.settingpage.NotificationSettingsFragment"
         android:label="Notification"
         tools:layout="@layout/setting_fragment_notification" >
         <action

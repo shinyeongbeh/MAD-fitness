@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Title -->
+        <!-- 日期标题（绑定 calendar 点击的日期） -->
         <TextView
             android:id="@+id/tvDayTitle"
             android:layout_width="match_parent"
@@ -28,13 +28,13 @@
             android:layout_marginBottom="48dp" />
 
         <!-- Details Card -->
-        <androidx.cardview.widget.CardView android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             app:cardBackgroundColor="#DCEFC5"
             app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,6 +43,7 @@
                 android:padding="24dp">
 
                 <TextView
+                    android:id="@+id/tvProgressTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Daily Progress"
@@ -52,16 +53,30 @@
                     android:fontFamily="@font/coiny"
                     android:layout_marginBottom="16dp" />
 
+                <!-- 步数进度（从数据库 / ViewModel 绑定） -->
                 <TextView
+                    android:id="@+id/tvSteps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Steps: 0/1000"
+                    android:text="Steps: 0 / 10000"
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:fontFamily="@font/coiny"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
+                    android:id="@+id/tvGoal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Goal: 10000 steps"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/coiny"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- 完成状态（决定文字 + 颜色） -->
+                <TextView
+                    android:id="@+id/tvStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Status: Not Completed"
@@ -77,7 +92,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!-- Back Button -->
+        <!-- 返回按钮 -->
         <Button
             android:id="@+id/btnBack"
             android:layout_width="match_parent"

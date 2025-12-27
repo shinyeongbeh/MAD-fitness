@@ -13,6 +13,15 @@
         <item name="android:fontFamily">@font/coiny</item>
     </style>
 
+    <!-- 全屏对话框样式 - 新添加的 -->
+    <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+
     <!-- 注意：这里已经没有 AppTheme 了！ -->
     <!-- 可以添加其他组件样式，但不要定义主题 -->
 
