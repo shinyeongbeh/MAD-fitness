@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.entity.FitnessDataEntity;
 import com.example.madgroupproject.data.repository.StatisticsRepository;
-import com.example.madgroupproject.data.viewmodel.StatisticsViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 public class StatsFragment extends Fragment {
