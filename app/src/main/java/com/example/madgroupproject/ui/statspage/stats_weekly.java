@@ -1,24 +1,26 @@
 package com.example.madgroupproject.ui.statspage;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.entity.FitnessDataEntity;
+import com.example.madgroupproject.data.viewmodel.StatisticsViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-
-import android.widget.TextView;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,10 +30,9 @@ import java.util.Locale;
 
 public class stats_weekly extends Fragment {
 
+    private TextView tvDailySteps, tvDailyDistance, tvDailyCalories;
+    private BarChart barChartWeekly;
     private StatisticsViewModel viewModel;
-    private FrameLayout weeklyBarChartContainer;
-    private TextView tvDailySteps, tvDailyCalories, tvDailyDistance;
-    private TextView tvTodayDate, tvTodayDay;
 
     public stats_weekly() { }
 
@@ -45,85 +46,81 @@ public class stats_weekly extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        weeklyBarChartContainer = view.findViewById(R.id.weeklyBarChartContainer);
         tvDailySteps = view.findViewById(R.id.tvDailySteps);
-        tvDailyCalories = view.findViewById(R.id.tvDailyCalories);
         tvDailyDistance = view.findViewById(R.id.tvDailyDistance);
-        tvTodayDate = view.findViewById(R.id.tvTodayDate);
-        tvTodayDay = view.findViewById(R.id.tvTodayDay);
+        tvDailyCalories = view.findViewById(R.id.tvDailyCalories);
+        barChartWeekly = view.findViewById(R.id.weeklyBarChart);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(StatisticsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
 
+        // Get current week (Sunday → Saturday)
         Calendar calendar = Calendar.getInstance();
-        tvTodayDate.setText(new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(calendar.getTime()));
-        tvTodayDay.setText(new SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.getTime()));
+        int todayDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        calendar.add(Calendar.DAY_OF_WEEK, - (todayDayOfWeek - Calendar.SUNDAY)); // go to Sunday
 
-        setupWeeklyChart(calendar);
-
-        loadDailySummary(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime()));
-    }
-
-    private void setupWeeklyChart(Calendar calendar) {
-        BarChart barChart = new BarChart(requireContext());
-        weeklyBarChartContainer.removeAllViews();
-        weeklyBarChartContainer.addView(barChart, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        ));
-
-        final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-        List<BarEntry> entries = new ArrayList<>();
-
-        int todayIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1; // Sunday = 0
-
+        List<String> weekDates = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            calendar.set(Calendar.DAY_OF_WEEK, i + 1);
-            String dateStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .format(calendar.getTime());
-
-            int steps = 0;
-            List<FitnessDataEntity> dataList = viewModel.getStatsForDate(dateStr); // create this helper
-            if (dataList != null && !dataList.isEmpty() && dataList.get(0) != null) {
-                steps = dataList.get(0).steps;
-            }
-
-            entries.add(new BarEntry(i, steps));
+            String dateStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+            weekDates.add(dateStr);
+            calendar.add(Calendar.DAY_OF_WEEK, 1);
         }
 
-        BarDataSet dataSet = new BarDataSet(entries, "Steps");
-        dataSet.setColor(getResources().getColor(R.color.colorPrimary)); // default
-        dataSet.setHighLightColor(getResources().getColor(R.color.accent));
+        loadWeeklyBarChart(weekDates);
 
-        // Highlight today
-        dataSet.getColors().set(todayIndex, getResources().getColor(R.color.accent));
-
-        BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.6f);
-        barChart.setData(barData);
-
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter((value, axis) -> days[(int) value % days.length]);
-        xAxis.setGranularity(1f);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-        barChart.getAxisRight().setEnabled(false);
-        barChart.getDescription().setEnabled(false);
-        barChart.invalidate();
-    }
-
-    private void loadDailySummary(String dateStr) {
-        viewModel.setSelectedDate(dateStr);
-
-        viewModel.getDailyStats().observe(getViewLifecycleOwner(), result -> {
-            if (result != null && !result.isEmpty() && result.get(0) != null) {
-                FitnessDataEntity stats = result.get(0);
-                tvDailySteps.setText(String.valueOf(stats.steps));
-                tvDailyDistance.setText(String.valueOf(stats.distanceMeters) + " m");
-                tvDailyCalories.setText(String.valueOf(stats.calories) + " kcal");
+        // Load today's stats
+        String todayStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
+        viewModel.setSelectedDate(todayStr);
+        viewModel.getDailyStats().observe(getViewLifecycleOwner(), dataList -> {
+            if (dataList != null && !dataList.isEmpty()) {
+                FitnessDataEntity data = dataList.get(0);
+                tvDailySteps.setText(String.valueOf(data.steps));
+                tvDailyDistance.setText(data.distanceMeters + " km");
+                tvDailyCalories.setText(data.calories + " kcal");
             } else {
                 tvDailySteps.setText("0");
-                tvDailyDistance.setText("0 m");
+                tvDailyDistance.setText("0 km");
                 tvDailyCalories.setText("0 kcal");
             }
         });
+    }
+
+    private void loadWeeklyBarChart(List<String> weekDates) {
+        List<BarEntry> entries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // For each day, observe the daily stats
+        for (int i = 0; i < weekDates.size(); i++) {
+            final int index = i;
+            String dateStr = weekDates.get(i);
+            labels.add(new SimpleDateFormat("EEE", Locale.getDefault()).format(Calendar.getInstance())); // Sun, Mon, etc.
+
+            viewModel.setSelectedDate(dateStr);
+            viewModel.getDailyStats().observe(getViewLifecycleOwner(), dataList -> {
+                int steps = 0;
+                if (dataList != null && !dataList.isEmpty()) {
+                    steps = dataList.get(0).steps;
+                }
+
+                // Add or update entry
+                if (entries.size() > index) {
+                    entries.set(index, new BarEntry(index, steps));
+                } else {
+                    entries.add(new BarEntry(index, steps));
+                }
+
+                BarDataSet dataSet = new BarDataSet(entries, "Steps");
+                dataSet.setColor(Color.parseColor("#81C784"));
+                BarData barData = new BarData(dataSet);
+                barData.setBarWidth(0.9f);
+
+                barChartWeekly.setData(barData);
+                barChartWeekly.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+                barChartWeekly.getXAxis().setGranularity(1f);
+                barChartWeekly.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+                barChartWeekly.getAxisRight().setEnabled(false);
+                barChartWeekly.getDescription().setEnabled(false);
+                barChartWeekly.invalidate();
+            });
+        }
     }
 }

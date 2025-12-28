@@ -57,4 +57,7 @@ public interface FitnessDataDao {
     @Query("SELECT * FROM fitness_data WHERE strftime('%Y-%m', date) = :month ORDER BY date ASC")
     LiveData<List<FitnessDataEntity>> getDailyStatsByMonth(String month);
 
+    @Query("SELECT * FROM fitness_data WHERE date = :date")
+    List<FitnessDataEntity> getStatsForDate(String date);
 }
+

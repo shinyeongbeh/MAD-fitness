@@ -47,5 +47,8 @@ public class StatisticsRepository {
     public LiveData<List<FitnessDataEntity>> getMonthlyDailyStats(String month) {
         return fitnessDataDao.getDailyStatsByMonth(month); // Implement DAO query below
     }
+
+
+
 }
 

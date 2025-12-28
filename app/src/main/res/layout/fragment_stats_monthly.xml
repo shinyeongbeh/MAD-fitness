@@ -21,10 +21,8 @@
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barChartMonthly"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_marginBottom="20dp"
-            app:chart_description_enabled="false"
-            app:legend_enabled="false"/>
+            android:layout_height="220dp"/>
+
 
 
         <TextView

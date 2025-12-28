@@ -16,9 +16,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+
     }
 }
 
-rootProject.name = "MAD group project"
+rootProject.name = "MAD-group-project"
 include(":app")
  
