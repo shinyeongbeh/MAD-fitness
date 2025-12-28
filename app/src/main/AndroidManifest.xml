@@ -28,15 +28,16 @@
             </intent-filter>
         </activity>
 
-   <!-- ✅ BROADCAST RECEIVER GOES HERE -->
- <!--   <receiver
-        android:name="GoalNotificationReceiver"
-        android:exported="false"/>
--->
-
+ <!-- Goal Notification -->
     <receiver
-        android:name=".main.DummyNotificationReceiver"
-        android:exported="false" />
+        android:name=".main.GoalNotificationReceiver"
+        android:exported="false"/>
+
+    <!-- Streak Notification -->
+    <receiver
+        android:name=".main.StreakNotificationReceiver"
+        android:exported="false"/>
+
 
 
     </application>

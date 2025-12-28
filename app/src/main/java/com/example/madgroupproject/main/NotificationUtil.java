@@ -19,12 +19,13 @@ public class NotificationUtil {
 
     public static final String CHANNEL_ID = "default_channel";
 
-    // Create notification channel (Android 8+)
+    // Create notification channel
     public static void createNotificationChannel(Context context) {
+        //for daily goals
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    "App Notification",
+                    "Daily Goals",
                     NotificationManager.IMPORTANCE_DEFAULT
             );
 
@@ -34,7 +35,7 @@ public class NotificationUtil {
         }
     }
 
-    // Check if user enabled notification
+    // Check whether the user turn on the notification
     public static boolean isNotificationEnabled(Context context) {
         SharedPreferences prefs =
                 context.getSharedPreferences("app_settings", Context.MODE_PRIVATE);
@@ -42,36 +43,9 @@ public class NotificationUtil {
         return prefs.getBoolean("notifications_enabled", true);
     }
 
-    // Show notification ONLY if enabled
-   /* public static void showNotification(Context context,
-                                        String title,
-                                        String message) {
-
-        if (!isNotificationEnabled(context)) return;
-
-        // Android 13+ permission check
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-        }
-
-        Notification notification =
-                new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_notification) // REQUIRED
-                        .setContentTitle(title)
-                        .setContentText(message)
-                        .setAutoCancel(true)
-                        .build();
-
-        NotificationManagerCompat.from(context).notify(1, notification);
-    }*/
 
     // Show a dummy notification
-    public static void showNotification(Context context) {
+    /*public static void showNotification(Context context) {
 
         if (!isNotificationEnabled(context)) return;
 
@@ -89,5 +63,31 @@ public class NotificationUtil {
         }
 
         NotificationManagerCompat.from(context).notify(1, builder.build());
+    }*/
+
+    public static void showNotification(Context context,int notificationId,String title, String message) {
+
+        if (!isNotificationEnabled(context)) return;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(
+                    context, Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+
+        Notification notification =
+                new NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setAutoCancel(true)
+                        .build();
+
+        NotificationManagerCompat.from(context).notify(notificationId, notification);
     }
+
+
+
 }

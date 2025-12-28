@@ -6,6 +6,9 @@ import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+
+
+//Use for Dark Mode changes
 public class MyApplication extends Application {
     @Override
     public void onCreate() {

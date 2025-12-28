@@ -30,6 +30,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -88,18 +90,18 @@ public class MainActivity extends AppCompatActivity {
         // Create notification channel
         NotificationUtil.createNotificationChannel(this);
 
-        // Show dummy notification
-        NotificationUtil.showNotification(this);
-
-     /*   // 🔔 DEMO: Show notification on app open
+        // DEMO: show immediately  for Daily goals
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            if (NotificationUtil.isNotificationEnabled(this)) {
-                showDemoGoalNotification();
-            }
-        }, 3000);
-*/
-        //checkPermissionAndStart();
+            sendBroadcast(new Intent(this, GoalNotificationReceiver.class));
+        }, 1000);
 
+        // DEMO: show immediately  for Streak
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            sendBroadcast(new Intent(this, StreakNotificationReceiver.class));
+        }, 1000);
+
+
+        //For notification
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.POST_NOTIFICATIONS)
@@ -109,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
+
+
 
         //bottom navigation bar
         BottomNavigationView bottomBar = findViewById(R.id.bottom_nav_view);
@@ -123,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     private void checkGooglePlayService() {
         int minVersion = LocalRecordingClient.LOCAL_RECORDING_CLIENT_MIN_VERSION_CODE;
@@ -178,15 +183,4 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-
-   /* private void showDemoGoalNotification() {
-        SharedPreferences prefs =
-                getSharedPreferences("user_data", MODE_PRIVATE);
-
-        String goal = prefs.getString("daily_goal", "No goal set");
-
-        NotificationUtil.showNotification(
-                this);
-
-    }*/
 }

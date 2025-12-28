@@ -14,6 +14,12 @@ public class StreakPreferenceManager {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
+    //for notification use
+    public static int getStreak(Context context) {
+        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                .getInt(KEY_DAILY_GOAL, 0);
+    }
+
     public int getDailyGoal() {
         return prefs.getInt(KEY_DAILY_GOAL, DEFAULT_DAILY_GOAL);
     }
