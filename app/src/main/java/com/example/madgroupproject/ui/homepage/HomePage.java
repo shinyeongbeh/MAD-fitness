@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import com.example.madgroupproject.R;
 
+
 public class HomePage extends Fragment {
 
     @Override
@@ -24,14 +25,19 @@ public class HomePage extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. 绑定 XML 中的苹果图片 ID
-        ImageView appleImage = view.findViewById(R.id.iv_apple);
 
-        // 2. 设置点击跳转
+        if (getChildFragmentManager().findFragmentById(R.id.dashboardContainer) == null) {
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.dashboardContainer, new FitnessDashboard())
+                    .commit();
+        }
+
+        // ==========================================
+        ImageView appleImage = view.findViewById(R.id.iv_apple);
         appleImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 使用你之前确认的跳转 ID
+                // 跳转到 AppleFragment
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_appleFragment3);
             }
         });

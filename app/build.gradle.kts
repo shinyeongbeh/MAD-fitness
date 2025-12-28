@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.madgroupproject"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -30,11 +30,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -67,4 +67,14 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
 
     implementation("com.google.code.gson:gson:2.10.1")
+    // Google Fit 核心库
+    implementation("com.google.android.gms:play-services-fitness:21.2.0")
+    // Google 登录认证
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    // Room 数据库组件
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    // LiveData 和 ViewModel 组件 (解决 MediatorLiveData 报错)
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 }

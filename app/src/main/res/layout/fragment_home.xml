@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="#E8E8E8">
 
-    <!-- Scrollable Content -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -25,7 +24,6 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Title -->
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
@@ -37,7 +35,6 @@
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
 
-            <!-- Activity Stats Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,9 +50,6 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- Steps -->
-
-                    <!-- Distance -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -106,7 +100,6 @@
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
 
-                    <!-- Calories -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -133,7 +126,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Streak Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -179,7 +171,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Goals Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -206,7 +197,6 @@
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
 
-                    <!-- Goal Item 1 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -242,7 +232,6 @@
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
 
-                    <!-- Goal Item 2 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -278,7 +267,6 @@
                             tools:ignore="HardcodedText" />
                     </LinearLayout>
 
-                    <!-- Goal Item 3 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -315,7 +303,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- This Week Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -342,15 +329,15 @@
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
 
-                    <!-- Chart Placeholder -->
-                    <View
+                    <FrameLayout
+                        android:id="@+id/dashboardContainer"
                         android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:background="@drawable/chart_placeholder" />
+                        android:layout_height="wrap_content"
+                        android:minHeight="200dp" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Three Icon Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -441,7 +428,6 @@
 
             </LinearLayout>
 
-            <!-- TIPS Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -468,7 +454,6 @@
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
-            <!-- Apple Card (Clickable) -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardApple"
                 android:layout_width="match_parent"
@@ -515,7 +500,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation Bar -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
