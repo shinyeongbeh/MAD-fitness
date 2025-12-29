@@ -141,21 +141,10 @@ public class MainActivity extends AppCompatActivity {
 
         //bottom navigation bar
         BottomNavigationView bottomBar = findViewById(R.id.bottom_nav_view);
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.main_fragment_area);
+        NavHostFragment mainFragmentSection = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment_area);
+        NavController navController = mainFragmentSection.getNavController();
 
-        if (navHostFragment != null) {
-            NavController navController = navHostFragment.getNavController();
-            NavigationUI.setupWithNavController(bottomBar, navController);
-
-            bottomBar.setOnItemSelectedListener(item -> {
-                if (item.getItemId() == R.id.homeFragment) {
-                    navController.navigate(R.id.homeFragment);
-                    return true;
-                }
-                return NavigationUI.onNavDestinationSelected(item, navController);
-            });
-        }
+        NavigationUI.setupWithNavController(bottomBar, navController);
 
         checkGooglePlayService();
         checkPermissionAndStartTracking();
