@@ -24,9 +24,9 @@ import com.example.madgroupproject.R;
 
 public class CreateGoalDialogFragment extends DialogFragment {
 
+    private static final String ARG_GOAL_ID = "goal_id";
     private static final String ARG_GOAL_NAME = "goal_name";
     private static final String ARG_GOAL_LABEL = "goal_label";
-    private static final String ARG_GOAL_POSITION = "goal_position";
     private static final String ARG_SUGGESTED_NAME = "suggested_name";
     private static final String ARG_SUGGESTED_LABEL = "suggested_label";
 
@@ -39,18 +39,18 @@ public class CreateGoalDialogFragment extends DialogFragment {
     private int selectedHour = 18;
     private int selectedMinute = 30;
     private boolean isEditMode = false;
-    private int goalPosition = -1;
+    private int goalId = -1;
 
     public static CreateGoalDialogFragment newInstance() {
         return new CreateGoalDialogFragment();
     }
 
-    public static CreateGoalDialogFragment newEditInstance(String name, String label, int position) {
+    public static CreateGoalDialogFragment newEditInstance(int id, String name, String label) {
         CreateGoalDialogFragment fragment = new CreateGoalDialogFragment();
         Bundle args = new Bundle();
+        args.putInt(ARG_GOAL_ID, id);
         args.putString(ARG_GOAL_NAME, name);
         args.putString(ARG_GOAL_LABEL, label);
-        args.putInt(ARG_GOAL_POSITION, position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -146,9 +146,9 @@ public class CreateGoalDialogFragment extends DialogFragment {
         Bundle args = getArguments();
         if (args == null) return;
 
-        if (args.containsKey(ARG_GOAL_POSITION)) {
+        if (args.containsKey(ARG_GOAL_ID)) {
             isEditMode = true;
-            goalPosition = args.getInt(ARG_GOAL_POSITION);
+            goalId = args.getInt(ARG_GOAL_ID);
             String name = args.getString(ARG_GOAL_NAME);
             String label = args.getString(ARG_GOAL_LABEL);
 
@@ -213,7 +213,7 @@ public class CreateGoalDialogFragment extends DialogFragment {
         result.putString("goal_name", name);
         result.putString("goal_label", label);
         if (isEditMode) {
-            result.putInt("goal_position", goalPosition);
+            result.putInt("goal_id", goalId);
         }
 
         getParentFragmentManager().setFragmentResult("goal_request", result);
@@ -223,7 +223,7 @@ public class CreateGoalDialogFragment extends DialogFragment {
     private void deleteGoal() {
         Bundle result = new Bundle();
         result.putBoolean("goal_deleted", true);
-        result.putInt("goal_position", goalPosition);
+        result.putInt("goal_id", goalId);
 
         getParentFragmentManager().setFragmentResult("goal_request", result);
         dismiss();

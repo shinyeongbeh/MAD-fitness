@@ -40,6 +40,7 @@ import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.repository.FitnessRepository;
 import com.example.madgroupproject.fitnessmanager.FitnessSyncWorker;
 import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
+import com.example.madgroupproject.goalmanager.DailyGoalResetScheduler;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.fitness.LocalRecordingClient;
@@ -84,11 +85,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+// ✅ 改成这样：只处理系统栏，但不设置底部内边距
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0); // 底部设为0
             return insets;
         });
+
 
 
         // Create notification channel
@@ -103,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             sendBroadcast(new Intent(this, StreakNotificationReceiver.class));
         }, 1000);
+
+        // ✅ 新增：开始每日目标重置调度（每天0点重置）
+        DailyGoalResetScheduler.scheduleDailyReset(this);
+        Log.d("MainActivity", "Next goal reset at: " + DailyGoalResetScheduler.getNextResetTime());
 
 
         //For notification
