@@ -29,9 +29,4 @@ public class GameProgressEntity {
     // track the last synced raw fitness value for accumulative calculation
 
     public String lastSyncedDate; // yyyy-MM-dd
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
