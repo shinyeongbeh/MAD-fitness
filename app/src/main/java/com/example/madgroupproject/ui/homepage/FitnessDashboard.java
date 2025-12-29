@@ -84,9 +84,9 @@ public class FitnessDashboard extends Fragment {
 
                     if(isAdded()) {
                         handler.post(() -> {
-                            tvSteps.setText("Steps: " + data.steps);
-                            tvDistance.setText(String.format("Distance: %.2f m", data.distance));
-                            tvCalories.setText(String.format("Calories: %.2f kcal", data.calories));
+                            tvSteps.setText(String.valueOf(data.steps));
+                            tvDistance.setText(String.format("%.2f m", data.distance));
+                            tvCalories.setText(String.format("%.2f kcal", data.calories));
                         });
                     }
                 });
