@@ -18,12 +18,12 @@ import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
-import com.example.madgroupproject.data.local.AppDatabase;
 
-public class FitnessDashboard extends Fragment{
+
+public class FitnessDashboard extends Fragment {
+
     private TextView tvSteps, tvDistance, tvCalories;
-    //    private ViewModel viewModel;
+//    private ViewModel viewModel;
     private RecordingAPIManager recordingAPIManager;
     private AppDatabase db;
     private Handler handler;
@@ -104,4 +104,3 @@ public class FitnessDashboard extends Fragment{
         }
     }
 }
-

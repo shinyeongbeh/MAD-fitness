@@ -67,14 +67,25 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
 
     implementation("com.google.code.gson:gson:2.10.1")
-    // Google Fit 核心库
+
+    val room_version = "2.8.4"
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+//    ksp("androidx.room:room-compiler:$room_version")
+
+    // If this project only uses Java source, use the Java annotationProcessor
+    // No additional plugins are necessary
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+
+    // Google Play Services - Recording API (The core tracker)
     implementation("com.google.android.gms:play-services-fitness:21.2.0")
-    // Google 登录认证
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
-    // Room 数据库组件
-    implementation("androidx.room:room-runtime:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
-    // LiveData 和 ViewModel 组件 (解决 MediatorLiveData 报错)
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
+    // WorkManager (Java support)
+    val workVersion = "2.9.1"
+    implementation("androidx.work:work-runtime:$workVersion")
+
 }

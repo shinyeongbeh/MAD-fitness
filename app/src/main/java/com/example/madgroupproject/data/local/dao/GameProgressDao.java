@@ -10,17 +10,17 @@ import com.example.madgroupproject.data.local.entity.GameProgressEntity;
 
 @Dao
 public interface GameProgressDao {
-    //    @Query("""
+//    @Query("""
 //        SELECT * FROM game_progress
 //        WHERE gameType = :type
 //        LIMIT 1
 //    """)
-    @Query("""
+@Query("""
         SELECT * FROM game_progress
     """)
     GameProgressEntity getProgressSync();
 
-    //    @Query("""
+//    @Query("""
 //        SELECT * FROM game_progress
 //        WHERE gameType = :type
 //        LIMIT 1

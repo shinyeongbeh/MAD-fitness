@@ -11,14 +11,25 @@
         android:layout_height="match_parent"
         android:background="@color/backgroundColor">
 
+        <Switch
+            android:id="@+id/Dark"
+            android:layout_width="186dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="118dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="107dp"
+            android:text="On"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_Theme_NM" />
+
         <Button
             android:id="@+id/button_Theme_NM"
             android:layout_width="224dp"
             android:layout_height="54dp"
             android:layout_marginStart="93dp"
-            android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
-            android:layout_marginBottom="411dp"
+            android:layout_marginBottom="372dp"
             android:backgroundTint="@color/buttonBackgroundColorTint"
             android:text="       Dark Mode"
             android:textAlignment="textStart"
@@ -32,8 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_Theme_LM" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/button_Theme_LM"
@@ -54,8 +64,10 @@
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toTopOf="@+id/button_Theme_NM"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TV_Theme" />
+            app:layout_constraintTop_toBottomOf="@+id/TV_Theme"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/TV_Theme"
@@ -68,5 +80,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="186dp"
+            tools:layout_editor_absoluteY="154dp" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="In default"
+            android:textColorLink="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_Theme_LM" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

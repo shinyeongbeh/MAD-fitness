@@ -3,16 +3,24 @@
     package="com.example.madgroupproject" >
 
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.BODY_SENSORS" />
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="Fitness Tracker"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Base.Theme.MAD"
-        >
-        <activity
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+
+
+
+    `   <application
+            android:name=".main.MyApplication"
+            android:theme="@style/Theme.MAD"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Fitness Tracker"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true">
+
+
+         <activity
             android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -21,6 +29,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+
+ <!-- Goal Notification -->
+    <receiver
+        android:name=".main.GoalNotificationReceiver"
+        android:exported="false"/>
+
+    <!-- Streak Notification -->
+    <receiver
+        android:name=".main.StreakNotificationReceiver"
+        android:exported="false"/>
+
+
+    <service
+        android:name=".main.StepTrackingService"
+        android:exported="false"
+        android:foregroundServiceType="health" />
+
+
+
+
+</application>
 
 </manifest>

@@ -9,8 +9,9 @@ import androidx.room.PrimaryKey;
 // only one row for the current level
 @Entity(tableName = "game_progress")
 public class GameProgressEntity {
-    @PrimaryKey(autoGenerate = true)
-    public int id; // auto-generated key
+    @PrimaryKey
+    public int id = 1; // auto-generated key
+    // only allow one row
 
 //    @NonNull
 //    public String gameType; // STEPS / DISTANCE
@@ -29,4 +30,8 @@ public class GameProgressEntity {
 
     public String lastSyncedDate; // yyyy-MM-dd
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

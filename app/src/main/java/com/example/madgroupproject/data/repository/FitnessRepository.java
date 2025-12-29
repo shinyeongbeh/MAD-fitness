@@ -21,7 +21,7 @@ public class FitnessRepository {
     }
 
 
-    //    // used to sync to the database entity
+//    // used to sync to the database entity
     public int syncTodayFitnessData() {
 
         RecordingAPIManager.DataRecordingAPI data =

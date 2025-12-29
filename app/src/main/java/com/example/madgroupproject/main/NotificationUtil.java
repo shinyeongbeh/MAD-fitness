@@ -1,0 +1,86 @@
+package com.example.madgroupproject.main;
+
+import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.example.madgroupproject.R;
+
+public class NotificationUtil {
+
+    public static final String CHANNEL_ID = "default_channel";
+
+    // Create notification channel
+    public static void createNotificationChannel(Context context) {
+        //for daily goals
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Daily Goals",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+
+            NotificationManager manager =
+                    context.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+    }
+
+    // Check whether the user turn on the notification
+    public static boolean isNotificationEnabled(Context context) {
+        SharedPreferences prefs =
+                context.getSharedPreferences("app_settings", Context.MODE_PRIVATE);
+
+        return prefs.getBoolean("notifications_enabled", true);
+    }
+
+    public static void showNotification(Context context, int notificationId, String title, String message) {
+
+        if (!isNotificationEnabled(context)) return;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(
+                    context, Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+
+        Notification notification =
+                new NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(message)) // 支持多行文本
+                        .setAutoCancel(true)
+                        .setOngoing(false) // 可以滑动删除
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .build();
+
+        NotificationManagerCompat.from(context).notify(notificationId, notification);
+    }
+
+    /**
+     * 取消指定的通知
+     */
+    public static void cancelNotification(Context context, int notificationId) {
+        NotificationManagerCompat.from(context).cancel(notificationId);
+    }
+
+    /**
+     * 取消所有通知
+     */
+    public static void cancelAllNotifications(Context context) {
+        NotificationManagerCompat.from(context).cancelAll();
+    }
+}
