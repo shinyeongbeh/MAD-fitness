@@ -68,12 +68,12 @@ public class GameProgressSyncWorker extends Worker {
         float todayValue;
         float yesterdayValue;
 
-        if (currentLevelStructure.gameType.equals("STEPS")) {
+        if (currentLevelStructure.gameType.equals("STEPS")) { // Steps
             todayValue = todayFitness.steps;
             yesterdayValue = yesterdayFitness != null
                     ? yesterdayFitness.steps
                     : 0;
-        } else {
+        } else { //Distance
             todayValue = todayFitness.distanceMeters;
             yesterdayValue = yesterdayFitness != null
                     ? yesterdayFitness.distanceMeters
@@ -93,7 +93,7 @@ public class GameProgressSyncWorker extends Worker {
 
         if (currentProgress.progressValue >= currentLevelStructure.targetValue) {
             // completion of the level
-            completeLevel(currentProgress, currentLevelStructure, today);
+            completeLevel(currentProgress, currentLevelStructure, today, todayValue);
         }
 
         //update current progress in Game Progress Entity
@@ -103,7 +103,8 @@ public class GameProgressSyncWorker extends Worker {
     private void completeLevel(
             GameProgressEntity progress,
             GameLevelEntity level,
-            String today
+            String today,
+            float todayValue
     ) {
         GameLevelHistoryDao historyDao = db.gameLevelHistoryDao();
 
@@ -114,15 +115,18 @@ public class GameProgressSyncWorker extends Worker {
         history.completedDate = today;
         historyDao.insert(history);
 
-        // 2. Advance to next level
+        // 2. Calculate overflow
+        float overflow = progress.progressValue - level.targetValue;
+
+        // 3. Advance to next level
         progress.currentLevel++;
 
-        // 3. Reset progress for next level
+        // 4. Reset progress for next level
         progress.progressValue = 0;
 
-        // 4. IMPORTANT: reset sync baseline
+        // 5. IMPORTANT: reset sync baseline
         progress.lastSyncedDate = today;
-        progress.lastSyncedFitnessValue = 0;
+        progress.lastSyncedFitnessValue = todayValue-overflow;
     }
 
 
@@ -154,8 +158,7 @@ public class GameProgressSyncWorker extends Worker {
         }
 
         // Crossed midnight
-        float yesterdayRemaining =
-                Math.max(yesterdayValue - progress.lastSyncedFitnessValue, 0);
+        float yesterdayRemaining = Math.max(yesterdayValue - progress.lastSyncedFitnessValue, 0);
 
         float delta = yesterdayRemaining + todayValue;
 
