@@ -32,6 +32,11 @@ public class HomePage extends Fragment {
                     .commit();
         }
 
+        ImageView btnSettings = view.findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_settingMainActivity);
+        });
+
         // ==========================================
         ImageView appleImage = view.findViewById(R.id.iv_apple);
         appleImage.setOnClickListener(new View.OnClickListener() {
