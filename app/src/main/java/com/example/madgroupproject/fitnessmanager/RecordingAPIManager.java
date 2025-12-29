@@ -139,6 +139,5 @@ public class RecordingAPIManager {
             this.distance = distance;
             this.calories = calories;
         }
-
     }
 }

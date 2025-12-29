@@ -18,33 +18,41 @@ public class StatisticsViewModel extends AndroidViewModel {
     private final LiveData<List<FitnessDataEntity>> dailyStats;
     private final LiveData<List<StatisticsRepository.MonthlyTotalStats>> monthlyTotalStats;
     private final LiveData<List<StatisticsRepository.MonthlyAverageStats>> monthlyAverageStats;
+    private final LiveData<List<FitnessDataEntity>> monthlyDailyStats; // NEW for BarChart
 
     private final MutableLiveData<String> selectedDate = new MutableLiveData<>();
     private final MutableLiveData<String> selectedMonth = new MutableLiveData<>();
+
     public StatisticsViewModel(@NonNull Application application) {
         super(application);
         this.repository = new StatisticsRepository(application);
-        // When date changes → new daily query
+
+        // Daily stats
         dailyStats = Transformations.switchMap(
                 selectedDate,
                 repository::getDailyStats
         );
 
-        // When month changes → new monthly totals
+        // Monthly totals
         monthlyTotalStats = Transformations.switchMap(
                 selectedMonth,
                 repository::getMonthlyTotals
         );
 
-        // When month changes → new monthly averages
+        // Monthly averages
         monthlyAverageStats = Transformations.switchMap(
                 selectedMonth,
                 repository::getMonthlyAverage
         );
+
+        // Monthly daily stats (for bar chart)
+        monthlyDailyStats = Transformations.switchMap(
+                selectedMonth,
+                repository::getMonthlyDailyStats
+        );
     }
 
     // setters
-    // set the current day or month that needs to be displayed
     public void setSelectedDate(String date) { // yyyy-MM-dd
         selectedDate.setValue(date);
     }
@@ -64,5 +72,9 @@ public class StatisticsViewModel extends AndroidViewModel {
 
     public LiveData<List<StatisticsRepository.MonthlyAverageStats>> getMonthlyAverageStats() {
         return monthlyAverageStats;
+    }
+
+    public LiveData<List<FitnessDataEntity>> getMonthlyDailyStats() { // NEW
+        return monthlyDailyStats;
     }
 }

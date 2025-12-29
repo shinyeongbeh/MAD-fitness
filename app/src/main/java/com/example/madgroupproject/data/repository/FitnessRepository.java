@@ -52,4 +52,6 @@ public class FitnessRepository {
     public FitnessDataEntity fetchDailyData(String date) {
         return fitnessDataDao.getByDate(date);
     }
+
+
 }

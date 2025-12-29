@@ -43,5 +43,12 @@ public class StatisticsRepository {
     public LiveData<List<StatisticsRepository.MonthlyAverageStats>> getMonthlyAverage(String month) {
         return this.fitnessDataDao.getMonthlyAverageLive(month);
     }
+
+    public LiveData<List<FitnessDataEntity>> getMonthlyDailyStats(String month) {
+        return fitnessDataDao.getDailyStatsByMonth(month); // Implement DAO query below
+    }
+
+
+
 }
 

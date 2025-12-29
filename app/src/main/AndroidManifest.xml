@@ -6,8 +6,6 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
-
 
 
     `   <application
@@ -30,25 +28,17 @@
             </intent-filter>
         </activity>
 
- <!-- Goal Notification -->
-    <receiver
-        android:name=".main.GoalNotificationReceiver"
+   <!-- ✅ BROADCAST RECEIVER GOES HERE -->
+ <!--   <receiver
+        android:name="GoalNotificationReceiver"
         android:exported="false"/>
+-->
 
-    <!-- Streak Notification -->
     <receiver
-        android:name=".main.StreakNotificationReceiver"
-        android:exported="false"/>
+        android:name=".main.DummyNotificationReceiver"
+        android:exported="false" />
 
 
-    <service
-        android:name=".main.StepTrackingService"
-        android:exported="false"
-        android:foregroundServiceType="health" />
-
-
-
-
-</application>
+    </application>
 
 </manifest>
