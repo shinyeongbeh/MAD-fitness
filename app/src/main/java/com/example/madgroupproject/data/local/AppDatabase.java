@@ -10,12 +10,14 @@ import com.example.madgroupproject.data.local.dao.FitnessDataDao;
 import com.example.madgroupproject.data.local.dao.GameLevelDao;
 import com.example.madgroupproject.data.local.dao.GameLevelHistoryDao;
 import com.example.madgroupproject.data.local.dao.GameProgressDao;
+import com.example.madgroupproject.data.local.dao.GoalDao;
 import com.example.madgroupproject.data.local.dao.StreakHistoryDao;
 import com.example.madgroupproject.data.local.dao.UserProfileDAO;
 import com.example.madgroupproject.data.local.entity.FitnessDataEntity;
 import com.example.madgroupproject.data.local.entity.GameLevelEntity;
 import com.example.madgroupproject.data.local.entity.GameLevelHistoryEntity;
 import com.example.madgroupproject.data.local.entity.GameProgressEntity;
+import com.example.madgroupproject.data.local.entity.GoalEntity;
 import com.example.madgroupproject.data.local.entity.StreakHistoryEntity;
 import com.example.madgroupproject.data.local.entity.UserProfile;
 
@@ -29,9 +31,10 @@ import java.util.concurrent.Executors;
                 UserProfile.class,
                 GameLevelEntity.class,
                 GameLevelHistoryEntity.class,
-                GameProgressEntity.class
+                GameProgressEntity.class,
+                GoalEntity.class  // ✅ 添加Goal实体
         },
-        version = 2, // ✅ 一定要升版本
+        version = 4, // ✅ 升级数据库版本到4
         exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -48,6 +51,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract GameProgressDao gameProgressDao();
     public abstract GameLevelDao gameLevelDao();
     public abstract GameLevelHistoryDao gameLevelHistoryDao();
+    public abstract GoalDao goalDao();  // ✅ 添加GoalDao
 
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -58,7 +62,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class,
                                     "fitness_app_db"
                             )
-                            // ✅ 关键修复：允许删库重建
+                            // ✅ 允许删库重建
                             .fallbackToDestructiveMigration()
                             .build();
                 }

@@ -43,29 +43,7 @@ public class NotificationUtil {
         return prefs.getBoolean("notifications_enabled", true);
     }
 
-
-    // Show a dummy notification
-    /*public static void showNotification(Context context) {
-
-        if (!isNotificationEnabled(context)) return;
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_info) // use a built-in dummy icon
-                .setContentTitle("Dummy Title")
-                .setContentText("This is a dummy notification message.")
-                .setAutoCancel(true);
-
-        // Check for POST_NOTIFICATIONS permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // Permission not granted, just return for now
-            return;
-        }
-
-        NotificationManagerCompat.from(context).notify(1, builder.build());
-    }*/
-
-    public static void showNotification(Context context,int notificationId,String title, String message) {
+    public static void showNotification(Context context, int notificationId, String title, String message) {
 
         if (!isNotificationEnabled(context)) return;
 
@@ -82,12 +60,27 @@ public class NotificationUtil {
                         .setSmallIcon(R.drawable.ic_notification)
                         .setContentTitle(title)
                         .setContentText(message)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(message)) // 支持多行文本
                         .setAutoCancel(true)
+                        .setOngoing(false) // 可以滑动删除
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .build();
 
         NotificationManagerCompat.from(context).notify(notificationId, notification);
     }
 
+    /**
+     * 取消指定的通知
+     */
+    public static void cancelNotification(Context context, int notificationId) {
+        NotificationManagerCompat.from(context).cancel(notificationId);
+    }
 
-
+    /**
+     * 取消所有通知
+     */
+    public static void cancelAllNotifications(Context context) {
+        NotificationManagerCompat.from(context).cancelAll();
+    }
 }
