@@ -7,6 +7,7 @@ import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,14 +35,14 @@ public class GoalFragment extends Fragment {
     private GoalRepository goalRepository;
     private Handler mainHandler;
 
+    // Flag to prevent triggering switch listener during UI updates
+    private boolean isUpdatingUI = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         goalRepository = new GoalRepository(requireContext());
         mainHandler = new Handler(Looper.getMainLooper());
-
-        // ❌ 移除默认目标初始化
-        // goalRepository.initializeDefaultGoals(null);
     }
 
     @Override
@@ -54,10 +55,12 @@ public class GoalFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        loadGoalsFromDatabase();
         setupListeners(view);
 
-        // 监听来自CreateGoalDialogFragment的结果
+        // Use LiveData to observe database changes
+        observeGoals();
+
+        // Listen for results from CreateGoalDialogFragment
         getParentFragmentManager().setFragmentResultListener("goal_request", this, (requestKey, result) -> {
             if (result.containsKey("goal_deleted")) {
                 int goalId = result.getInt("goal_id", -1);
@@ -71,10 +74,10 @@ public class GoalFragment extends Fragment {
 
                 if (goalName != null && goalLabel != null) {
                     if (goalId > 0) {
-                        // 编辑现有目标
+                        // Edit existing goal
                         updateGoalInDatabase(goalId, goalName, goalLabel);
                     } else {
-                        // 创建新目标
+                        // Create new goal
                         createGoalInDatabase(goalName, goalLabel);
                     }
                 }
@@ -85,7 +88,7 @@ public class GoalFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // 每次回到这个页面时更新通知
+        // Update notification when returning to this page
         GoalNotificationManager.updateGoalNotification(requireContext());
     }
 
@@ -94,31 +97,27 @@ public class GoalFragment extends Fragment {
         btnCreateGoal = view.findViewById(R.id.btnCreateGoal);
     }
 
-    // 从数据库加载目标
-    private void loadGoalsFromDatabase() {
-        goalRepository.getAllGoals(new GoalRepository.OnResultListener<List<GoalEntity>>() {
+    // Use LiveData to observe database changes for automatic UI updates
+    private void observeGoals() {
+        goalRepository.getAllGoalsLive().observe(getViewLifecycleOwner(), new Observer<List<GoalEntity>>() {
             @Override
-            public void onSuccess(List<GoalEntity> result) {
-                mainHandler.post(() -> {
-                    goalsList.clear();
-                    goalsList.addAll(result);
-                    displayGoals();
+            public void onChanged(List<GoalEntity> goals) {
+                Log.d("GoalFragment", "LiveData triggered, received " + goals.size() + " goals");
 
-                    // 🔔 加载完成后更新通知
-                    GoalNotificationManager.updateGoalNotification(requireContext());
-                });
-            }
+                // Update local list
+                goalsList.clear();
+                goalsList.addAll(goals);
 
-            @Override
-            public void onError(Exception e) {
-                mainHandler.post(() -> {
-                    Toast.makeText(requireContext(), "Failed to load goals", Toast.LENGTH_SHORT).show();
-                });
+                // Refresh UI
+                displayGoals();
+
+                // Update notification
+                GoalNotificationManager.updateGoalNotification(requireContext());
             }
         });
     }
 
-    // 创建新目标
+    // Create new goal
     private void createGoalInDatabase(String name, String label) {
         GoalEntity newGoal = new GoalEntity();
         newGoal.setName(name);
@@ -131,10 +130,7 @@ public class GoalFragment extends Fragment {
             public void onSuccess(Long result) {
                 mainHandler.post(() -> {
                     Toast.makeText(requireContext(), "Goal created!", Toast.LENGTH_SHORT).show();
-                    loadGoalsFromDatabase();
-
-                    // 🔔 创建目标后立即更新通知
-                    GoalNotificationManager.updateGoalNotification(requireContext());
+                    // LiveData will automatically update UI, no need to manually call loadGoalsFromDatabase()
                 });
             }
 
@@ -147,9 +143,9 @@ public class GoalFragment extends Fragment {
         });
     }
 
-    // 更新目标
+    // Update goal
     private void updateGoalInDatabase(int goalId, String name, String label) {
-        // 找到对应的目标
+        // Find the corresponding goal
         GoalEntity goalToUpdate = null;
         for (GoalEntity goal : goalsList) {
             if (goal.getId() == goalId) {
@@ -168,10 +164,7 @@ public class GoalFragment extends Fragment {
                 public void onSuccess(Void result) {
                     mainHandler.post(() -> {
                         Toast.makeText(requireContext(), "Goal updated!", Toast.LENGTH_SHORT).show();
-                        loadGoalsFromDatabase();
-
-                        // 🔔 更新目标后立即更新通知
-                        GoalNotificationManager.updateGoalNotification(requireContext());
+                        // LiveData will automatically update UI
                     });
                 }
 
@@ -185,17 +178,14 @@ public class GoalFragment extends Fragment {
         }
     }
 
-    // 删除目标
+    // Delete goal
     private void deleteGoalFromDatabase(int goalId) {
         goalRepository.deleteGoalById(goalId, new GoalRepository.OnResultListener<Void>() {
             @Override
             public void onSuccess(Void result) {
                 mainHandler.post(() -> {
                     Toast.makeText(requireContext(), "Goal deleted!", Toast.LENGTH_SHORT).show();
-                    loadGoalsFromDatabase();
-
-                    // 🔔 删除目标后立即更新通知
-                    GoalNotificationManager.updateGoalNotification(requireContext());
+                    // LiveData will automatically update UI
                 });
             }
 
@@ -209,20 +199,18 @@ public class GoalFragment extends Fragment {
     }
 
     private void displayGoals() {
-        goalsContainer.removeAllViews();
+        // Set flag to indicate UI is being updated
+        isUpdatingUI = true;
 
-//        // ✅ 如果没有目标，显示空状态提示
-//        if (goalsList.isEmpty()) {
-//            View emptyView = LayoutInflater.from(requireContext()).inflate(
-//                    R.layout.empty_goals_view, goalsContainer, false);
-//            goalsContainer.addView(emptyView);
-//            return;
-//        }
+        goalsContainer.removeAllViews();
 
         for (GoalEntity goal : goalsList) {
             View goalView = createGoalView(goal);
             goalsContainer.addView(goalView);
         }
+
+        // UI update complete
+        isUpdatingUI = false;
     }
 
     private View createGoalView(GoalEntity goal) {
@@ -245,12 +233,18 @@ public class GoalFragment extends Fragment {
             goalBorder.setVisibility(View.GONE);
         }
 
-        // 使用lambda表达式简化
+        // Improved: Check if change is caused by UI update in listener
         goalSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Ignore if this change is caused by UI update
+            if (isUpdatingUI) {
+                return;
+            }
+
+            // User manual operation, update status
             updateGoalStatus(goal, goalSwitch, goalBorder, isChecked);
         });
 
-        // 点击整个卡片跳转到编辑页面
+        // Click entire card to jump to edit page
         view.setOnClickListener(v -> {
             CreateGoalDialogFragment.newEditInstance(
                     goal.getId(),
@@ -267,7 +261,7 @@ public class GoalFragment extends Fragment {
             new CreateGoalDialogFragment().show(getParentFragmentManager(), "create_goal");
         });
 
-        // 建议的目标
+        // Suggested goals
         root.findViewById(R.id.suggestedExercise).setOnClickListener(v -> {
             CreateGoalDialogFragment.newSuggestedInstance("Exercise 30min", "Exercise")
                     .show(getParentFragmentManager(), "suggested");
@@ -285,32 +279,33 @@ public class GoalFragment extends Fragment {
     }
 
     private void updateGoalStatus(GoalEntity goal, SwitchCompat switchView, View borderView, boolean newStatus) {
-        // 保存原始状态
+        // Save original status
         boolean originalStatus = goal.isCompleted();
 
-        // 立即更新UI
+        // Immediately update UI
         borderView.setVisibility(newStatus ? View.VISIBLE : View.GONE);
 
-        // 更新数据库
+        // Update database
         goalRepository.updateCompletedStatus(goal.getId(), newStatus, new GoalRepository.OnResultListener<Void>() {
             @Override
             public void onSuccess(Void result) {
                 mainHandler.post(() -> {
                     goal.setCompleted(newStatus);
-                    Log.d("GoalFragment", "状态更新成功: " + goal.getName() + " -> " + newStatus);
+                    Log.d("GoalFragment", "Status update successful: " + goal.getName() + " -> " + newStatus);
                     GoalNotificationManager.updateGoalNotification(requireContext());
+                    // LiveData will automatically trigger UI update to ensure synchronization
                 });
             }
 
             @Override
             public void onError(Exception e) {
                 mainHandler.post(() -> {
-                    Log.e("GoalFragment", "状态更新失败", e);
+                    Log.e("GoalFragment", "Status update failed", e);
                     Toast.makeText(requireContext(), "Failed to update status", Toast.LENGTH_SHORT).show();
 
-                    // 完全回滚
+                    // Complete rollback
                     switchView.setChecked(originalStatus);
-                    goal.setCompleted(originalStatus); // 确保本地对象也回滚
+                    goal.setCompleted(originalStatus);
                     borderView.setVisibility(originalStatus ? View.VISIBLE : View.GONE);
                 });
             }

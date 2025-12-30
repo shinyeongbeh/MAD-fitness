@@ -26,7 +26,7 @@ public class GoalRepository {
         this.executorService = Executors.newSingleThreadExecutor();
     }
 
-    // 插入目标
+    // Insert goal
     public void insertGoal(GoalEntity goal, OnResultListener<Long> listener) {
         executorService.execute(() -> {
             try {
@@ -43,7 +43,7 @@ public class GoalRepository {
         });
     }
 
-    // 更新目标
+    // Update goal
     public void updateGoal(GoalEntity goal, OnResultListener<Void> listener) {
         executorService.execute(() -> {
             try {
@@ -60,7 +60,7 @@ public class GoalRepository {
         });
     }
 
-    // 删除目标
+    // Delete goal
     public void deleteGoal(GoalEntity goal, OnResultListener<Void> listener) {
         executorService.execute(() -> {
             try {
@@ -77,7 +77,7 @@ public class GoalRepository {
         });
     }
 
-    // 根据ID删除目标
+    // Delete goal by ID
     public void deleteGoalById(int goalId, OnResultListener<Void> listener) {
         executorService.execute(() -> {
             try {
@@ -94,7 +94,7 @@ public class GoalRepository {
         });
     }
 
-    // 获取所有目标
+    // Get all goals
     public void getAllGoals(OnResultListener<List<GoalEntity>> listener) {
         executorService.execute(() -> {
             try {
@@ -111,12 +111,12 @@ public class GoalRepository {
         });
     }
 
-    // 获取所有目标（LiveData）
+    // Get all goals (LiveData)
     public LiveData<List<GoalEntity>> getAllGoalsLive() {
         return goalDao.getAllGoalsLive();
     }
 
-    // 获取未完成的目标
+    // Get incomplete goals
     public void getIncompleteGoals(OnResultListener<List<GoalEntity>> listener) {
         executorService.execute(() -> {
             try {
@@ -133,23 +133,22 @@ public class GoalRepository {
         });
     }
 
-    // 更新完成状态
-// 更新完成状态（修复版）
+    // Update completion status (fixed version)
     public void updateCompletedStatus(int goalId, boolean completed, OnResultListener<Void> listener) {
         executorService.execute(() -> {
             try {
-                // ✅ 尝试使用直接的SQL更新
+                // Try using direct SQL update
                 try {
                     goalDao.updateCompletedStatus(goalId, completed);
-                    Log.d(TAG, "✅ Direct SQL update succeeded for goalId: " + goalId);
+                    Log.d(TAG, "Direct SQL update succeeded for goalId: " + goalId);
                 } catch (Exception sqlEx) {
-                    // ✅ 如果直接更新失败，回退到先查询再更新
+                    // If direct update fails, fall back to query-then-update approach
                     Log.d(TAG, "Direct update failed, trying query-then-update approach");
                     GoalEntity goal = goalDao.getGoalById(goalId);
                     if (goal != null) {
                         goal.setCompleted(completed);
                         goalDao.update(goal);
-                        Log.d(TAG, "✅ Query-then-update succeeded for goalId: " + goalId);
+                        Log.d(TAG, "Query-then-update succeeded for goalId: " + goalId);
                     } else {
                         throw new Exception("Goal not found with id: " + goalId);
                     }
@@ -159,8 +158,8 @@ public class GoalRepository {
                     listener.onSuccess(null);
                 }
             } catch (Exception e) {
-                Log.e(TAG, "❌ Error updating completed status for goalId: " + goalId, e);
-                // 打印完整堆栈跟踪
+                Log.e(TAG, "Error updating completed status for goalId: " + goalId, e);
+                // Print full stack trace
                 e.printStackTrace();
                 if (listener != null) {
                     listener.onError(e);
@@ -169,10 +168,7 @@ public class GoalRepository {
         });
     }
 
-    // ❌ 移除默认目标初始化方法
-    // 不再需要 initializeDefaultGoals()
-
-    // 根据label获取对应的图标资源ID
+    // Get icon resource ID based on label
     public static int getIconForLabel(String label) {
         switch (label) {
             case "Exercise": return R.drawable.ic_exercise;
@@ -185,7 +181,7 @@ public class GoalRepository {
         }
     }
 
-    // 回调接口
+    // Callback interface
     public interface OnResultListener<T> {
         void onSuccess(T result);
         void onError(Exception e);

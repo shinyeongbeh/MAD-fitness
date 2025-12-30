@@ -77,12 +77,12 @@
 
     <!-- Green Border (when completed) -->
     <View
-    android:id="@+id/goalBorder"
-    android:layout_width="match_parent"
-    android:layout_height="4dp"
-    android:layout_gravity="bottom"
-    android:background="@drawable/border_goal_completed"
-    android:visibility="gone"/>
+        android:id="@+id/goalBorder"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/border_goal_completed"
+        android:visibility="gone"/>
 
 
 </androidx.cardview.widget.CardView>
