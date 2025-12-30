@@ -3,7 +3,7 @@
     <style name="Base.Theme.MAD" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- Font (same as light) -->
-        <item name="android:fontFamily">@font/coiny</item>
+        <item name="android:fontFamily">@font/jost</item>
 
         <!-- Primary (Green stays, but deeper) -->
         <item name="colorPrimary">#81C784</item>

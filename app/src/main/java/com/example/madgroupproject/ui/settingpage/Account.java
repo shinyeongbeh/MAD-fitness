@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.madgroupproject.R;
@@ -68,6 +69,7 @@ public class Account extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -82,6 +84,8 @@ public class Account extends Fragment {
     private boolean isEditing = false;
     private AppDatabase db;
     private UserProfile profile;
+
+    private ImageView profileUser , frame ;
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -180,7 +184,22 @@ public class Account extends Fragment {
 
         });
 
+
+
+        //Frame
+
+        profileUser = view.findViewById(R.id.user);
+        frame = view.findViewById(R.id.imgFrame);
+
+        // current profile picture
+        //profile.setImageResource(R.drawable.profile_pic);
+
+        // Demo frame (always applied)
+        frame.setImageResource(R.drawable.frame_1);
+
     }
+
+
 }
 
 

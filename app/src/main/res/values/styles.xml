@@ -11,6 +11,13 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">8dp</item>
         <item name="android:fontFamily">@font/coiny</item>
+
+
+    </style>
+
+    <!-- Add this style -->
+    <style name="CircleImageStyle" parent="">
+        <item name="cornerSize">50%</item>
     </style>
 
     <!-- 全屏对话框样式 - 新添加的 -->
@@ -20,6 +27,10 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+    <!-- Add this style -->
+    <style name="CircleImageStyle" parent="">
+        <item name="cornerSize">50%</item>
     </style>
 
     <!-- 注意：这里已经没有 AppTheme 了！ -->
