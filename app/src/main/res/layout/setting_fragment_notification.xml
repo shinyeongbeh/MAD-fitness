@@ -9,13 +9,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundColor">
+        android:background="?attr/android:windowBackground">
 
         <TextView
             android:id="@+id/TV_Reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reminder"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/button_Notification_DG"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,10 +29,10 @@
             android:layout_height="54dp"
             android:layout_marginStart="93dp"
             android:layout_marginEnd="94dp"
-            android:backgroundTint="@color/buttonBackgroundColorTint"
+            android:backgroundTint="?attr/colorSurface"
             android:text="    Daily Goals"
             android:textAlignment="textStart"
-            android:textColor="#020000"
+            android:textColor="?attr/colorOnSurface"
             android:textColorLink="#BC8787"
             app:icon="@drawable/ic_launcher_foreground"
             app:iconGravity="textStart"
@@ -46,7 +47,7 @@
             app:layout_constraintVertical_bias="0.177" />
 
         <Switch
-            android:id="@+id/switch1"
+            android:id="@+id/switchGoal"
             android:layout_width="198dp"
             android:layout_height="35dp"
             android:layout_marginStart="106dp"
@@ -54,6 +55,7 @@
             android:layout_marginEnd="107dp"
             android:layout_marginBottom="10dp"
             android:text="Notification Bar"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintBottom_toTopOf="@+id/button_Notification_Storage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -69,10 +71,10 @@
             android:layout_marginTop="28dp"
             android:layout_marginEnd="94dp"
             android:layout_marginBottom="396dp"
-            android:backgroundTint="@color/buttonBackgroundColorTint"
+            android:backgroundTint="?attr/colorSurface"
             android:text="    Streak Alerts"
             android:textAlignment="textStart"
-            android:textColor="#020000"
+            android:textColor="?attr/colorOnSurface"
             android:textColorLink="#BC8787"
             app:icon="@drawable/ic_launcher_foreground"
             app:iconGravity="textStart"
@@ -87,13 +89,14 @@
             app:layout_constraintVertical_bias="0.468" />
 
         <Switch
-            android:id="@+id/switch2"
+            android:id="@+id/switchStreak"
             android:layout_width="198dp"
             android:layout_height="35dp"
             android:layout_marginStart="106dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="107dp"
             android:text="Notification Bar"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,10 +109,10 @@
             android:layout_marginStart="93dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="94dp"
-            android:backgroundTint="@color/buttonBackgroundColorTint"
-            android:text="Step Milestone Alerts"
+            android:backgroundTint="?attr/colorSurface"
+            android:text="    Step Alerts"
             android:textAlignment="textStart"
-            android:textColor="#020000"
+            android:textColor="?attr/colorOnSurface"
             android:textColorLink="#BC8787"
             app:icon="@drawable/ic_launcher_foreground"
             app:iconGravity="textStart"
@@ -120,17 +123,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch2"
+            app:layout_constraintTop_toBottomOf="@+id/switchStreak"
             app:layout_constraintVertical_bias="0.0" />
 
         <Switch
-            android:id="@+id/switch4"
+            android:id="@+id/switchStep"
             android:layout_width="198dp"
             android:layout_height="35dp"
             android:layout_marginStart="106dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="107dp"
             android:text="Notification Bar"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_Notification_SMA" />

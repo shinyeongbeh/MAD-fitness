@@ -9,8 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundColor"
-        android:backgroundTint="@color/backgroundColor">
+        android:background="?attr/android:windowBackground"
+        android:backgroundTint="?attr/android:windowBackground">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -45,7 +45,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Username:"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp" />
 
                 <EditText
@@ -55,7 +55,7 @@
                     android:layout_weight="1"
                     android:text="Puppy"
                     android:textAlignment="center"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
             <LinearLayout
@@ -70,7 +70,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Email:"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp" />
 
                 <EditText
@@ -80,7 +80,7 @@
                     android:layout_weight="1"
                     android:text="puppy@gmail.com"
                     android:textAlignment="textStart"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
             <LinearLayout
@@ -95,7 +95,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Phone No:"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp" />
 
                 <EditText
@@ -105,7 +105,7 @@
                     android:layout_weight="1"
                     android:text="011234589"
                     android:textAlignment="textStart"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
             <LinearLayout
@@ -120,7 +120,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Age:"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp" />
 
                 <EditText
@@ -130,7 +130,7 @@
                     android:layout_weight="1"
                     android:text="20"
                     android:textAlignment="textStart"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
             <LinearLayout
@@ -145,7 +145,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Weight (kg):"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp" />
 
                 <EditText
@@ -155,7 +155,7 @@
                     android:layout_weight="1"
                     android:text=" 40 "
                     android:textAlignment="textStart"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
             <LinearLayout
@@ -170,7 +170,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Height (cm):"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp" />
 
                 <EditText
@@ -180,7 +180,7 @@
                     android:layout_weight="1"
                     android:text="160"
                     android:textAlignment="textStart"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
         </LinearLayout>
@@ -193,16 +193,16 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="18dp"
-            android:backgroundTint="#9CB1AA"
+            android:backgroundTint="?attr/colorSurfaceVariant"
             android:text="Edit"
             android:textAlignment="textStart"
-            android:textColor="#020000"
+            android:textColor="?attr/colorOnSurface"
             android:textColorLink="#BC8787"
             android:textSize="12sp"
-            app:icon="@drawable/ic_launcher_foreground"
+            app:icon="@drawable/baseline_edit_24"
             app:iconGravity="textStart"
-            app:iconSize="30dp"
-            app:iconTint="@color/backgroundColorTint"
+            app:iconSize="20dp"
+            app:iconTint="?attr/colorPrimary"
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toTopOf="@+id/button_Account_Profile"
             app:layout_constraintEnd_toEndOf="parent"
@@ -216,15 +216,15 @@
             android:layout_marginStart="93dp"
             android:layout_marginTop="83dp"
             android:layout_marginEnd="94dp"
-            android:backgroundTint="@color/buttonBackgroundColorTint"
+            android:backgroundTint="?attr/colorSurfaceVariant"
             android:text="      Profile"
             android:textAlignment="textStart"
-            android:textColor="#020000"
+            android:textColor="?attr/colorOnSurface"
             android:textColorLink="#BC8787"
-            app:icon="@drawable/ic_launcher_foreground"
+            app:icon="@drawable/outline_emoji_people_24"
             app:iconGravity="textStart"
             app:iconSize="30dp"
-            app:iconTint="@color/iconTintPrimary"
+            app:iconTint="?attr/colorPrimary"
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

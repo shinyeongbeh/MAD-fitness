@@ -1,9 +1,6 @@
 package com.example.madgroupproject.ui.settingpage;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -17,10 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Switch;
 
 import com.example.madgroupproject.R;
-import com.example.madgroupproject.main.GoalNotificationReceiver;
 //import com.example.madgroupproject.main.GoalNotificationReceiver;
 
-import java.util.Calendar;
 
 public class NotificationSettingsFragment extends Fragment {
 
@@ -31,29 +26,52 @@ public class NotificationSettingsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.setting_fragment_notification, container, false);
 
-        Switch switchNotification = view.findViewById(R.id.switch1);
+        Switch switchNotificationGoal = view.findViewById(R.id.switchGoal);
+        Switch switchNotificationStreak = view.findViewById(R.id.switchStreak);
+        Switch switchNotificationStep = view.findViewById(R.id.switchStep);
+
+
 
         SharedPreferences prefs =
                 requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE);
 
         // Load saved value
         boolean enabled = prefs.getBoolean("notifications_enabled", true);
-        switchNotification.setChecked(enabled);
+        switchNotificationGoal.setChecked(enabled);
 
-        switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit()
-                    .putBoolean("notifications_enabled", isChecked)
-                    .apply();
+        // 1. Load saved values for each individual setting
+        switchNotificationGoal.setChecked(prefs.getBoolean("goal_notifications_enabled", true));
+        switchNotificationStreak.setChecked(prefs.getBoolean("streak_notifications_enabled", true));
+        switchNotificationStep.setChecked(prefs.getBoolean("step_notifications_enabled", true));
+
+        // 2. Set individual listeners for each switch
+        switchNotificationGoal.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("goal_notifications_enabled", isChecked).apply();
+            // Optional: call scheduleDailyGoalNotification(requireContext()) here if needed
+        });
+
+        switchNotificationStreak.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("streak_notifications_enabled", isChecked).apply();
+            // Optional: call scheduleStreakReminder(requireContext()) here if needed
+        });
+
+        switchNotificationStep.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("step_notifications_enabled", isChecked).apply();
+        });
+
+        return view;
+    }
+
+
+
+
 
             //if (isChecked) {
             //    scheduleDailyGoalNotification(requireContext());
             //} else {
             //    cancelDailyGoalNotification(requireContext());
             //}
-        });
 
-        return view;
-    }
 
     /*
     // Schedule 8AM notification

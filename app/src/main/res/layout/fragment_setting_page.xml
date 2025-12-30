@@ -83,6 +83,7 @@
             android:textAlignment="textStart"
             android:textColor="?attr/colorOnSurface"
 
+            android:visibility="gone"
             app:icon="@drawable/twotone_private_connectivity_24"
             app:iconGravity="textStart"
             app:iconSize="30dp"
@@ -105,6 +106,7 @@
             android:textAlignment="textStart"
             android:textColor="?attr/colorOnSurface"
 
+            android:visibility="gone"
             app:icon="@drawable/baseline_cloud_sync_24"
             app:iconGravity="textStart"
             app:iconSize="30dp"

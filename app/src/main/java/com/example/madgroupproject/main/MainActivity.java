@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startTracking() {
+
         RecordingAPIManager recordingAPIManager = new RecordingAPIManager(this);
         recordingAPIManager.subscribeToRecording(this);
 
