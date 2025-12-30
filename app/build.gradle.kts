@@ -88,4 +88,12 @@ dependencies {
     val workVersion = "2.9.1"
     implementation("androidx.work:work-runtime:$workVersion")
 
+    //added by YE
+    val fragment_version="1.6.1"
+    implementation("androidx.fragment:fragment:$fragment_version")
+    implementation("androidx.fragment:fragment-ktx:${fragment_version}")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+
+
 }
