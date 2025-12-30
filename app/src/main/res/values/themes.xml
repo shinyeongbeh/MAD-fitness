@@ -36,6 +36,7 @@
 
     <!-- AppTheme 别名 -->
     <style name="AppTheme" parent="Base.Theme.MAD" />
+
     <!-- Add this style -->
     <style name="CircleImageStyle" parent="">
         <item name="cornerSize">50%</item>
