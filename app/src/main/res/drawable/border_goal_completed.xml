@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- res/drawable/border_goal_completed.xml -->
+<!-- 四边绿色边框 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- 设置边框颜色和宽度 -->
     <stroke
         android:width="4dp"
-        android:color="#4CAF50"/>
-    <corners android:radius="12dp"/>
+        android:color="#4CAF50" />
+
+    <!-- 可选：背景透明或白色 -->
+    <solid android:color="@android:color/transparent"/>
 </shape>

@@ -7,12 +7,18 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.madgroupproject.ui.homepage.HomeFragment"
+        android:name="com.example.madgroupproject.ui.homepage.HomePage"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_settingMainActivity"
             app:destination="@id/settingMainActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_appleFragment2"
+            app:destination="@id/appleFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_appleFragment3"
+            app:destination="@id/appleFragment" />
     </fragment>
 
     <fragment
@@ -78,4 +84,9 @@
         android:name="com.example.madgroupproject.ui.gamelevelspage.LevelDetailFragment"
         android:label="Level Detail"
         tools:layout="@layout/level_details" />
+    <fragment
+        android:id="@+id/appleFragment"
+        android:name="com.example.madgroupproject.ui.homepage.AppleFragment"
+        tools:layout="@layout/fragment_apple"
+        android:label="AppleFragment" />
 </navigation>

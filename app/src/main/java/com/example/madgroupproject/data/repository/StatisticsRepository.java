@@ -44,4 +44,3 @@ public class StatisticsRepository {
         return this.fitnessDataDao.getMonthlyAverageLive(month);
     }
 }
-

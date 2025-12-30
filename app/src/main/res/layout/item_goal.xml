@@ -10,6 +10,7 @@
     app:cardElevation="0dp"
     android:layout_marginBottom="12dp">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,8 +79,10 @@
     <View
         android:id="@+id/goalBorder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="bottom"
         android:background="@drawable/border_goal_completed"
         android:visibility="gone"/>
+
 
 </androidx.cardview.widget.CardView>
