@@ -16,7 +16,7 @@ public interface GameProgressDao {
 //        LIMIT 1
 //    """)
 @Query("""
-        SELECT * FROM game_progress
+        SELECT * FROM game_progress LIMIT 1
     """)
     GameProgressEntity getProgressSync();
 
@@ -25,7 +25,7 @@ public interface GameProgressDao {
 //        WHERE gameType = :type
 //        LIMIT 1
 //    """)
-    @Query("SELECT * FROM game_progress")
+    @Query("SELECT * FROM game_progress LIMIT 1")
     LiveData<GameProgressEntity> observeProgress();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
