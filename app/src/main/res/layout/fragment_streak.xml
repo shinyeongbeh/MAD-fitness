@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#D6DAC8">
+    android:background="@color/page_background">
 
     <!-- 可滚动的内容区域 -->
     <ScrollView
@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="CURRENT STREAK: 4 DAYS"
-                android:textColor="#000000"
+                android:textColor="@color/text_main"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
@@ -36,7 +36,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="#DCEFC5"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
                 android:layout_marginBottom="24dp">
@@ -59,6 +59,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/streak_ic_link"
+                            app:tint="#000000"
                             android:layout_marginEnd="8dp"/>
 
                         <TextView
@@ -66,7 +67,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Today: Feb 9"
-                            android:textColor="#000000"
+                            android:textColor="@color/text_main"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:fontFamily="@font/coiny"/>
@@ -91,7 +92,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Steps: 760/1000"
-                            android:textColor="#999999"
+                            android:textColor="@color/text_light_gray"
                             android:textSize="16sp"
                             android:fontFamily="@font/coiny"/>
                     </LinearLayout>
@@ -102,7 +103,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background_white"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
                 android:layout_marginBottom="24dp">
@@ -129,7 +130,7 @@
                             android:src="@android:drawable/ic_media_previous"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:contentDescription="Previous Month"
-                            app:tint="#000000" />
+                            app:tint="@color/text_main" />
 
                         <!-- Month Title -->
                         <TextView
@@ -138,7 +139,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="December 2024"
-                            android:textColor="#000000"
+                            android:textColor="@color/text_main"
                             android:textSize="22sp"
                             android:textStyle="bold"
                             android:fontFamily="@font/coiny"
@@ -152,7 +153,7 @@
                             android:src="@android:drawable/ic_media_next"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:contentDescription="Next Month"
-                            app:tint="#000000" />
+                            app:tint="@color/text_main" />
                     </LinearLayout>
 
                     <!-- Calendar Grid -->
@@ -182,7 +183,7 @@
                 android:id="@+id/cardBestStreak"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="#DCEFC5"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
                 android:layout_marginBottom="24dp"
@@ -213,7 +214,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Best Streak"
-                            android:textColor="#000000"
+                            android:textColor="@color/text_main"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:fontFamily="@font/coiny"
@@ -224,7 +225,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Jan 1 - 30"
-                            android:textColor="#000000"
+                            android:textColor="@color/text_main"
                             android:textSize="14sp"
                             android:fontFamily="@font/coiny"
                             android:layout_marginBottom="4dp"/>
@@ -234,7 +235,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="30 days"
-                            android:textColor="#000000"
+                            android:textColor="@color/text_main"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:fontFamily="@font/coiny"/>
@@ -244,6 +245,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        app:tint="#FFD700"
                         android:src="@drawable/streak_ic_trophy"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -258,7 +260,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="@color/streak_completed"
                 android:padding="16dp"
                 android:textAllCaps="false"
                 android:layout_marginBottom="24dp"/>

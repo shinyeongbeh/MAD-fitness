@@ -35,4 +35,18 @@
     <!-- AppTheme for dark mode -->
     <style name="AppTheme" parent="Base.Theme.MAD" />
 
+    <!-- ========== 以下是新增的 Dark Mode 颜色定义 ========== -->
+    <!-- HomePage, GoalPage, StreakPage specific colors (Dark Mode) -->
+    <color name="page_background">#121212</color>           <!-- 深黑色背景 -->
+    <color name="card_background">#1E1E1E</color>           <!-- 深灰色卡片 -->
+    <color name="card_background_white">#1E1E1E</color>     <!-- 深灰色卡片 -->
+    <color name="card_background_gray">#1E1E1E</color>      <!-- 深灰色卡片 -->
+    <color name="text_main">#FFFFFF</color>
+    <color name="text_secondary_gray">#BDBDBD</color>
+    <color name="text_light_gray">#757575</color>
+    <color name="streak_completed">#81C784</color>
+    <color name="calendar_inactive">#2A2A2A</color>
+    <color name="goal_completed_border">#81C784</color>
+    <color name="icon_circle_bg">#2A2A2A</color>            <!-- 深灰色图标背景 -->
+
 </resources>
