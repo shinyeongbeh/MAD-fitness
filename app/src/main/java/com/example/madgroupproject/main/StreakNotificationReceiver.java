@@ -12,7 +12,7 @@ import com.example.madgroupproject.data.StreakPreferenceManager;
 import java.util.stream.Stream;
 
 public class StreakNotificationReceiver extends BroadcastReceiver {
-    public static final int STREAK_NOTIFICATION_ID = 102;
+    public static final int STREAK_NOTIFICATION_ID = 1002;
 
 
     @Override

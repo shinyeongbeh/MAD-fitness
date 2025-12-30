@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.madgroupproject.R;
+import com.example.madgroupproject.data.StreakPreferenceManager;
 import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
 
 import java.util.concurrent.ExecutorService;
@@ -28,7 +29,7 @@ public class StepTrackingService extends Service {
             new Handler(Looper.getMainLooper());
 
     private static final String CHANNEL_ID = "step_tracking_channel";
-    private static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = 2001;
 
     @Override
     public void onCreate() {
@@ -116,6 +117,9 @@ public class StepTrackingService extends Service {
 
             NotificationManagerCompat.from(this)
                     .notify(NOTIFICATION_ID, notification);
+
+            //Check daily goal if reach then notify
+             StreakPreferenceManager.checkAndNotifyDailyGoal(this, steps);
         }
 
 }

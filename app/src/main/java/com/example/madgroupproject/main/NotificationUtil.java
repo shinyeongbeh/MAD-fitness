@@ -44,27 +44,6 @@ public class NotificationUtil {
     }
 
 
-    // Show a dummy notification
-    /*public static void showNotification(Context context) {
-
-        if (!isNotificationEnabled(context)) return;
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_info) // use a built-in dummy icon
-                .setContentTitle("Dummy Title")
-                .setContentText("This is a dummy notification message.")
-                .setAutoCancel(true);
-
-        // Check for POST_NOTIFICATIONS permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // Permission not granted, just return for now
-            return;
-        }
-
-        NotificationManagerCompat.from(context).notify(1, builder.build());
-    }*/
-
     public static void showNotification(Context context,int notificationId,String title, String message) {
 
         SharedPreferences prefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE);
@@ -75,7 +54,7 @@ public class NotificationUtil {
             isEnabled = prefs.getBoolean("goal_notifications_enabled", true);
         } else if (notificationId == 1002) { // Streak ID
             isEnabled = prefs.getBoolean("streak_notifications_enabled", true);
-        } else if (notificationId == 2001) { // Step Milestone ID
+        } else if (notificationId == 2002) { // Step Milestone ID
             isEnabled = prefs.getBoolean("step_notifications_enabled", true);
         }
 

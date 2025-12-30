@@ -3,6 +3,12 @@ package com.example.madgroupproject.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.madgroupproject.main.NotificationUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class StreakPreferenceManager {
     private static final String PREF_NAME = "StreakPrefs";
     private static final String KEY_DAILY_GOAL = "daily_goal";
@@ -31,4 +37,31 @@ public class StreakPreferenceManager {
     public void resetToDefault() {
         setDailyGoal(DEFAULT_DAILY_GOAL);
     }
+
+    private static final String KEY_GOAL_REACHED_DATE = "goal_reached_date";
+
+
+    public static void checkAndNotifyDailyGoal(
+            Context context,
+            int currentSteps
+    ) {
+        SharedPreferences prefs =
+                context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+        int dailyGoal = prefs.getInt(KEY_DAILY_GOAL, DEFAULT_DAILY_GOAL);
+
+        // Not reached yet
+        if (currentSteps < dailyGoal) return;
+
+
+        //Show notification
+        NotificationUtil.showNotification(
+                context,
+                2002, // unique ID for daily goal
+                "Daily Step Goal Achieved 🎉",
+                "You reached " + dailyGoal + " steps today. Great job!"
+        );
+
+    }
+
 }

@@ -47,23 +47,21 @@ public class NotificationSettingsFragment extends Fragment {
         // 2. Set individual listeners for each switch
         switchNotificationGoal.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean("goal_notifications_enabled", isChecked).apply();
-            // Optional: call scheduleDailyGoalNotification(requireContext()) here if needed
+
         });
 
         switchNotificationStreak.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean("streak_notifications_enabled", isChecked).apply();
-            // Optional: call scheduleStreakReminder(requireContext()) here if needed
+
         });
 
+        //Only control the notification of reach DailyGoalStep
         switchNotificationStep.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean("step_notifications_enabled", isChecked).apply();
         });
 
         return view;
     }
-
-
-
 
 
             //if (isChecked) {

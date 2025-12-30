@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 public class GoalNotificationManager {
 
     private static final String TAG = "GoalNotificationManager";
-    public static final int GOAL_NOTIFICATION_ID = 101;
+    public static final int GOAL_NOTIFICATION_ID = 1001;
 
     /**
      * 更新目标通知（显示未完成的目标）
