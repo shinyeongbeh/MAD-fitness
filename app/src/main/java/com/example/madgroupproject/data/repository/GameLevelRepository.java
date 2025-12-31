@@ -59,4 +59,9 @@ public class GameLevelRepository {
     public List<GameLevelHistoryEntity> getHistoryByGameType(String type) {
         return historyDao.getHistoryByGameTypeDesc(type);
     }
+
+    public GameLevelHistoryEntity getHistoryForLevel(int level) {
+        return historyDao.getHistoryForLevel(level);
+    }
+
 }

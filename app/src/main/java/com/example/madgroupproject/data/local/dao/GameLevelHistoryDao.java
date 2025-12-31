@@ -23,6 +23,14 @@ public interface GameLevelHistoryDao {
     """)
     List<GameLevelHistoryEntity> getHistoryByLevel(int level);
 
+    @Query("""
+    SELECT * FROM game_level_history
+    WHERE levelNum = :level
+    LIMIT 1
+""")
+    GameLevelHistoryEntity getHistoryForLevel(int level);
+
+
     @Insert
     void insert(GameLevelHistoryEntity entity);
 

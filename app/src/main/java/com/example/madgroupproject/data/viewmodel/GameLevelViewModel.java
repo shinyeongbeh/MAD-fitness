@@ -52,4 +52,9 @@ public class GameLevelViewModel extends AndroidViewModel {
     public List<GameLevelHistoryEntity> getHistoryByGameType(String type) {
         return repo.getHistoryByGameType(type);
     }
+
+    public GameLevelHistoryEntity getHistoryForLevel(int level) {
+        return repo.getHistoryForLevel(level);
+    }
+
 }

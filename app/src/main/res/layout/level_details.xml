@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
-    <ImageView
-        android:id="@+id/idIVLevel"
-        android:layout_width="144dp"
-        android:layout_height="131dp"
-        android:layout_margin="8dp"
-        android:layout_marginTop="28dp"
-        android:padding="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idTVLevelName" />
 
     <TextView
         android:id="@+id/idTVLevelName"
@@ -80,5 +68,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idIVLevel" />
+
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/idIVLevel"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="28dp"
+        android:padding="4dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idTVLevelName"
+        app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+
+    <ImageView
+        android:id="@+id/imgFrame"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/frame_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idTVLevelName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
