@@ -40,18 +40,18 @@ public class GameLevelFragment extends Fragment {
     }
 
     private void addDataToList(){
-        levelsRVModelArrayList.add((new LevelsRVModel("First Steps","Level 1", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Warm-Up Walker","Level 2", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Casual Stroller","Level 3", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Consistent Starter","Level 4", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Daily Mover","Level 5", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Path Explorer","Level 6", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Steady Strider","Level 7", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Routine Walker","Level 8", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Pace Setter","Level 9", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Weekend Warrior","Level 10", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Trail Tracker","Level 11", "Walk 100 steps",R.drawable.husky)));
-        levelsRVModelArrayList.add((new LevelsRVModel("Speed Walker","Level 12", "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("First Steps",1, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Warm-Up Walker",2, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Casual Stroller",3, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Consistent Starter",4, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Daily Mover",5, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Path Explorer",6, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Steady Strider",7, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Routine Walker",8, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Pace Setter",9, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Weekend Warrior",10, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Trail Tracker",11, "Walk 100 steps",R.drawable.husky)));
+        levelsRVModelArrayList.add((new LevelsRVModel("Speed Walker",12, "Walk 100 steps",R.drawable.husky)));
 
     }
 

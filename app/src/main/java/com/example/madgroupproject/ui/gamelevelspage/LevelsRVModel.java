@@ -2,12 +2,10 @@ package com.example.madgroupproject.ui.gamelevelspage;
 
 public class LevelsRVModel {
 
-    private String levelName;
-    private int levelImg;
-    private String levelDetail;
-    private String levelNum;
+    private String levelName,levelDetail;
+    private int levelImg, levelNum;
 
-    public LevelsRVModel(String levelName, String levelNum, String levelDetail, int levelImg) {
+    public LevelsRVModel(String levelName, int levelNum, String levelDetail, int levelImg) {
         this.levelDetail = levelDetail;
         this.levelImg = levelImg;
         this.levelName = levelName;
@@ -38,11 +36,11 @@ public class LevelsRVModel {
         this.levelName = levelName;
     }
 
-    public String getLevelNum() {
+    public int getLevelNum() {
         return levelNum;
     }
 
-    public void setLevelNum(String levelNum) {
+    public void setLevelNum(int levelNum) {
         this.levelNum = levelNum;
     }
 }

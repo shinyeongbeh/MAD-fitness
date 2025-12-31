@@ -37,9 +37,11 @@ public class LevelRVAdapter extends RecyclerView.Adapter<LevelRVAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull LevelRVAdapter.ViewHolder holder, int position) {
         holder.levelNameTV.setText(levelsRVModelArrayList.get(position).getLevelName());
-        holder.levelNum.setText(levelsRVModelArrayList.get(position).getLevelNum());
         holder.levelDetailTV.setText(levelsRVModelArrayList.get(position).getLevelDetail());
         holder.levelImg.setImageResource(levelsRVModelArrayList.get(position).getLevelImg());
+        holder.levelNum.setText(
+                String.valueOf(levelsRVModelArrayList.get(position).getLevelNum())
+        );
 
         LevelsRVModel level = levelsRVModelArrayList.get(position);
 
@@ -47,7 +49,7 @@ public class LevelRVAdapter extends RecyclerView.Adapter<LevelRVAdapter.ViewHold
         holder.itemView.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
 
-            bundle.putString("LEVEL_NUMBER", level.getLevelNum());
+            bundle.putInt("LEVEL_NUMBER", level.getLevelNum());
             bundle.putString("LEVEL_TITLE", level.getLevelName());
             bundle.putString("LEVEL_DESC", level.getLevelDetail());
             bundle.putInt("LEVEL_IMG", level.getLevelImg());
