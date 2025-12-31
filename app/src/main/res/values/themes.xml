@@ -28,7 +28,6 @@
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:windowLightNavigationBar">true</item>
 
-
     </style>
 
     <!-- Main application theme -->
@@ -41,5 +40,7 @@
     <style name="CircleImageStyle" parent="">
         <item name="cornerSize">50%</item>
     </style>
+
+
 
 </resources>

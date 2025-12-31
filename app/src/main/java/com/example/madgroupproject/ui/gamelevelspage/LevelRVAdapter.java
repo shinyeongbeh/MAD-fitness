@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,14 +37,16 @@ public class LevelRVAdapter extends RecyclerView.Adapter<LevelRVAdapter.ViewHold
     //deal with clicks here
     @Override
     public void onBindViewHolder(@NonNull LevelRVAdapter.ViewHolder holder, int position) {
+        LevelsRVModel level = levelsRVModelArrayList.get(position);
+
         holder.levelNameTV.setText(levelsRVModelArrayList.get(position).getLevelName());
         holder.levelDetailTV.setText(levelsRVModelArrayList.get(position).getLevelDetail());
-        holder.levelImg.setImageResource(levelsRVModelArrayList.get(position).getLevelImg());
+        holder.levelFrame.setImageResource(levelsRVModelArrayList.get(position).getLevelFrame());
         holder.levelNum.setText(
                 String.valueOf(levelsRVModelArrayList.get(position).getLevelNum())
         );
-
-        LevelsRVModel level = levelsRVModelArrayList.get(position);
+        int color = ContextCompat.getColor(context, level.getBgColor());
+        holder.itemView.setBackgroundColor(color);
 
         //onclick
         holder.itemView.setOnClickListener(v -> {
@@ -52,7 +55,7 @@ public class LevelRVAdapter extends RecyclerView.Adapter<LevelRVAdapter.ViewHold
             bundle.putInt("LEVEL_NUMBER", level.getLevelNum());
             bundle.putString("LEVEL_TITLE", level.getLevelName());
             bundle.putString("LEVEL_DESC", level.getLevelDetail());
-            bundle.putInt("LEVEL_IMG", level.getLevelImg());
+            bundle.putInt("LEVEL_FRAME", level.getLevelFrame());
 
 
             Navigation.findNavController(v)
@@ -73,13 +76,13 @@ public class LevelRVAdapter extends RecyclerView.Adapter<LevelRVAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView levelNameTV, levelDetailTV,levelNum;
-        private ImageView levelImg;
+        private ImageView levelFrame;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             levelNameTV = itemView.findViewById(R.id.idTVLevelName);
             levelDetailTV = itemView.findViewById(R.id.idTVDetail);
-            levelImg = itemView.findViewById(R.id.idIVLevel);
+            levelFrame = itemView.findViewById(R.id.idIVFrame);
             levelNum = itemView.findViewById(R.id.idTVLevelNum);
         }
     }

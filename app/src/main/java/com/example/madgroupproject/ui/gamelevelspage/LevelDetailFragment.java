@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 
 public class LevelDetailFragment extends Fragment {
     private TextView levelTitleTV, levelNumTV, levelDescTV, levelPercentageTV, levelDateTV;
-    private ImageView levelImgIV;
+    private ImageView levelFrameIV;
     private GameLevelViewModel viewModel;
     int levelNumber=1;
 
@@ -32,7 +32,7 @@ public class LevelDetailFragment extends Fragment {
         levelTitleTV = view.findViewById(R.id.idTVLevelName);
         levelNumTV = view.findViewById(R.id.idTVLevelNum);
         levelDescTV = view.findViewById(R.id.idTVDetail);
-        levelImgIV = view.findViewById(R.id.idIVLevel);
+        levelFrameIV = view.findViewById(R.id.idIVFrame);
         levelPercentageTV = view.findViewById(R.id.idTVPercentage);
         levelDateTV = view.findViewById(R.id.idTVDate);
 
@@ -43,9 +43,10 @@ public class LevelDetailFragment extends Fragment {
             levelNumber = getArguments().getInt("LEVEL_NUMBER", 1);
             levelTitleTV.setText(getArguments().getString("LEVEL_TITLE", ""));
             levelDescTV.setText(getArguments().getString("LEVEL_DESC", ""));
-            int img = getArguments().getInt("LEVEL_IMG", R.drawable.apples);
-            levelImgIV.setImageResource(img);
-            //static game leve (from fragment)
+
+            int img = getArguments().getInt("LEVEL_FRAME", R.drawable.apples);
+            levelFrameIV.setImageResource(img);
+
             levelNumTV.setText("Level " +String.valueOf(levelNumber));
 
         }

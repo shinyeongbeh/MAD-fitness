@@ -30,6 +30,12 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
+<!--    Game Level colors-->
+    <color name="beginner">#7bc990</color>
+    <color name="intermediate">#7bc9c4</color>
+    <color name="expert">#ae7bc9</color>
+    <color name="professional">#c97b8d</color>
+
     <!-- ========== 以下是新增的 Dark Mode 支持颜色 (Light Mode - 保持原有颜色) ========== -->
     <!-- HomePage, GoalPage, StreakPage specific colors (Light Mode) -->
     <color name="page_background">#D6DAC8</color>           <!-- 浅绿色背景，和原来一样 -->
