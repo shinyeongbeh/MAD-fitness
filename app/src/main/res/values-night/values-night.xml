@@ -50,4 +50,10 @@
     <color name="icon_circle_bg">#2A2A2A</color>            <!-- 深灰色图标背景 -->
     <color name="motivation_card_bg">#2A2A2A</color>        <!-- Keep Going卡片背景（深灰） -->
 
+<!--    game level dark mode-->
+    <color name="beginner">#4CAF50</color>
+    <color name="intermediate">#009688</color>
+    <color name="expert">#9C27B0</color>
+    <color name="professional">#E91E63</color>
+
 </resources>

@@ -41,10 +41,16 @@ public class StreakPreferenceManager {
     private static final String KEY_GOAL_REACHED_DATE = "goal_reached_date";
 
 
+
+    private static boolean hasShownThisSession = false;
+
     public static void checkAndNotifyDailyGoal(
             Context context,
             int currentSteps
     ) {
+        //show once everytime the app open for demo purpose
+        if (hasShownThisSession) return;
+
         SharedPreferences prefs =
                 context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
@@ -61,6 +67,8 @@ public class StreakPreferenceManager {
                 "Daily Step Goal Achieved 🎉",
                 "You reached " + dailyGoal + " steps today. Great job!"
         );
+
+        hasShownThisSession = true;
 
     }
 

@@ -64,10 +64,10 @@ public class StepTrackingService extends Service {
             public void run() {
 
                 executor.execute(() -> {
-                    int steps = readStepsSafely(); // ✅ background thread
+                    int steps = readStepsSafely(); // background thread
 
                     mainHandler.post(() -> {
-                        updateNotification(steps); // ✅ UI thread
+                        updateNotification(steps); // UI thread
                     });
                 });
 

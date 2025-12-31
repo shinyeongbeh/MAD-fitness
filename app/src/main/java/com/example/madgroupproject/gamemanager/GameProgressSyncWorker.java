@@ -59,7 +59,7 @@ public class GameProgressSyncWorker extends Worker {
 
         //---------------------------------------------------------------
         // Get current level's details
-        GameLevelEntity currentLevelStructure = levelDao.getLevel(currentProgress.currentLevel);
+        GameLevelEntity currentLevelStructure = levelDao.getLevelSync(currentProgress.currentLevel);
 
         if (currentLevelStructure == null) return;
 
