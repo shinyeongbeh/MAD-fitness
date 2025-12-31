@@ -1,5 +1,6 @@
 package com.example.madgroupproject.ui.streakpage;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -203,15 +205,15 @@ public class StreakFragment extends Fragment {
 
                     if (result.achieved) {
                         ivTodayCheck.setImageResource(R.drawable.streak_ic_check_green_circle);
-                        tvTodaySteps.setTextColor(Color.parseColor("#4CAF50"));
+                        tvTodaySteps.setTextColor(getThemedColor(R.color.streak_completed));
                     } else {
                         ivTodayCheck.setImageResource(R.drawable.streak_ic_check_gray_circle);
-                        tvTodaySteps.setTextColor(Color.parseColor("#999999"));
+                        tvTodaySteps.setTextColor(getThemedColor(R.color.text_light_gray));
                     }
                 } else {
                     tvTodaySteps.setText("Steps: 0/0");
                     ivTodayCheck.setImageResource(R.drawable.streak_ic_check_gray_circle);
-                    tvTodaySteps.setTextColor(Color.parseColor("#999999"));
+                    tvTodaySteps.setTextColor(getThemedColor(R.color.text_light_gray));
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Error updating today steps UI", e);
@@ -310,13 +312,13 @@ public class StreakFragment extends Fragment {
 
         if (!hasData) {
             view.setBackgroundResource(R.drawable.streak_calendar_day_inactive);
-            view.setTextColor(Color.parseColor("#999999"));
+            view.setTextColor(getThemedColor(R.color.text_light_gray));
         } else if (achieved) {
             view.setBackgroundResource(R.drawable.streak_calendar_day_completed);
             view.setTextColor(Color.WHITE);
         } else {
             view.setBackgroundResource(R.drawable.streak_calendar_day_inactive);
-            view.setTextColor(Color.parseColor("#999999"));
+            view.setTextColor(getThemedColor(R.color.text_light_gray));
         }
 
         view.setOnClickListener(v -> {
@@ -353,6 +355,21 @@ public class StreakFragment extends Fragment {
             Log.e(TAG, "Error formatting date range", e);
             return startDateStr + " - " + endDateStr;
         }
+    }
+
+    /**
+     * 获取主题颜色 - 自动适配 Dark Mode
+     */
+    private int getThemedColor(int colorResId) {
+        return ContextCompat.getColor(requireContext(), colorResId);
+    }
+
+    /**
+     * 检查当前是否为 Dark Mode
+     */
+    private boolean isDarkMode() {
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
     }
 
     @Override

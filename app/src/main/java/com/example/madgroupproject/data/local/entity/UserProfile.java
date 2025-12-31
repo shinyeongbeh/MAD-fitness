@@ -15,6 +15,8 @@ public class UserProfile {
     private String birthday;
     private String weight;
     private String height;
+    private String profileImageUri;
+
 
 
 
@@ -43,4 +45,8 @@ public class UserProfile {
     public void setWeight(String weight) { this.weight = weight; }
     public String getHeight() { return height; }
     public void setHeight(String height) { this.height = height; }
+
+    public String getProfileImageUri() { return profileImageUri; }
+    public void setProfileImageUri(String uri) { this.profileImageUri = uri; }
+
 }

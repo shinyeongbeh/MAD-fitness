@@ -2,8 +2,11 @@ package com.example.madgroupproject.ui.settingpage;
 
 import static kotlinx.serialization.descriptors.ContextAwareKt.withContext;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.madgroupproject.R;
@@ -68,6 +72,7 @@ public class Account extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -82,6 +87,12 @@ public class Account extends Fragment {
     private boolean isEditing = false;
     private AppDatabase db;
     private UserProfile profile;
+
+    private ImageView profileUser , frame ;
+    private Uri selectedImageUri;
+
+    private String profileImageUri;
+
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -125,12 +136,22 @@ public class Account extends Fragment {
 
             // Update UI on main thread
             requireActivity().runOnUiThread(() -> {
+
                 etName.setText(profile.getName());
                 etEmail.setText(profile.getEmail());
                 etPhone.setText(profile.getPhone());
                 etBirthday.setText(profile.getBirthday());
                 etWeight.setText(profile.getWeight());
                 etHeight.setText(profile.getHeight());
+
+                if (profile.getProfileImageUri() != null &&
+                        !profile.getProfileImageUri().isEmpty()) {
+
+                    profileUser.setImageURI(
+                            Uri.parse(profile.getProfileImageUri())
+                    );
+                }
+
             });
         });
 
@@ -145,6 +166,11 @@ public class Account extends Fragment {
                 etBirthday.setEnabled(true);
                 etWeight.setEnabled(true);
                 etHeight.setEnabled(true);
+                //upload photo
+                profileUser.setEnabled(true);
+                profileUser.setAlpha(0.8f); // visual hint
+                profileUser.setOnClickListener(imgView -> imagePicker.launch("image/*"));
+
 
                 btnEdit.setText("Save");
 
@@ -160,6 +186,17 @@ public class Account extends Fragment {
                 profile.setBirthday(etBirthday.getText().toString().trim());
                 profile.setWeight(etWeight.getText().toString().trim());
                 profile.setHeight(etHeight.getText().toString().trim());
+
+                profileUser.setEnabled(false);
+                profileUser.setAlpha(1.0f);
+                profileUser.setOnClickListener(null);
+
+                // Save profile image URI if user selected a new image
+                if (selectedImageUri != null) {
+                    profile.setProfileImageUri(selectedImageUri.toString());
+                }
+
+
 
                 // Run DB update on background thread
                 Executors.newSingleThreadExecutor().execute(() -> db.userProfileDao().update(profile));
@@ -180,7 +217,32 @@ public class Account extends Fragment {
 
         });
 
+
+
+        //Frame
+
+        profileUser = view.findViewById(R.id.user);
+        frame = view.findViewById(R.id.imgFrame);
+
+        // current profile picture
+        //profile.setImageResource(R.drawable.profile_pic);
+
+        // Demo frame (always applied)
+        frame.setImageResource(R.drawable.frame_1);
+
+
+
     }
+
+    //for upload image profile
+    private final ActivityResultLauncher<String> imagePicker =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    selectedImageUri = uri;
+                    profileUser.setImageURI(uri);
+                }
+            });
+
 }
 
 

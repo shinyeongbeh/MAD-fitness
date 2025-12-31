@@ -53,4 +53,11 @@ public interface FitnessDataDao {
     // 这个不应该被用在其他任何地方
     @Query("INSERT INTO fitness_data (date, steps, distanceMeters, calories, lastUpdated) VALUES ('2025-12-18', 123, 0, 0, 0)")
     void dummyInsert();
+
+    @Query("SELECT * FROM fitness_data WHERE strftime('%Y-%m', date) = :month ORDER BY date ASC")
+    LiveData<List<FitnessDataEntity>> getDailyStatsByMonth(String month);
+
+    @Query("SELECT * FROM fitness_data WHERE date = :date")
+    List<FitnessDataEntity> getStatsForDate(String date);
 }
+

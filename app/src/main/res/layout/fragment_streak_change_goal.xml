@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#D6DAC8">
+    android:background="@color/page_background">
 
     <!-- 可滚动的内容区域 -->
     <ScrollView
@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Change streak goal"
-                android:textColor="#000000"
+                android:textColor="@color/text_main"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
@@ -35,7 +35,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="#DCEFC5"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 android:layout_marginBottom="24dp">
@@ -50,7 +50,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Current Streak:"
-                        android:textColor="#000000"
+                        android:textColor="@color/text_main"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/coiny"
@@ -61,7 +61,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="1000 steps daily"
-                        android:textColor="#000000"
+                        android:textColor="@color/text_main"
                         android:textSize="18sp"
                         android:fontFamily="@font/coiny"/>
                 </LinearLayout>
@@ -71,7 +71,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="#DCEFC5"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 android:layout_marginBottom="24dp">
@@ -86,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="New Streak:"
-                        android:textColor="#000000"
+                        android:textColor="@color/text_main"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/coiny"
@@ -97,11 +97,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Input"
-                        android:textColor="#666666"
-                        android:textColorHint="#999999"
+                        android:textColor="@color/text_main"
+                        android:textColorHint="@color/text_light_gray"
                         android:textSize="16sp"
                         android:fontFamily="@font/coiny"
-                        android:background="#9CB1AA"
+                        android:background="@color/calendar_inactive"
                         android:inputType="number"
                         android:padding="8dp"/>
                 </LinearLayout>
@@ -117,7 +117,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="@color/streak_completed"
                 android:padding="16dp"
                 android:textAllCaps="false"
                 android:layout_marginBottom="16dp"/>
@@ -132,21 +132,10 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/coiny"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="@color/streak_completed"
                 android:padding="16dp"
                 android:textAllCaps="false"
                 android:layout_marginBottom="16dp"/>
-
-            <!-- Warning Text -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="(I you can only reset goals after 7 days of your last goal set)"
-                android:textColor="#000000"
-                android:textSize="12sp"
-                android:fontFamily="@font/coiny"
-                android:gravity="center"
-                android:layout_marginBottom="24dp"/>
 
             <!-- 底部空白区域 -->
             <View

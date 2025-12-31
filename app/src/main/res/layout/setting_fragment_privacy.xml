@@ -60,11 +60,12 @@
             android:id="@+id/TV_Privacy"
             android:layout_width="214dp"
             android:layout_height="68dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="36dp"
             android:text="   Privacy"
             android:textColor="@color/black"
             android:textSize="34sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.588"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

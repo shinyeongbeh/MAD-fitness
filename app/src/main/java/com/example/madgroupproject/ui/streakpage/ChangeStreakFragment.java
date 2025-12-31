@@ -38,7 +38,7 @@ public class ChangeStreakFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.streak_change_goal, container, false);
+        return inflater.inflate(R.layout.fragment_streak_change_goal, container, false);
     }
 
     @Override

@@ -11,6 +11,8 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">8dp</item>
         <item name="android:fontFamily">@font/coiny</item>
+
+
     </style>
 
     <!-- 全屏对话框样式 - 新添加的 -->
@@ -21,6 +23,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
     </style>
+
 
     <!-- 注意：这里已经没有 AppTheme 了！ -->
     <!-- 可以添加其他组件样式，但不要定义主题 -->

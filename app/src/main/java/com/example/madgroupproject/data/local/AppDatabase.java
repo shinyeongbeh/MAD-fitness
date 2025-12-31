@@ -34,7 +34,7 @@ import java.util.concurrent.Executors;
                 GameProgressEntity.class,
                 GoalEntity.class  // ✅ 添加Goal实体
         },
-        version = 5, // ✅ 升级数据库版本到4
+        version = 6, // ✅ 升级数据库版本到4 //UserProfileIncreaseSchema
         exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {

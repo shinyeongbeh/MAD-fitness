@@ -27,11 +27,33 @@
             app:layout_constraintTop_toBottomOf="@+id/button_Account_Profile"
             app:layout_constraintVertical_bias="0.0">
 
-            <ImageView
-                android:id="@+id/user"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:src="@drawable/puppiescouk_053399600_1663317083_2412" />
+                android:layout_height="wrap_content">
+
+                <!-- Frame overlay -->
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/user"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:padding="2dp"
+                    android:scaleType="centerCrop"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:shapeAppearanceOverlay="@style/CircleImageStyle"
+                    android:src="@drawable/puppiescouk_053399600_1663317083_2412" />
+
+                <ImageView
+                    android:id="@+id/imgFrame"
+                    android:layout_width="174dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/frame_1" />
+
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -193,7 +215,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="18dp"
-            android:backgroundTint="?attr/colorSurfaceVariant"
+            android:backgroundTint="?attr/colorSurface"
             android:text="Edit"
             android:textAlignment="textStart"
             android:textColor="?attr/colorOnSurface"
@@ -216,7 +238,7 @@
             android:layout_marginStart="93dp"
             android:layout_marginTop="83dp"
             android:layout_marginEnd="94dp"
-            android:backgroundTint="?attr/colorSurfaceVariant"
+            android:backgroundTint="?attr/colorSurface"
             android:text="      Profile"
             android:textAlignment="textStart"
             android:textColor="?attr/colorOnSurface"

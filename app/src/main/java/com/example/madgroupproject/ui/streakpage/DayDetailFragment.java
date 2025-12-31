@@ -32,7 +32,7 @@ public class DayDetailFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.streak_day_detail, container, false);
+        return inflater.inflate(R.layout.fragment_streak_day_detail, container, false);
     }
 
     @Override

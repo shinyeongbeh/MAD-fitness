@@ -30,5 +30,20 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
+    <!-- ========== 以下是新增的 Dark Mode 支持颜色 (Light Mode - 保持原有颜色) ========== -->
+    <!-- HomePage, GoalPage, StreakPage specific colors (Light Mode) -->
+    <color name="page_background">#D6DAC8</color>           <!-- 浅绿色背景，和原来一样 -->
+    <color name="card_background">#DCEFC5</color>           <!-- 绿色卡片背景，和原来一样 -->
+    <color name="card_background_white">#FFFFFF</color>     <!-- 白色卡片背景（日历用） -->
+    <color name="card_background_gray">#E8E8E8</color>      <!-- 灰色卡片背景（goal item用） -->
+    <color name="text_main">#000000</color>
+    <color name="text_secondary_gray">#666666</color>
+    <color name="text_light_gray">#999999</color>
+    <color name="streak_completed">#4CAF50</color>
+    <color name="calendar_inactive">#F5F5F5</color>
+    <color name="goal_completed_border">#4CAF50</color>
+    <color name="icon_circle_bg">#DCEFC5</color>            <!-- 图标圆形背景 -->
+    <color name="motivation_card_bg">#9CB1AA</color>        <!-- Keep Going卡片背景（深绿灰） -->
+
     <!-- 注意：switch_track_color 已移到 res/color/switch_track_color.xml -->
 </resources>

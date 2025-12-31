@@ -64,11 +64,11 @@ public class NotificationSettingsFragment extends Fragment {
     }
 
 
-            //if (isChecked) {
-            //    scheduleDailyGoalNotification(requireContext());
-            //} else {
-            //    cancelDailyGoalNotification(requireContext());
-            //}
+    //if (isChecked) {
+    //    scheduleDailyGoalNotification(requireContext());
+    //} else {
+    //    cancelDailyGoalNotification(requireContext());
+    //}
 
 
     /*

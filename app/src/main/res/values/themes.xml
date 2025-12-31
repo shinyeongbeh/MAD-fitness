@@ -2,8 +2,8 @@
 
     <!-- Base application theme (Light Mode) -->
     <style name="Base.Theme.MAD" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- 全局字体设置为 Coiny -->
-        <item name="android:fontFamily">@font/coiny</item>
+
+        <item name="android:fontFamily">@font/jost</item>
 
         <!-- Primary Colors -->
         <item name="colorPrimary">@color/primary</item>
@@ -36,5 +36,10 @@
 
     <!-- AppTheme 别名 -->
     <style name="AppTheme" parent="Base.Theme.MAD" />
+
+    <!-- Add this style -->
+    <style name="CircleImageStyle" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 
 </resources>

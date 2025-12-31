@@ -10,17 +10,17 @@
 
 
 
-        <application
-            android:name=".main.MyApplication"
-            android:theme="@style/Theme.MAD"
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="Fitness Tracker"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true">
+    <application
+        android:name=".main.MyApplication"
+        android:theme="@style/Theme.MAD"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Fitness Tracker"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true">
 
 
-         <activity
+        <activity
             android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -30,25 +30,26 @@
             </intent-filter>
         </activity>
 
- <!-- Goal Notification -->
-    <receiver
-        android:name=".main.GoalNotificationReceiver"
-        android:exported="false"/>
+        <!-- Goal Notification -->
+        <receiver
+            android:name=".main.GoalNotificationReceiver"
+            android:exported="false"/>
 
-    <!-- Streak Notification -->
-    <receiver
-        android:name=".main.StreakNotificationReceiver"
-        android:exported="false"/>
-
-
-    <service
-        android:name=".main.StepTrackingService"
-        android:exported="false"
-        android:foregroundServiceType="health" />
+        <!-- Streak Notification -->
+        <receiver
+            android:name=".main.StreakNotificationReceiver"
+            android:exported="false"/>
 
 
+        <service
+            android:name=".main.StepTrackingService"
+            android:exported="false"
+            android:foregroundServiceType="health" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
 
-</application>
+    </application>
 
 </manifest>

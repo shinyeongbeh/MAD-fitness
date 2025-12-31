@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8E8E8">
+    android:background="@color/page_background">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -24,36 +24,37 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="20dp">
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="Today"
-                android:textColor="#000000"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-            <ImageView
-                android:id="@+id/btnSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                app:srcCompat="@drawable/ic_settings" />
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="Today"
+                    android:textColor="@color/text_main"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/btnSettings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    app:tint="@color/text_main"
+                    app:srcCompat="@drawable/ic_settings" />
+            </LinearLayout>
 
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background_white"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp">
 
@@ -78,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background_white"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp">
 
@@ -95,17 +96,18 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="STREAK :"
-                        android:textColor="#000000"
+                        android:textColor="@color/text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/tvStreakNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:text="5"
-                        android:textColor="#000000"
+                        android:text="0"
+                        android:textColor="@color/text_main"
                         android:textSize="32sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
@@ -123,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background_white"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp">
 
@@ -140,114 +142,20 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="16dp"
                         android:text="Goal"
-                        android:textColor="#000000"
+                        android:textColor="@color/text_primary"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
 
+                    <!-- 动态显示Goals的容器 -->
                     <LinearLayout
+                        android:id="@+id/goalsDisplayContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="12dp"
-                            android:background="@drawable/bullet_point" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Walk the dog"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:background="@drawable/checkmark_circle"
-                            android:gravity="center"
-                            android:text="✓"
-                            android:textColor="#FFFFFF"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
+                        android:orientation="vertical">
+                        <!-- Goals will be dynamically added here -->
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="12dp"
-                            android:background="@drawable/bullet_point" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Drink 8 glass water"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:background="@drawable/checkmark_circle"
-                            android:gravity="center"
-                            android:text="✓"
-                            android:textColor="#FFFFFF"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="12dp"
-                            android:background="@drawable/bullet_point" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Listening to podcast x2"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:background="@drawable/checkmark_circle"
-                            android:gravity="center"
-                            android:text="✓"
-                            android:textColor="#FFFFFF"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
-                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -268,7 +176,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="@color/card_background_white"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="2dp">
 
@@ -295,7 +203,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="@color/card_background_white"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="2dp">
 
@@ -322,7 +230,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="@color/card_background_white"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="2dp">
 
@@ -355,7 +263,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="ⓘ"
-                    android:textColor="#666666"
+                    android:textColor="@color/text_secondary_gray"
                     android:textSize="20sp"
                     tools:ignore="HardcodedText" />
 
@@ -363,7 +271,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TIPS"
-                    android:textColor="#000000"
+                    android:textColor="@color/text_main"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -377,7 +285,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background_white"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp">
 
@@ -401,11 +309,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:background="#E8E8E8"
+                        android:background="@color/page_background"
                         android:gravity="center"
                         android:padding="12dp"
                         android:text="An Apple A Day"
-                        android:textColor="#000000"
+                        android:textColor="@color/text_main"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:ignore="HardcodedText" />
