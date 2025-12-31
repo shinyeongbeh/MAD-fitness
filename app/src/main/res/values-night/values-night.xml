@@ -48,5 +48,6 @@
     <color name="calendar_inactive">#2A2A2A</color>
     <color name="goal_completed_border">#81C784</color>
     <color name="icon_circle_bg">#2A2A2A</color>            <!-- 深灰色图标背景 -->
+    <color name="motivation_card_bg">#2A2A2A</color>        <!-- Keep Going卡片背景（深灰） -->
 
 </resources>

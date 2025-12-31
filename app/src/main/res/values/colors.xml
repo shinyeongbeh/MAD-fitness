@@ -43,6 +43,7 @@
     <color name="calendar_inactive">#F5F5F5</color>
     <color name="goal_completed_border">#4CAF50</color>
     <color name="icon_circle_bg">#DCEFC5</color>            <!-- 图标圆形背景 -->
+    <color name="motivation_card_bg">#9CB1AA</color>        <!-- Keep Going卡片背景（深绿灰） -->
 
     <!-- 注意：switch_track_color 已移到 res/color/switch_track_color.xml -->
 </resources>
