@@ -108,25 +108,16 @@ public class Account extends Fragment {
         etHeight = view.findViewById(R.id.Height);
         btnEdit = view.findViewById(R.id.button_Account_Edit);
 
+        //not allow to edit when not in edit mode
+        etName.setEnabled(false);
+        etEmail.setEnabled(false);
+        etPhone.setEnabled(false);
+        etBirthday.setEnabled(false);
+        etWeight.setEnabled(false);
+        etHeight.setEnabled(false);
+
         db = AppDatabase.getDatabase(requireContext());
         gameProgressDao = db.gameProgressDao();
-
-
-
-        //load current profile
-
-        /*profile = db.userProfileDao().getProfile();
-        if (profile != null) {
-            etName.setText(profile.getName());
-            etEmail.setText(profile.getEmail());
-        } else {
-            // First time, create empty profile
-            profile = new UserProfile(" ", " ", " ", " ", " ", "");
-            db.userProfileDao().insert(profile);
-
-        }*/
-
-
 
 
 
@@ -206,11 +197,9 @@ public class Account extends Fragment {
 
 
 
-                // Run DB update on background thread
+                // Save to database in background
                 Executors.newSingleThreadExecutor().execute(() -> {
-                    profile = db.userProfileDao().getProfile();
-
-
+                    db.userProfileDao().update(profile); //
                 });
 
                 etName.setEnabled(false);
