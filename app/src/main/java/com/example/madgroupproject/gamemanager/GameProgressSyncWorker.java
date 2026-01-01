@@ -172,6 +172,7 @@ public class GameProgressSyncWorker extends Worker {
         GameProgressEntity progress = new GameProgressEntity();
         progress.currentLevel = 1;
         progress.progressValue = 0;
+        progress.id = 1;
         progress.lastSyncedDate = today;
         progress.lastSyncedFitnessValue = 0;
         db.gameProgressDao().updateOrInsertProgress(progress);
