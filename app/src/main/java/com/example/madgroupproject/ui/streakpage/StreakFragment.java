@@ -28,6 +28,7 @@ import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.entity.StreakHistoryEntity;
 import com.example.madgroupproject.data.repository.StreakRepository;
 import com.example.madgroupproject.data.viewmodel.StreakViewModel;
+import com.example.madgroupproject.util.MidnightChangeListener;  // 🆕 添加这个import
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -57,6 +58,42 @@ public class StreakFragment extends Fragment {
     private YearMonth currentYearMonth;
 
     private LiveData<List<StreakHistoryEntity>> currentMonthLiveData;
+
+    // 🆕 添加午夜监听器
+    private MidnightChangeListener midnightListener;
+
+    // 🆕 添加onCreate方法
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // 🆕 设置午夜监听器
+        setupMidnightListener();
+    }
+
+    // 🆕 设置午夜监听器的方法
+    private void setupMidnightListener() {
+        midnightListener = new MidnightChangeListener(requireContext());
+        midnightListener.addListener(() -> {
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    Log.d(TAG, "🌙 Midnight passed! Updating date display...");
+
+                    // 更新日期显示
+                    updateTodayDateDisplay();
+
+                    // 如果当前查看的是当月，刷新日历数据
+                    YearMonth now = YearMonth.now();
+                    if (currentYearMonth != null && currentYearMonth.equals(now)) {
+                        Log.d(TAG, "Currently viewing current month, refreshing data...");
+                        loadMonthData();
+                    }
+
+                    Toast.makeText(requireContext(), "Happy new day! 🎉", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,6 +140,7 @@ public class StreakFragment extends Fragment {
         LocalDate today = LocalDate.now();
         String monthName = today.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
         tvStreakDate.setText(String.format("Today: %s %d", monthName, today.getDayOfMonth()));
+        Log.d(TAG, "Updated today date display to: " + today); // 🆕 添加日志
     }
 
     private void updateMonthTitle() {
@@ -382,6 +420,19 @@ public class StreakFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause called. Current month: " + currentYearMonth);
+    }
+
+    // 🆕 添加onDestroy方法来清理监听器
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // 🆕 销毁午夜监听器
+        if (midnightListener != null) {
+            midnightListener.destroy();
+            midnightListener = null;
+            Log.d(TAG, "MidnightChangeListener destroyed");
+        }
     }
 }
 

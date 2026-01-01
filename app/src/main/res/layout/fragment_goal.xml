@@ -27,7 +27,7 @@
                 android:textColor="@color/text_main"
                 android:textSize="32sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/coiny"
+                android:fontFamily="@font/jost"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"/>
 
@@ -51,7 +51,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/coiny"
+                android:fontFamily="@font/jost"
                 android:backgroundTint="@color/streak_completed"
                 android:padding="20dp"
                 android:textAllCaps="false"
@@ -66,7 +66,7 @@
                 android:textColor="@color/text_main"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/coiny"
+                android:fontFamily="@font/jost"
                 android:layout_marginBottom="16dp"/>
 
             <!-- Suggested Goals Container -->
@@ -103,7 +103,7 @@
                         android:text="Exercise 30min"
                         android:textColor="@color/text_main"
                         android:textSize="14sp"
-                        android:fontFamily="@font/coiny"
+                        android:fontFamily="@font/jost"
                         android:gravity="center"/>
                 </LinearLayout>
 
@@ -134,7 +134,7 @@
                         android:text="Early Wake-up"
                         android:textColor="@color/text_main"
                         android:textSize="14sp"
-                        android:fontFamily="@font/coiny"
+                        android:fontFamily="@font/jost"
                         android:gravity="center"/>
                 </LinearLayout>
 
@@ -164,7 +164,7 @@
                         android:text="Sleep 8hours"
                         android:textColor="@color/text_main"
                         android:textSize="14sp"
-                        android:fontFamily="@font/coiny"
+                        android:fontFamily="@font/jost"
                         android:gravity="center"/>
                 </LinearLayout>
             </LinearLayout>

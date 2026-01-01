@@ -27,7 +27,7 @@
                 android:textColor="@color/text_main"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/coiny"
+                android:fontFamily="@font/jost"
                 android:gravity="center"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="24dp"/>
@@ -70,7 +70,7 @@
                             android:textColor="@color/text_main"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:fontFamily="@font/coiny"/>
+                            android:fontFamily="@font/jost"/>
                     </LinearLayout>
 
                     <!-- Steps progress with check icon -->
@@ -94,7 +94,7 @@
                             android:text="Steps: 760/1000"
                             android:textColor="@color/text_light_gray"
                             android:textSize="16sp"
-                            android:fontFamily="@font/coiny"/>
+                            android:fontFamily="@font/jost"/>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -142,7 +142,7 @@
                             android:textColor="@color/text_main"
                             android:textSize="22sp"
                             android:textStyle="bold"
-                            android:fontFamily="@font/coiny"
+                            android:fontFamily="@font/jost"
                             android:gravity="center"/>
 
                         <!-- Next Month Button -->
@@ -217,7 +217,7 @@
                             android:textColor="@color/text_main"
                             android:textSize="20sp"
                             android:textStyle="bold"
-                            android:fontFamily="@font/coiny"
+                            android:fontFamily="@font/jost"
                             android:layout_marginBottom="4dp"/>
 
                         <TextView
@@ -227,7 +227,7 @@
                             android:text="Jan 1 - 30"
                             android:textColor="@color/text_main"
                             android:textSize="14sp"
-                            android:fontFamily="@font/coiny"
+                            android:fontFamily="@font/jost"
                             android:layout_marginBottom="4dp"/>
 
                         <TextView
@@ -238,7 +238,7 @@
                             android:textColor="@color/text_main"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:fontFamily="@font/coiny"/>
+                            android:fontFamily="@font/jost"/>
                     </LinearLayout>
 
                     <!-- Trophy icon -->
@@ -259,7 +259,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/coiny"
+                android:fontFamily="@font/jost"
                 android:backgroundTint="@color/streak_completed"
                 android:padding="16dp"
                 android:textAllCaps="false"

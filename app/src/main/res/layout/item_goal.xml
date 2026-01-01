@@ -51,7 +51,7 @@
                 android:textColor="@color/text_main"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/coiny"
+                android:fontFamily="@font/jost"
                 android:layout_marginBottom="4dp"/>
 
             <TextView
@@ -61,7 +61,7 @@
                 android:text="Label: Exercise"
                 android:textColor="@color/text_main"
                 android:textSize="14sp"
-                android:fontFamily="@font/coiny"/>
+                android:fontFamily="@font/jost"/>
         </LinearLayout>
 
         <!-- Toggle Switch -->

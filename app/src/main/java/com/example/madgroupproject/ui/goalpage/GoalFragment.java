@@ -1,5 +1,7 @@
 package com.example.madgroupproject.ui.goalpage;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,7 +25,9 @@ import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.entity.GoalEntity;
 import com.example.madgroupproject.data.repository.GoalRepository;
 import com.example.madgroupproject.main.GoalNotificationManager;
+import com.example.madgroupproject.util.MidnightChangeListener;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +42,34 @@ public class GoalFragment extends Fragment {
     // Flag to prevent triggering switch listener during UI updates
     private boolean isUpdatingUI = false;
 
+    // 🆕 午夜监听器
+    private MidnightChangeListener midnightListener;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         goalRepository = new GoalRepository(requireContext());
         mainHandler = new Handler(Looper.getMainLooper());
+
+        // 🆕 创建午夜监听器
+        setupMidnightListener();
+    }
+
+    // 🆕 设置午夜监听器
+    private void setupMidnightListener() {
+        midnightListener = new MidnightChangeListener(requireContext());
+        midnightListener.addListener(() -> {
+            mainHandler.post(() -> {
+                Log.d("GoalFragment", "🌙 Midnight passed! New day started.");
+                Toast.makeText(requireContext(), "New day! Goals have been reset.", Toast.LENGTH_SHORT).show();
+
+                // LiveData会自动刷新UI，但为了确保，手动触发观察
+                observeGoals();
+
+                // 更新通知
+                GoalNotificationManager.updateGoalNotification(requireContext());
+            });
+        });
     }
 
     @Override
@@ -88,8 +115,43 @@ public class GoalFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        // 🆕 检查是否跨日了
+        checkAndHandleDayChange();
+
         // Update notification when returning to this page
         GoalNotificationManager.updateGoalNotification(requireContext());
+    }
+
+    // 🆕 检查日期变化
+    private void checkAndHandleDayChange() {
+        SharedPreferences prefs = requireContext()
+                .getSharedPreferences("goal_prefs", Context.MODE_PRIVATE);
+
+        String lastDate = prefs.getString("last_viewed_date", "");
+        String currentDate = LocalDate.now().toString();
+
+        if (!lastDate.equals(currentDate)) {
+            // 日期变了，强制刷新数据
+            Log.d("GoalFragment", "📅 Day changed from " + lastDate + " to " + currentDate);
+
+            // LiveData会自动触发UI更新
+            observeGoals();
+
+            // 保存新日期
+            prefs.edit().putString("last_viewed_date", currentDate).apply();
+
+            Toast.makeText(requireContext(), "Welcome to a new day!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // 🆕 销毁午夜监听器
+        if (midnightListener != null) {
+            midnightListener.destroy();
+        }
     }
 
     private void initViews(View view) {
