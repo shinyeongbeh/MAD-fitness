@@ -109,6 +109,7 @@ public class Account extends Fragment {
         btnEdit = view.findViewById(R.id.button_Account_Edit);
 
         db = AppDatabase.getDatabase(requireContext());
+        gameProgressDao = db.gameProgressDao();
 
 
 
@@ -124,6 +125,11 @@ public class Account extends Fragment {
             db.userProfileDao().insert(profile);
 
         }*/
+
+
+
+
+
 
         // Run Room query on background thread
         Executors.newSingleThreadExecutor().execute(() -> {
@@ -205,18 +211,6 @@ public class Account extends Fragment {
                     profile = db.userProfileDao().getProfile();
 
 
-                    //back to main UI
-                    requireActivity().runOnUiThread(() -> {
-
-                        //change when the level is updated
-
-                        gameProgressDao.getCurrentLevel().observe(getViewLifecycleOwner(), level -> {
-                            int frameRes = getFrameByLevel(level);
-                            frame.setImageResource(frameRes);
-                        });
-
-
-                    });
                 });
 
                 etName.setEnabled(false);
@@ -248,7 +242,11 @@ public class Account extends Fragment {
 
         frame.setImageResource(R.drawable.frame_1);
 
-
+        //auto update frame based on current level
+        gameProgressDao.getCurrentLevel().observe(getViewLifecycleOwner(), level -> {
+            int frameRes = getFrameByLevel(level);
+            frame.setImageResource(frameRes);
+        });
 
     }
 
