@@ -28,6 +28,9 @@ public interface GameProgressDao {
     @Query("SELECT * FROM game_progress LIMIT 1")
     LiveData<GameProgressEntity> observeProgress();
 
+    @Query("SELECT currentLevel FROM game_progress LIMIT 1")
+    LiveData<Integer> getCurrentLevel();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void updateOrInsertProgress(GameProgressEntity entity);
 

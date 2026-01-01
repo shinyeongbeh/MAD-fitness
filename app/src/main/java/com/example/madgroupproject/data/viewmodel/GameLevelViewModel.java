@@ -57,4 +57,9 @@ public class GameLevelViewModel extends AndroidViewModel {
         return repo.getHistoryForLevel(level);
     }
 
+    public LiveData<Integer> getCurrentLevelNumber() {
+        return repo.getCurrentLevel();
+    }
+
+
 }

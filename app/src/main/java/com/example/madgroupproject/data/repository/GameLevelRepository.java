@@ -36,6 +36,10 @@ public class GameLevelRepository {
         return levelDao.getLevel(level);
     }
 
+    public LiveData<Integer> getCurrentLevel() {
+        return progressDao.getCurrentLevel();
+    }
+
     public LiveData<GameProgressEntity> observeProgress() {
         return progressDao.observeProgress();
     }
