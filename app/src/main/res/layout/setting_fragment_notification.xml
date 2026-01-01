@@ -83,10 +83,10 @@
             app:iconTintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_Notification_DG"
-            app:layout_constraintVertical_bias="0.468" />
+            app:layout_constraintVertical_bias="0.632" />
 
         <Switch
             android:id="@+id/switchStreak"
@@ -133,8 +133,10 @@
             android:layout_marginStart="106dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="107dp"
+            android:layout_marginBottom="264dp"
             android:text="Notification Bar"
             android:textColor="?attr/colorOnSurface"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_Notification_SMA" />

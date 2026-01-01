@@ -21,7 +21,9 @@ import android.widget.Toast;
 
 import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.AppDatabase;
+import com.example.madgroupproject.data.local.dao.GameProgressDao;
 import com.example.madgroupproject.data.local.entity.UserProfile;
+import com.example.madgroupproject.data.repository.GameLevelRepository;
 
 import java.util.concurrent.Executors;
 
@@ -199,8 +201,23 @@ public class Account extends Fragment {
 
 
                 // Run DB update on background thread
-                Executors.newSingleThreadExecutor().execute(() -> db.userProfileDao().update(profile));
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    profile = db.userProfileDao().getProfile();
 
+
+                    //back to main UI
+                    requireActivity().runOnUiThread(() -> {
+
+                        //change when the level is updated
+
+                        gameProgressDao.getCurrentLevel().observe(getViewLifecycleOwner(), level -> {
+                            int frameRes = getFrameByLevel(level);
+                            frame.setImageResource(frameRes);
+                        });
+
+
+                    });
+                });
 
                 etName.setEnabled(false);
                 etEmail.setEnabled(false);
@@ -228,11 +245,46 @@ public class Account extends Fragment {
         //profile.setImageResource(R.drawable.profile_pic);
 
         // Demo frame (always applied)
+
         frame.setImageResource(R.drawable.frame_1);
 
 
 
     }
+
+
+
+        private GameProgressDao gameProgressDao;
+
+        //load the frame based on the level (drawable image compile into integer)
+
+    private int getFrameByLevel(int level) {
+        if (level == 1) return R.drawable.frame_1;
+        if (level == 2) return R.drawable.frame_2;
+        if (level == 3)  return R.drawable.frame_3;
+        if (level == 4)  return R.drawable.frame_4;
+        if (level == 5)  return R.drawable.frame_5;
+        if(level == 6) return R.drawable.frame_6;
+        if(level == 7) return R.drawable.frame_7;
+        if(level == 8) return R.drawable.frame_8;
+        if(level == 9) return R.drawable.frame_9;
+        if(level == 10) return R.drawable.frame_10;
+        if(level == 11) return R.drawable.frame_11;
+        if(level == 12) return R.drawable.frame_12;
+        if(level == 13) return R.drawable.frame_13;
+        if(level == 14) return R.drawable.frame_14;
+        if(level == 15) return R.drawable.frame_15;
+        if(level == 16) return R.drawable.frame_16;
+        if(level == 17) return R.drawable.frame_17;
+        if(level == 18) return R.drawable.frame_18;
+        if(level == 19) return R.drawable.frame_19;
+        if(level == 20) return R.drawable.frame_20;
+
+
+        return R.drawable.frame_1;
+    }
+
+
 
     //for upload image profile
     private final ActivityResultLauncher<String> imagePicker =

@@ -12,21 +12,22 @@
         android:layout_height="match_parent"
         android:background="?attr/android:windowBackground">
 
+
+        <!--    android:textColorLink="#BC8787" -->
+
         <TextView
             android:id="@+id/TV_Setting"
             android:layout_width="147dp"
             android:layout_height="57dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="36dp"
             android:fontFamily="@font/jost"
             android:text="Setting"
             android:textColor="?attr/colorOnSurface"
             android:textSize="34sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.541"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-
-        <!--    android:textColorLink="#BC8787" -->
 
         <Button
             android:id="@+id/button_App_SP"

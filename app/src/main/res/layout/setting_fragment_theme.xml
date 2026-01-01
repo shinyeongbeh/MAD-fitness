@@ -29,6 +29,7 @@
             android:layout_width="224dp"
             android:layout_height="54dp"
             android:layout_marginStart="93dp"
+            android:layout_marginTop="26dp"
             android:layout_marginEnd="94dp"
             android:layout_marginBottom="372dp"
             android:backgroundTint="?attr/colorSurface"
@@ -44,7 +45,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <Button
             android:id="@+id/button_Theme_LM"
