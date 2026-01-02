@@ -1,5 +1,7 @@
 package com.example.madgroupproject.ui.gamelevelspage;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +12,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.madgroupproject.R;
+import com.example.madgroupproject.data.local.AppDatabase;
 import com.example.madgroupproject.data.local.entity.GameLevelEntity;
 import com.example.madgroupproject.data.local.entity.GameLevelHistoryEntity;
+import com.example.madgroupproject.data.local.entity.UserProfile;
 import com.example.madgroupproject.data.viewmodel.GameLevelViewModel;
 
 import java.util.concurrent.Executors;
 
 public class LevelDetailFragment extends Fragment {
     private TextView levelTitleTV, levelNumTV, levelDescTV, levelPercentageTV, levelDateTV;
-    private ImageView levelFrameIV;
+    private ImageView levelFrameIV, levelProfileIV;
     private GameLevelViewModel viewModel;
     int levelNumber=1;
 
@@ -35,6 +39,7 @@ public class LevelDetailFragment extends Fragment {
         levelFrameIV = view.findViewById(R.id.idIVFrame);
         levelPercentageTV = view.findViewById(R.id.idTVPercentage);
         levelDateTV = view.findViewById(R.id.idTVDate);
+        levelProfileIV = view.findViewById(R.id.user);
 
         viewModel = new ViewModelProvider(this).get(GameLevelViewModel.class);
 
@@ -47,84 +52,68 @@ public class LevelDetailFragment extends Fragment {
             int img = getArguments().getInt("LEVEL_FRAME", R.drawable.apples);
             levelFrameIV.setImageResource(img);
 
-            levelNumTV.setText("Level " +String.valueOf(levelNumber));
+            levelNumTV.setText("Level " + String.valueOf(levelNumber));
 
         }
 
-        //dynamic data
-//        viewModel.getLevel(levelNumber).observe(getViewLifecycleOwner(), level -> {
-//            if (level != null) {
-//                //example: levelNumTV.setText(String.valueOf(level.levelNum));
-//                // You can update other fields here if needed
-//            }
-//        });
+        //level percentage
+        viewModel.getLevel(levelNumber).observe(getViewLifecycleOwner(), level -> {
+            if (level == null) return;
 
-        // dynamic data (percentage)
-        viewModel.observeProgress().observe(getViewLifecycleOwner(), progress -> {
-            if (progress != null && progress.currentLevel == levelNumber) {
-                    float percentage = ((float) progress.progressValue /
-                            getTargetValue(levelNumber)) * 100;
-                    levelPercentageTV.setText(String.format("%.0f%%", percentage));
-            }
+            viewModel.observeProgress().observe(getViewLifecycleOwner(), progress -> {
+                if (progress == null) return;
 
-        });
-        //show when in progress
-        levelPercentageTV.setVisibility(View.GONE);
-        viewModel.observeProgress().observe(getViewLifecycleOwner(), progress -> {
-            if (progress == null) return;
+                float percent;
 
-            Executors.newSingleThreadExecutor().execute(() -> {
-                GameLevelHistoryEntity history = viewModel.getHistoryForLevel(levelNumber);
-
-                if (getActivity() == null) return;
-
-                getActivity().runOnUiThread(() -> {
-                    if (history != null) {
-                        // Level completed
-                        levelPercentageTV.setVisibility(View.VISIBLE);
-                        levelPercentageTV.setText("100%");
-                        levelDateTV.setVisibility(View.VISIBLE);
-                        levelDateTV.setText(history.completedDate);
-                    } else if (progress.currentLevel == levelNumber) {
-                        // Level in progress
-                        levelPercentageTV.setVisibility(View.VISIBLE);
-                        float percentage = (progress.progressValue / getTargetValue(levelNumber)) * 100f;
-                        levelPercentageTV.setText(String.format("%.0f%%", percentage));
-                        levelDateTV.setVisibility(View.GONE);
-                    } else {
-                        // Level not started yet
-                        levelPercentageTV.setVisibility(View.GONE);
-                        levelDateTV.setVisibility(View.GONE);
-                    }
-                });
-            });
-        });
-
-        //show when completed
-        levelDateTV.setVisibility(View.GONE);
-
-        Executors.newSingleThreadExecutor().execute(() -> {
-            GameLevelHistoryEntity history =
-                    viewModel.getHistoryForLevel(levelNumber);
-
-            if (getActivity() == null) return;
-
-            getActivity().runOnUiThread(() -> {
-                if (history != null) {
-                    levelDateTV.setVisibility(View.VISIBLE);
-                    levelDateTV.setText(history.completedDate);
-                } else {
+                // NOT STARTED
+                if (progress.currentLevel < levelNumber) {
+                    levelPercentageTV.setVisibility(View.GONE);
                     levelDateTV.setVisibility(View.GONE);
+                }
+                // IN PROGRESS
+                else if (progress.currentLevel == levelNumber) {
+                    percent = (progress.progressValue / level.targetValue) * 100f;
+                    levelPercentageTV.setVisibility(View.VISIBLE);
+                    levelPercentageTV.setText(String.format("%.0f%%", percent));
+                    levelDateTV.setVisibility(View.GONE);
+                }
+                // COMPLETED
+                else {
+                    levelPercentageTV.setVisibility(View.VISIBLE);
+                    levelPercentageTV.setText("100%");
+                    percent=100;
                 }
             });
         });
 
-        return view;
-    }
+        // Completion date
+        viewModel.observeHistoryForLevel(levelNumber)
+                .observe(getViewLifecycleOwner(), history -> {
+                    if (history != null) {
+                        levelDateTV.setVisibility(View.VISIBLE);
+                        levelDateTV.setText(history.completedDate);
+                    }
+                });
 
-    // Helper method to get target value for level (could query ViewModel or database)
-    private int getTargetValue(int levelNumber) {
-        GameLevelEntity level = viewModel.getLevel(levelNumber).getValue();
-        return level != null ? level.targetValue : 100; // fallback
+        //sync profile pic
+        AppDatabase db = AppDatabase.getDatabase(getContext());
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            UserProfile profile = db.userProfileDao().getProfile();
+
+            if (profile != null && getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    // Load profile image from URI
+                    String uriString = profile.getProfileImageUri();
+                    if (uriString != null && !uriString.isEmpty()) {
+                        levelProfileIV.setImageURI(Uri.parse(uriString));
+                    }
+
+                    // Optionally set other info
+                    // levelNameTV.setText(profile.getName());
+                });
+            }
+        });
+                return view;
     }
 }

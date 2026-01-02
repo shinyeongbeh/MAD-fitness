@@ -40,65 +40,110 @@ public class GameProgressSyncWorker extends Worker {
 
         return Result.success();
     }
-    private void syncCurrentLevel(
-            String today,
-            FitnessDataEntity todayFitness,
-            FitnessDataEntity yesterdayFitness
-    ) {
+//    private void syncCurrentLevel(
+//            String today,
+//            FitnessDataEntity todayFitness,
+//            FitnessDataEntity yesterdayFitness
+//    ) {
+//
+//        GameProgressDao progressDao = db.gameProgressDao();
+//        GameLevelDao levelDao = db.gameLevelDao();
+//        GameLevelHistoryDao historyDao = db.gameLevelHistoryDao();
+//        //------------------------------------------------------------------
+//        // Load current progress
+//        GameProgressEntity currentProgress = progressDao.getProgressSync();
+//
+//        if (currentProgress == null) {
+//            currentProgress = initializeProgress(today);
+//        }
+//
+//        //---------------------------------------------------------------
+//        // Get current level's details
+//        GameLevelEntity currentLevelStructure = levelDao.getLevelSync(currentProgress.currentLevel);
+//
+//        if (currentLevelStructure == null) return;
+//
+//        //---------------------------------------------------------------
+//        // initialize today and yesterday's fitness value based on game type
+//        float todayValue;
+//        float yesterdayValue;
+//
+//        if (currentLevelStructure.gameType.equals("STEPS")) { // Steps
+//            todayValue = todayFitness.steps;
+//            yesterdayValue = yesterdayFitness != null
+//                    ? yesterdayFitness.steps
+//                    : 0;
+//        } else { //Distance
+//            todayValue = todayFitness.distanceMeters;
+//            yesterdayValue = yesterdayFitness != null
+//                    ? yesterdayFitness.distanceMeters
+//                    : 0;
+//        }
+//
+//        //---------------------------------------------------------------
+//        // calculate the steps / distance updated since last sync
+//        float delta = calculateDelta(
+//                currentProgress,
+//                today,
+//                todayValue,
+//                yesterdayValue
+//        );
+//
+//        currentProgress.progressValue += delta;
+//
+//        if (currentProgress.progressValue >= currentLevelStructure.targetValue) {
+//            // completion of the level
+//            completeLevel(currentProgress, currentLevelStructure, today, todayValue);
+//        }
+//
+//        //update current progress in Game Progress Entity
+//        progressDao.updateOrInsertProgress(currentProgress);
+//    }
 
+    private void syncCurrentLevel(String today, FitnessDataEntity todayFitness, FitnessDataEntity yesterdayFitness) {
         GameProgressDao progressDao = db.gameProgressDao();
         GameLevelDao levelDao = db.gameLevelDao();
-        GameLevelHistoryDao historyDao = db.gameLevelHistoryDao();
-        //------------------------------------------------------------------
-        // Load current progress
-        GameProgressEntity currentProgress = progressDao.getProgressSync();
 
-        if (currentProgress == null) {
-            currentProgress = initializeProgress(today);
+        GameProgressEntity progress = progressDao.getProgressSync();
+        if (progress == null) progress = initializeProgress(today);
+
+        while (true) {
+            GameLevelEntity level = levelDao.getLevelSync(progress.currentLevel);
+            if (level == null) break;
+
+            float todayValue = level.gameType.equals("STEPS")
+                    ? todayFitness.steps
+                    : todayFitness.distanceMeters;
+            float yesterdayValue = level.gameType.equals("STEPS")
+                    ? (yesterdayFitness != null ? yesterdayFitness.steps : 0)
+                    : (yesterdayFitness != null ? yesterdayFitness.distanceMeters : 0);
+
+            float delta = calculateDelta(progress, today, todayValue, yesterdayValue);
+            progress.progressValue += delta;
+
+            if (progress.progressValue >= level.targetValue) {
+                // complete level and move to next
+                completeLevel(progress, level, today, todayValue);
+
+                // reset delta for next level
+                progress.progressValue = 0;
+
+                // if next level type is different, reset baseline
+                GameLevelEntity nextLevel = levelDao.getLevelSync(progress.currentLevel);
+                if (nextLevel == null) break;
+                if (!nextLevel.gameType.equals(level.gameType)) {
+                    progress.lastSyncedFitnessValue = 0;
+                }
+
+                continue; // loop again to process next level immediately
+            }
+
+            break; // current level not completed, exit
         }
 
-        //---------------------------------------------------------------
-        // Get current level's details
-        GameLevelEntity currentLevelStructure = levelDao.getLevelSync(currentProgress.currentLevel);
-
-        if (currentLevelStructure == null) return;
-
-        //---------------------------------------------------------------
-        // initialize today and yesterday's fitness value based on game type
-        float todayValue;
-        float yesterdayValue;
-
-        if (currentLevelStructure.gameType.equals("STEPS")) { // Steps
-            todayValue = todayFitness.steps;
-            yesterdayValue = yesterdayFitness != null
-                    ? yesterdayFitness.steps
-                    : 0;
-        } else { //Distance
-            todayValue = todayFitness.distanceMeters;
-            yesterdayValue = yesterdayFitness != null
-                    ? yesterdayFitness.distanceMeters
-                    : 0;
-        }
-
-        //---------------------------------------------------------------
-        // calculate the steps / distance updated since last sync
-        float delta = calculateDelta(
-                currentProgress,
-                today,
-                todayValue,
-                yesterdayValue
-        );
-
-        currentProgress.progressValue += delta;
-
-        if (currentProgress.progressValue >= currentLevelStructure.targetValue) {
-            // completion of the level
-            completeLevel(currentProgress, currentLevelStructure, today, todayValue);
-        }
-
-        //update current progress in Game Progress Entity
-        progressDao.updateOrInsertProgress(currentProgress);
+        progressDao.updateOrInsertProgress(progress);
     }
+
 
     private void completeLevel(
             GameProgressEntity progress,

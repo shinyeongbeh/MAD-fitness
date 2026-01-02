@@ -68,4 +68,9 @@ public class GameLevelRepository {
         return historyDao.getHistoryForLevel(level);
     }
 
+    public LiveData<GameLevelHistoryEntity> observeHistoryForLevel(int level) {
+        return historyDao.observeHistoryForLevel(level);
+    }
+
+
 }
