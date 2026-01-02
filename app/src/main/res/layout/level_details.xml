@@ -45,16 +45,17 @@
                 android:layout_marginBottom="16dp"
                 android:background="@color/white">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/user"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    android:background="@android:color/white"
-                    android:layerType="software"
                     android:src="@drawable/puppiescouk_053399600_1663317083_2412"
-                    app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+                    android:background="@drawable/bg_circle_white"
+                    android:clipToOutline="true"
+                    android:outlineProvider="background" />
+
 
                 <ImageView
                     android:id="@+id/idIVFrame"

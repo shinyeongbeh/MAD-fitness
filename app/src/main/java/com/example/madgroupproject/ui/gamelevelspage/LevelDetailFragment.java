@@ -3,8 +3,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,7 +137,19 @@ public class LevelDetailFragment extends Fragment {
                     // Load profile image from URI
                     String uriString = profile.getProfileImageUri();
                     if (uriString != null && !uriString.isEmpty()) {
-                        levelProfileIV.setImageURI(Uri.parse(uriString));
+                        levelProfileIV.post(() -> {
+                            try {
+                                Bitmap original = MediaStore.Images.Media.getBitmap(
+                                        requireContext().getContentResolver(),
+                                        Uri.parse(uriString)
+                                );
+                                Bitmap circular = toCircularBitmap(original);
+                                levelProfileIV.setImageBitmap(circular);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+
                     }
 
                     // Optionally set other info
@@ -177,4 +194,27 @@ public class LevelDetailFragment extends Fragment {
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(shareIntent, "Share Level"));
     }
+    private Bitmap toCircularBitmap(Bitmap source) {
+        int size = Math.min(source.getWidth(), source.getHeight());
+
+        Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Rect src = new Rect(
+                (source.getWidth() - size) / 2,
+                (source.getHeight() - size) / 2,
+                (source.getWidth() + size) / 2,
+                (source.getHeight() + size) / 2
+        );
+
+        Rect dst = new Rect(0, 0, size, size);
+
+        canvas.drawCircle(size / 2f, size / 2f, size / 2f, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(source, src, dst, paint);
+
+        return output;
+    }
+
 }
