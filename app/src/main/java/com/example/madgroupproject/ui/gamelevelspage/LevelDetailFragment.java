@@ -1,14 +1,21 @@
 package com.example.madgroupproject.ui.gamelevelspage;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,6 +27,9 @@ import com.example.madgroupproject.data.local.entity.GameProgressEntity;
 import com.example.madgroupproject.data.local.entity.UserProfile;
 import com.example.madgroupproject.data.viewmodel.GameLevelViewModel;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 
 public class LevelDetailFragment extends Fragment {
@@ -44,6 +54,8 @@ public class LevelDetailFragment extends Fragment {
         levelDateTV = view.findViewById(R.id.idTVDate);
         levelProfileIV = view.findViewById(R.id.user);
         levelProgressBar = view.findViewById(R.id.progressBar);
+        CardView cardView = view.findViewById(R.id.cardView);
+        Button shareButton = view.findViewById(R.id.shareButton);
 
         viewModel = new ViewModelProvider(this).get(GameLevelViewModel.class);
 
@@ -66,6 +78,8 @@ public class LevelDetailFragment extends Fragment {
             viewModel.observeProgress().observe(getViewLifecycleOwner(), progress -> {
                 if (progress == null) return;
                 float percent = 0;
+                levelProgressBar.setVisibility(View.GONE);
+
 
                 // NOT STARTED
                 if (progress.currentLevel < levelNumber) {
@@ -78,17 +92,21 @@ public class LevelDetailFragment extends Fragment {
                     levelPercentageTV.setVisibility(View.VISIBLE);
                     levelPercentageTV.setText(String.format("%.1f%%", percent));
                     levelDateTV.setVisibility(View.GONE);
+
+                    //progress bar
+                    levelProgressBar.setVisibility(View.VISIBLE);
+                    levelProgressBar.setProgress((int) percent);
                 }
                 // COMPLETED
                 else {
                     levelPercentageTV.setVisibility(View.VISIBLE);
                     levelPercentageTV.setText("100%");
                     percent=100;
+                    //progress bar
+                    levelProgressBar.setVisibility(View.VISIBLE);
+                    levelProgressBar.setProgress((int) percent);
                 }
 
-                //progress bar
-                levelProgressBar.setVisibility(View.VISIBLE);
-                levelProgressBar.setProgress((int) percent);
             });
         });
 
@@ -122,6 +140,41 @@ public class LevelDetailFragment extends Fragment {
                 });
             }
         });
-                return view;
+
+        //share button
+        shareButton.setOnClickListener(v -> shareCard(cardView));
+
+        return view;
+    }
+
+    //share button logic
+    // Convert CardView to Bitmap and share
+    private void shareCard(View cardView) {
+        // 1. Convert view to bitmap
+        Bitmap bitmap = Bitmap.createBitmap(cardView.getWidth(), cardView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.WHITE);
+        cardView.draw(canvas);
+
+        // 2. Save bitmap to cache
+        File cachePath = new File(getContext().getCacheDir(), "images");
+        cachePath.mkdirs();
+        File file = new File(cachePath, "card.png");
+        try (FileOutputStream stream = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // 3. Get URI using FileProvider
+        Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider", file);
+
+        // 4. Create share intent
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/png");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(shareIntent, "Share Level"));
     }
 }
