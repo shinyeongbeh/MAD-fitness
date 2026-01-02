@@ -94,6 +94,24 @@ public class GoalRepository {
         });
     }
 
+    // 🆕 Delete all goals - 新增方法用于清空所有目标
+    public void deleteAllGoals(OnResultListener<Void> listener) {
+        executorService.execute(() -> {
+            try {
+                goalDao.deleteAll();
+                Log.d(TAG, "All goals deleted successfully");
+                if (listener != null) {
+                    listener.onSuccess(null);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error deleting all goals", e);
+                if (listener != null) {
+                    listener.onError(e);
+                }
+            }
+        });
+    }
+
     // Get all goals
     public void getAllGoals(OnResultListener<List<GoalEntity>> listener) {
         executorService.execute(() -> {

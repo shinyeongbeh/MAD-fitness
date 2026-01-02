@@ -1,7 +1,11 @@
 package com.example.madgroupproject.ui.goalpage;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,6 +37,8 @@ import java.util.List;
 
 public class GoalFragment extends Fragment {
 
+    private static final String TAG = "GoalFragment";
+
     private LinearLayout goalsContainer;
     private Button btnCreateGoal;
     private List<GoalEntity> goalsList = new ArrayList<>();
@@ -42,8 +48,8 @@ public class GoalFragment extends Fragment {
     // Flag to prevent triggering switch listener during UI updates
     private boolean isUpdatingUI = false;
 
-    // 🆕 午夜监听器
-    private MidnightChangeListener midnightListener;
+    // ✅ 添加广播接收器
+    private BroadcastReceiver midnightReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,25 +57,8 @@ public class GoalFragment extends Fragment {
         goalRepository = new GoalRepository(requireContext());
         mainHandler = new Handler(Looper.getMainLooper());
 
-        // 🆕 创建午夜监听器
-        setupMidnightListener();
-    }
-
-    // 🆕 设置午夜监听器
-    private void setupMidnightListener() {
-        midnightListener = new MidnightChangeListener(requireContext());
-        midnightListener.addListener(() -> {
-            mainHandler.post(() -> {
-                Log.d("GoalFragment", "🌙 Midnight passed! New day started.");
-                Toast.makeText(requireContext(), "New day! Goals have been reset.", Toast.LENGTH_SHORT).show();
-
-                // LiveData会自动刷新UI，但为了确保，手动触发观察
-                observeGoals();
-
-                // 更新通知
-                GoalNotificationManager.updateGoalNotification(requireContext());
-            });
-        });
+        // ✅ 注册广播接收器
+        setupMidnightBroadcastReceiver();
     }
 
     @Override
@@ -116,41 +105,56 @@ public class GoalFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // 🆕 检查是否跨日了
-        checkAndHandleDayChange();
-
-        // Update notification when returning to this page
+        // ✅ 只更新通知,不再检查日期变化(MainActivity已处理)
         GoalNotificationManager.updateGoalNotification(requireContext());
+        Log.d(TAG, "onResume - Updated notification");
     }
 
-    // 🆕 检查日期变化
-    private void checkAndHandleDayChange() {
-        SharedPreferences prefs = requireContext()
-                .getSharedPreferences("goal_prefs", Context.MODE_PRIVATE);
+    /**
+     * ✅ 设置广播接收器监听午夜事件
+     */
+    private void setupMidnightBroadcastReceiver() {
+        midnightReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if ("com.example.madgroupproject.MIDNIGHT_PASSED".equals(intent.getAction())) {
+                    Log.d(TAG, "📡 Received midnight broadcast!");
 
-        String lastDate = prefs.getString("last_viewed_date", "");
-        String currentDate = LocalDate.now().toString();
+                    // LiveData会自动刷新UI(因为数据库已清空)
+                    // 只需要显示欢迎消息
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        if (isAdded()) {
+                            Toast.makeText(requireContext(),
+                                    "Welcome to a new day! ✨",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }, 300);
+                }
+            }
+        };
 
-        if (!lastDate.equals(currentDate)) {
-            // 日期变了，强制刷新数据
-            Log.d("GoalFragment", "📅 Day changed from " + lastDate + " to " + currentDate);
-
-            // LiveData会自动触发UI更新
-            observeGoals();
-
-            // 保存新日期
-            prefs.edit().putString("last_viewed_date", currentDate).apply();
-
-            Toast.makeText(requireContext(), "Welcome to a new day!", Toast.LENGTH_SHORT).show();
+        IntentFilter filter = new IntentFilter("com.example.madgroupproject.MIDNIGHT_PASSED");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireContext().registerReceiver(midnightReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            requireContext().registerReceiver(midnightReceiver, filter);
         }
+
+        Log.d(TAG, "✅ Midnight broadcast receiver registered");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // 🆕 销毁午夜监听器
-        if (midnightListener != null) {
-            midnightListener.destroy();
+
+        // ✅ 取消注册广播接收器
+        if (midnightReceiver != null) {
+            try {
+                requireContext().unregisterReceiver(midnightReceiver);
+                Log.d(TAG, "Midnight broadcast receiver unregistered");
+            } catch (Exception e) {
+                Log.e(TAG, "Error unregistering receiver", e);
+            }
         }
     }
 
@@ -164,7 +168,7 @@ public class GoalFragment extends Fragment {
         goalRepository.getAllGoalsLive().observe(getViewLifecycleOwner(), new Observer<List<GoalEntity>>() {
             @Override
             public void onChanged(List<GoalEntity> goals) {
-                Log.d("GoalFragment", "LiveData triggered, received " + goals.size() + " goals");
+                Log.d(TAG, "LiveData triggered, received " + goals.size() + " goals");
 
                 // Update local list
                 goalsList.clear();
@@ -353,7 +357,7 @@ public class GoalFragment extends Fragment {
             public void onSuccess(Void result) {
                 mainHandler.post(() -> {
                     goal.setCompleted(newStatus);
-                    Log.d("GoalFragment", "Status update successful: " + goal.getName() + " -> " + newStatus);
+                    Log.d(TAG, "Status update successful: " + goal.getName() + " -> " + newStatus);
                     GoalNotificationManager.updateGoalNotification(requireContext());
                     // LiveData will automatically trigger UI update to ensure synchronization
                 });
@@ -362,7 +366,7 @@ public class GoalFragment extends Fragment {
             @Override
             public void onError(Exception e) {
                 mainHandler.post(() -> {
-                    Log.e("GoalFragment", "Status update failed", e);
+                    Log.e(TAG, "Status update failed", e);
                     Toast.makeText(requireContext(), "Failed to update status", Toast.LENGTH_SHORT).show();
 
                     // Complete rollback

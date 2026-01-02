@@ -8,7 +8,7 @@
 
     <!-- Card / Rectangle container for main info -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardContainer"
+        android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="500dp"
         app:cardCornerRadius="12dp"
@@ -41,22 +41,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                >
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/user"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
+                    android:background="@drawable/bg_circle_white"
+                    android:clipToOutline="true"
+                    android:outlineProvider="background"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/puppiescouk_053399600_1663317083_2412"
-                    app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+                    android:src="@drawable/puppiescouk_053399600_1663317083_2412" />
+
 
                 <ImageView
                     android:id="@+id/idIVFrame"
                     android:layout_width="160dp"
                     android:layout_height="160dp"
                     android:scaleType="centerCrop"
+
                     android:src="@drawable/frame_1" />
             </FrameLayout>
 
@@ -79,6 +84,13 @@
                 android:text="detailsss"
                 android:textSize="20sp"
             />
+
+<!--            progress bar-->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <!-- Percentage -->
             <TextView
@@ -104,17 +116,16 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Share Button (outside the rectangle) -->
-    <TextView
-        android:id="@+id/idTVShare"
+    <Button
+        android:id="@+id/shareButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="Share"
+        android:textColor="@color/white"
         android:textSize="18sp"
-        android:textColor="@color/primary"
-        app:layout_constraintTop_toBottomOf="@id/cardContainer"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

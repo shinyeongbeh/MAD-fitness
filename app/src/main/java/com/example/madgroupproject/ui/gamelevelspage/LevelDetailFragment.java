@@ -1,13 +1,26 @@
 package com.example.madgroupproject.ui.gamelevelspage;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -15,9 +28,13 @@ import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.AppDatabase;
 import com.example.madgroupproject.data.local.entity.GameLevelEntity;
 import com.example.madgroupproject.data.local.entity.GameLevelHistoryEntity;
+import com.example.madgroupproject.data.local.entity.GameProgressEntity;
 import com.example.madgroupproject.data.local.entity.UserProfile;
 import com.example.madgroupproject.data.viewmodel.GameLevelViewModel;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 
 public class LevelDetailFragment extends Fragment {
@@ -25,6 +42,7 @@ public class LevelDetailFragment extends Fragment {
     private ImageView levelFrameIV, levelProfileIV;
     private GameLevelViewModel viewModel;
     int levelNumber=1;
+    ProgressBar levelProgressBar;
 
 
     @Override
@@ -40,6 +58,9 @@ public class LevelDetailFragment extends Fragment {
         levelPercentageTV = view.findViewById(R.id.idTVPercentage);
         levelDateTV = view.findViewById(R.id.idTVDate);
         levelProfileIV = view.findViewById(R.id.user);
+        levelProgressBar = view.findViewById(R.id.progressBar);
+        CardView cardView = view.findViewById(R.id.cardView);
+        Button shareButton = view.findViewById(R.id.shareButton);
 
         viewModel = new ViewModelProvider(this).get(GameLevelViewModel.class);
 
@@ -56,44 +77,49 @@ public class LevelDetailFragment extends Fragment {
 
         }
 
+        // Completion date
+        viewModel.observeHistoryForLevel(levelNumber)
+                .observe(getViewLifecycleOwner(), history -> {
+                    if (history != null) {
+                        levelDateTV.setText(history.completedDate);
+                    }
+                });
+
         //level percentage
         viewModel.getLevel(levelNumber).observe(getViewLifecycleOwner(), level -> {
             if (level == null) return;
-
             viewModel.observeProgress().observe(getViewLifecycleOwner(), progress -> {
                 if (progress == null) return;
-
-                float percent;
+                levelProgressBar.setVisibility(View.GONE);
+                levelDateTV.setVisibility(View.GONE);
+                levelDateTV.setVisibility(View.GONE);
 
                 // NOT STARTED
                 if (progress.currentLevel < levelNumber) {
-                    levelPercentageTV.setVisibility(View.GONE);
-                    levelDateTV.setVisibility(View.GONE);
+                    return;
                 }
                 // IN PROGRESS
                 else if (progress.currentLevel == levelNumber) {
-                    percent = (progress.progressValue / level.targetValue) * 100f;
+                    float percent = (progress.progressValue / level.targetValue) * 100f;
                     levelPercentageTV.setVisibility(View.VISIBLE);
-                    levelPercentageTV.setText(String.format("%.0f%%", percent));
-                    levelDateTV.setVisibility(View.GONE);
+                    levelPercentageTV.setText(String.format("%.1f%%", percent));
+                    //progress bar
+                    levelProgressBar.setVisibility(View.VISIBLE);
+                    levelProgressBar.setProgress((int) percent);
+                    return;
                 }
                 // COMPLETED
                 else {
                     levelPercentageTV.setVisibility(View.VISIBLE);
                     levelPercentageTV.setText("100%");
-                    percent=100;
+                    //progress bar
+                    levelProgressBar.setVisibility(View.VISIBLE);
+                    levelProgressBar.setProgress(100);
+                    levelDateTV.setVisibility(View.VISIBLE);
                 }
+
             });
         });
-
-        // Completion date
-        viewModel.observeHistoryForLevel(levelNumber)
-                .observe(getViewLifecycleOwner(), history -> {
-                    if (history != null) {
-                        levelDateTV.setVisibility(View.VISIBLE);
-                        levelDateTV.setText(history.completedDate);
-                    }
-                });
 
         //sync profile pic
         AppDatabase db = AppDatabase.getDatabase(getContext());
@@ -106,7 +132,19 @@ public class LevelDetailFragment extends Fragment {
                     // Load profile image from URI
                     String uriString = profile.getProfileImageUri();
                     if (uriString != null && !uriString.isEmpty()) {
-                        levelProfileIV.setImageURI(Uri.parse(uriString));
+                        levelProfileIV.post(() -> {
+                            try {
+                                Bitmap original = MediaStore.Images.Media.getBitmap(
+                                        requireContext().getContentResolver(),
+                                        Uri.parse(uriString)
+                                );
+                                Bitmap circular = toCircularBitmap(original);
+                                levelProfileIV.setImageBitmap(circular);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+
                     }
 
                     // Optionally set other info
@@ -114,6 +152,66 @@ public class LevelDetailFragment extends Fragment {
                 });
             }
         });
-                return view;
+
+        //share button
+        shareButton.setOnClickListener(v -> shareCard(cardView));
+
+        return view;
     }
+
+    //share button logic
+    // Convert CardView to Bitmap and share
+    private void shareCard(View cardView) {
+        // 1. Convert view to bitmap
+        Bitmap bitmap = Bitmap.createBitmap(cardView.getWidth(), cardView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.WHITE);
+        cardView.draw(canvas);
+
+        // 2. Save bitmap to cache
+        File cachePath = new File(getContext().getCacheDir(), "images");
+        cachePath.mkdirs();
+        File file = new File(cachePath, "card.png");
+        try (FileOutputStream stream = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // 3. Get URI using FileProvider
+        Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider", file);
+
+        // 4. Create share intent
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/png");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(shareIntent, "Share Level"));
+    }
+
+    //remove black corners
+    private Bitmap toCircularBitmap(Bitmap source) {
+        int size = Math.min(source.getWidth(), source.getHeight());
+
+        Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Rect src = new Rect(
+                (source.getWidth() - size) / 2,
+                (source.getHeight() - size) / 2,
+                (source.getWidth() + size) / 2,
+                (source.getHeight() + size) / 2
+        );
+
+        Rect dst = new Rect(0, 0, size, size);
+
+        canvas.drawCircle(size / 2f, size / 2f, size / 2f, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(source, src, dst, paint);
+
+        return output;
+    }
+
 }

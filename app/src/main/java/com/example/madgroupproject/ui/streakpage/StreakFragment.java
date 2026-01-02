@@ -2,7 +2,9 @@ package com.example.madgroupproject.ui.streakpage;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,12 +25,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.entity.StreakHistoryEntity;
 import com.example.madgroupproject.data.repository.StreakRepository;
 import com.example.madgroupproject.data.viewmodel.StreakViewModel;
-import com.example.madgroupproject.util.MidnightChangeListener;  // 🆕 添加这个import
+import com.example.madgroupproject.util.MidnightChangeListener;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -54,45 +60,18 @@ public class StreakFragment extends Fragment {
     private StreakViewModel viewModel;
     private List<StreakHistoryEntity> monthData;
 
-    // ✅ 从 ViewModel 获取当前月份（不再是 Fragment 的成员变量）
     private YearMonth currentYearMonth;
 
     private LiveData<List<StreakHistoryEntity>> currentMonthLiveData;
 
-    // 🆕 添加午夜监听器
-    private MidnightChangeListener midnightListener;
+    // ✅ 添加广播接收器
+    private BroadcastReceiver midnightReceiver;
 
-    // 🆕 添加onCreate方法
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // 🆕 设置午夜监听器
-        setupMidnightListener();
-    }
-
-    // 🆕 设置午夜监听器的方法
-    private void setupMidnightListener() {
-        midnightListener = new MidnightChangeListener(requireContext());
-        midnightListener.addListener(() -> {
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    Log.d(TAG, "🌙 Midnight passed! Updating date display...");
-
-                    // 更新日期显示
-                    updateTodayDateDisplay();
-
-                    // 如果当前查看的是当月，刷新日历数据
-                    YearMonth now = YearMonth.now();
-                    if (currentYearMonth != null && currentYearMonth.equals(now)) {
-                        Log.d(TAG, "Currently viewing current month, refreshing data...");
-                        loadMonthData();
-                    }
-
-                    Toast.makeText(requireContext(), "Happy new day! 🎉", Toast.LENGTH_SHORT).show();
-                });
-            }
-        });
+        // ✅ 注册广播接收器
+        setupMidnightBroadcastReceiver();
     }
 
     @Override
@@ -106,9 +85,11 @@ public class StreakFragment extends Fragment {
 
         // ✅ 先初始化 ViewModel
         viewModel = new ViewModelProvider(this).get(StreakViewModel.class);
+
+        // ✅ 确保今天的记录存在(MainActivity已经初始化过,这里作为保险)
         viewModel.autoInitTodayRecord();
 
-        // ✅ 从 ViewModel 恢复月份（ViewModel 在 Fragment 重建时会保留）
+        // ✅ 从 ViewModel 恢复月份(ViewModel 在 Fragment 重建时会保留)
         currentYearMonth = viewModel.getCurrentViewingMonthValue();
         Log.d(TAG, "Restored month from ViewModel: " + currentYearMonth);
 
@@ -139,8 +120,13 @@ public class StreakFragment extends Fragment {
     private void updateTodayDateDisplay() {
         LocalDate today = LocalDate.now();
         String monthName = today.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-        tvStreakDate.setText(String.format("Today: %s %d", monthName, today.getDayOfMonth()));
-        Log.d(TAG, "Updated today date display to: " + today); // 🆕 添加日志
+        String dateText = String.format("Today: %s %d", monthName, today.getDayOfMonth());
+
+        if (tvStreakDate != null) {
+            tvStreakDate.setText(dateText);
+        }
+
+        Log.d(TAG, "Updated today date display to: " + today);
     }
 
     private void updateMonthTitle() {
@@ -157,7 +143,6 @@ public class StreakFragment extends Fragment {
             btnPrevMonth.setOnClickListener(v -> {
                 Log.d(TAG, "Previous month clicked. Current: " + currentYearMonth);
                 currentYearMonth = currentYearMonth.minusMonths(1);
-                // ✅ 保存到 ViewModel
                 viewModel.setCurrentViewingMonth(currentYearMonth);
                 updateMonthTitle();
                 loadMonthData();
@@ -170,7 +155,6 @@ public class StreakFragment extends Fragment {
                 Log.d(TAG, "Next month clicked. Current: " + currentYearMonth + ", Now: " + now);
                 if (currentYearMonth.isBefore(now)) {
                     currentYearMonth = currentYearMonth.plusMonths(1);
-                    // ✅ 保存到 ViewModel
                     viewModel.setCurrentViewingMonth(currentYearMonth);
                     updateMonthTitle();
                     loadMonthData();
@@ -395,16 +379,10 @@ public class StreakFragment extends Fragment {
         }
     }
 
-    /**
-     * 获取主题颜色 - 自动适配 Dark Mode
-     */
     private int getThemedColor(int colorResId) {
         return ContextCompat.getColor(requireContext(), colorResId);
     }
 
-    /**
-     * 检查当前是否为 Dark Mode
-     */
     private boolean isDarkMode() {
         int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
@@ -422,17 +400,76 @@ public class StreakFragment extends Fragment {
         Log.d(TAG, "onPause called. Current month: " + currentYearMonth);
     }
 
-    // 🆕 添加onDestroy方法来清理监听器
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        // 🆕 销毁午夜监听器
-        if (midnightListener != null) {
-            midnightListener.destroy();
-            midnightListener = null;
-            Log.d(TAG, "MidnightChangeListener destroyed");
+        // ✅ 取消注册广播接收器
+        if (midnightReceiver != null) {
+            try {
+                requireContext().unregisterReceiver(midnightReceiver);
+                Log.d(TAG, "Midnight broadcast receiver unregistered");
+            } catch (Exception e) {
+                Log.e(TAG, "Error unregistering receiver", e);
+            }
         }
     }
+
+    /**
+     * ✅ 设置广播接收器（修复版 - 使用主线程Handler）
+     */
+    private void setupMidnightBroadcastReceiver() {
+        midnightReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if ("com.example.madgroupproject.MIDNIGHT_PASSED".equals(intent.getAction())) {
+                    Log.d(TAG, "📡 Received midnight broadcast!");
+                    Log.d(TAG, "   Thread: " + Thread.currentThread().getName());
+
+                    if (!isAdded()) {
+                        Log.e(TAG, "❌ Fragment not added, skipping update");
+                        return;
+                    }
+
+                    // 🔴 关键修复：使用主线程Handler
+                    new android.os.Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        if (!isAdded()) {
+                            Log.e(TAG, "❌ Fragment not added (delayed check)");
+                            return;
+                        }
+
+                        Log.d(TAG, "🔄 Starting UI update on main thread...");
+
+                        // 1️⃣ 更新日期显示
+                        updateTodayDateDisplay();
+
+                        // 2️⃣ 如果当前查看的是当月,刷新日历数据
+                        YearMonth now = YearMonth.now();
+                        if (currentYearMonth != null && currentYearMonth.equals(now)) {
+                            Log.d(TAG, "🔄 Refreshing calendar for new day...");
+                            loadMonthData();
+                        }
+
+                        // 3️⃣ 显示欢迎消息
+                        Toast.makeText(requireContext(),
+                                "New day, new streak challenge! 💪",
+                                Toast.LENGTH_SHORT).show();
+
+                        Log.d(TAG, "✅ UI update complete!");
+                    }, 500);
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter("com.example.madgroupproject.MIDNIGHT_PASSED");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireContext().registerReceiver(midnightReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            requireContext().registerReceiver(midnightReceiver, filter);
+        }
+
+        Log.d(TAG, "✅ Midnight broadcast receiver registered");
+    }
 }
+
 
