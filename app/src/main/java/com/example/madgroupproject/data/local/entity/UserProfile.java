@@ -21,13 +21,15 @@ public class UserProfile {
 
 
     // Constructor
-    public UserProfile(String name, String email, String phone, String birthday, String weight, String height) {
+    public UserProfile(String name, String email, String phone, String birthday, String weight, String height,String profileImageUri) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.birthday = birthday;
         this.weight = weight;
         this.height = height;
+        this.profileImageUri = profileImageUri;
+
     }
 
     // Getters and setters
