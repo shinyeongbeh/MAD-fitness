@@ -74,7 +74,7 @@ public class LevelDetailFragment extends Fragment {
                 else if (progress.currentLevel == levelNumber) {
                     percent = (progress.progressValue / level.targetValue) * 100f;
                     levelPercentageTV.setVisibility(View.VISIBLE);
-                    levelPercentageTV.setText(String.format("%.0f%%", percent));
+                    levelPercentageTV.setText(String.format("%.1f%%", percent));
                     levelDateTV.setVisibility(View.GONE);
                 }
                 // COMPLETED
