@@ -17,8 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.5"
-        app:cardBackgroundColor="@color/white">
+        app:layout_constraintVertical_bias="0.5">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,18 +42,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/white">
+                >
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:id="@+id/user"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
+                    android:background="@drawable/bg_circle_white"
+                    android:clipToOutline="true"
+                    android:outlineProvider="background"
                     android:scaleType="centerCrop"
-                    android:background="@android:color/white"
-                    android:layerType="software"
-                    android:src="@drawable/puppiescouk_053399600_1663317083_2412"
-                    app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+                    android:src="@drawable/puppiescouk_053399600_1663317083_2412" />
+
 
                 <ImageView
                     android:id="@+id/idIVFrame"
