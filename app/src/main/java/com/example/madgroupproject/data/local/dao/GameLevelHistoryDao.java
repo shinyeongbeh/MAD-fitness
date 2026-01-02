@@ -1,5 +1,6 @@
 package com.example.madgroupproject.data.local.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -29,6 +30,16 @@ public interface GameLevelHistoryDao {
     LIMIT 1
 """)
     GameLevelHistoryEntity getHistoryForLevel(int level);
+
+    @Query("""
+    SELECT * FROM game_level_history
+    WHERE levelNum = :level
+    LIMIT 1
+""")
+    LiveData<GameLevelHistoryEntity> observeHistoryForLevel(int level);
+
+
+
 
 
     @Insert
