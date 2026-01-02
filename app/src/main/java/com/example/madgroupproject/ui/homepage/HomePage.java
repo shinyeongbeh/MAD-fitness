@@ -1,6 +1,5 @@
 package com.example.madgroupproject.ui.homepage;
 
-import android.content.res.Configuration;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -45,15 +44,19 @@ public class HomePage extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 1. 初始化数据
         goalRepository = new GoalRepository(requireContext());
         streakViewModel = new ViewModelProvider(this).get(StreakViewModel.class);
 
+        // 2. 绑定 UI
         tvStreakNumber = view.findViewById(R.id.tvStreakNumber);
         goalsDisplayContainer = view.findViewById(R.id.goalsDisplayContainer);
 
-        // ✅ Streak 数字（使用 theme-aware 颜色）
-        tvStreakNumber.setTextColor(getThemedColor(R.color.text_primary));
+        if(tvStreakNumber != null) {
+            tvStreakNumber.setTextColor(getThemedColor(R.color.text_primary));
+        }
 
+        // 3. 数据观察
         streakViewModel.getCurrentStreakLiveData()
                 .observe(getViewLifecycleOwner(), result -> {
                     if (result != null && result.streakCount >= 0) {
@@ -66,26 +69,78 @@ public class HomePage extends Fragment {
         goalRepository.getAllGoalsLive()
                 .observe(getViewLifecycleOwner(), this::displayGoals);
 
+        // 4. 加载 Dashboard
         if (getChildFragmentManager().findFragmentById(R.id.dashboardContainer) == null) {
             getChildFragmentManager().beginTransaction()
                     .add(R.id.dashboardContainer, new FitnessDashboard())
                     .commit();
         }
 
-        ImageView btnSettings = view.findViewById(R.id.btnSettings);
-        btnSettings.setOnClickListener(v ->
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_homeFragment_to_settingMainActivity)
-        );
+        // =======================================================
+        // 5. 点击跳转逻辑
+        // =======================================================
 
-        ImageView appleImage = view.findViewById(R.id.iv_apple);
-        appleImage.setOnClickListener(v ->
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_homeFragment_to_appleFragment3)
-        );
+        // -> 跳转 Streak
+        View.OnClickListener toStreakAction = v ->
+                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_streakFragment);
+
+        View cardStreak = view.findViewById(R.id.cardStreak);
+        View btnFire = view.findViewById(R.id.btnHome);
+        if (cardStreak != null) cardStreak.setOnClickListener(toStreakAction);
+        if (btnFire != null) btnFire.setOnClickListener(toStreakAction);
+
+
+        // -> 跳转 Goal
+        View.OnClickListener toGoalAction = v ->
+                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_goalFragment);
+
+        View cardGoal = view.findViewById(R.id.cardGoal);
+        View btnFlag = view.findViewById(R.id.btnFlag);
+        if (cardGoal != null) cardGoal.setOnClickListener(toGoalAction);
+        if (btnFlag != null) btnFlag.setOnClickListener(toGoalAction);
+
+
+        // -> 跳转 Game
+        View btnTrophy = view.findViewById(R.id.btnAchievement);
+        if (btnTrophy != null) {
+            btnTrophy.setOnClickListener(v ->
+                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_gameLevelFragment)
+            );
+        }
+
+        // -> 跳转 Stats
+        View cardDashboard = view.findViewById(R.id.cardDashboard);
+        if (cardDashboard != null) {
+            cardDashboard.setOnClickListener(v ->
+                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_statsFragment)
+            );
+        }
+
+        // -> Settings
+        ImageView btnSettings = view.findViewById(R.id.btnSettings);
+        if (btnSettings != null) {
+            btnSettings.setOnClickListener(v ->
+                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_settingMainActivity)
+            );
+        }
+
+        // -> 核心修改：这里修复了 iv_apple 找不到的问题
+        // 我们改为查找 cardArticle 和 iv_article_image
+        View cardArticle = view.findViewById(R.id.cardArticle);
+        ImageView articleImage = view.findViewById(R.id.iv_article_image); // 这里修复了ID
+
+        View.OnClickListener toArticleAction = v ->
+                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_appleFragment3);
+
+        if (cardArticle != null) cardArticle.setOnClickListener(toArticleAction);
+        if (articleImage != null) articleImage.setOnClickListener(toArticleAction);
     }
 
+    // ===========================================
+    // 辅助方法
+    // ===========================================
     private void displayGoals(List<GoalEntity> goals) {
+        if (goalsDisplayContainer == null) return;
         goalsDisplayContainer.removeAllViews();
 
         if (goals == null || goals.isEmpty()) {
@@ -94,15 +149,6 @@ public class HomePage extends Fragment {
             noGoalsText.setTextSize(16);
             noGoalsText.setGravity(Gravity.CENTER);
             noGoalsText.setTextColor(getThemedColor(R.color.text_secondary));
-
-            LinearLayout.LayoutParams params =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.topMargin = dpToPx(16);
-            params.bottomMargin = dpToPx(16);
-            noGoalsText.setLayoutParams(params);
-
             goalsDisplayContainer.addView(noGoalsText);
             return;
         }
@@ -116,59 +162,42 @@ public class HomePage extends Fragment {
         LinearLayout itemLayout = new LinearLayout(requireContext());
         itemLayout.setOrientation(LinearLayout.HORIZONTAL);
         itemLayout.setGravity(Gravity.CENTER_VERTICAL);
-
-        LinearLayout.LayoutParams layoutParams =
-                new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.bottomMargin = dpToPx(8);
         itemLayout.setLayoutParams(layoutParams);
 
-        // ● Bullet
         TextView bullet = new TextView(requireContext());
-        LinearLayout.LayoutParams bulletParams =
-                new LinearLayout.LayoutParams(dpToPx(8), dpToPx(8));
+        LinearLayout.LayoutParams bulletParams = new LinearLayout.LayoutParams(dpToPx(8), dpToPx(8));
         bulletParams.rightMargin = dpToPx(12);
         bullet.setLayoutParams(bulletParams);
-
         GradientDrawable circle = new GradientDrawable();
         circle.setShape(GradientDrawable.OVAL);
         circle.setColor(getThemedColor(R.color.text_primary));
         bullet.setBackground(circle);
 
-        // Goal name
         TextView goalName = new TextView(requireContext());
-        LinearLayout.LayoutParams nameParams =
-                new LinearLayout.LayoutParams(
-                        0,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f);
-        goalName.setLayoutParams(nameParams);
+        goalName.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         goalName.setText(goal.getName());
         goalName.setTextSize(16);
         goalName.setTextColor(getThemedColor(R.color.text_primary));
 
-        // ✓ Check mark
         TextView checkMark = new TextView(requireContext());
-        LinearLayout.LayoutParams checkParams =
-                new LinearLayout.LayoutParams(dpToPx(28), dpToPx(28));
-        checkMark.setLayoutParams(checkParams);
+        checkMark.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(28), dpToPx(28)));
         checkMark.setGravity(Gravity.CENTER);
         checkMark.setText("✓");
         checkMark.setTextSize(18);
-        checkMark.setTypeface(null, android.graphics.Typeface.BOLD);
         checkMark.setTextColor(getThemedColor(R.color.white));
 
         if (goal.isCompleted()) {
             checkMark.setBackgroundResource(R.drawable.checkmark_circle);
         } else {
-            checkMark.setBackgroundResource(R.drawable.ic_check_gray_circle);
+            checkMark.setBackgroundColor(0x00000000);
         }
 
         itemLayout.addView(bullet);
         itemLayout.addView(goalName);
         itemLayout.addView(checkMark);
-
         return itemLayout;
     }
 
@@ -178,12 +207,5 @@ public class HomePage extends Fragment {
 
     private int getThemedColor(int colorResId) {
         return ContextCompat.getColor(requireContext(), colorResId);
-    }
-
-    private boolean isDarkMode() {
-        int nightMode =
-                getResources().getConfiguration().uiMode
-                        & Configuration.UI_MODE_NIGHT_MASK;
-        return nightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 }

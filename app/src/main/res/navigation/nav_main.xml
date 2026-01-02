@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
     app:startDestination="@id/homeFragment">
@@ -10,15 +10,31 @@
         android:name="com.example.madgroupproject.ui.homepage.HomePage"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
+
         <action
             android:id="@+id/action_homeFragment_to_settingMainActivity"
             app:destination="@id/settingMainActivity" />
-        <action
-            android:id="@+id/action_homeFragment_to_appleFragment2"
-            app:destination="@id/appleFragment" />
+
         <action
             android:id="@+id/action_homeFragment_to_appleFragment3"
             app:destination="@id/appleFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_streakFragment"
+            app:destination="@id/streakFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_goalFragment"
+            app:destination="@id/goalFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_gameLevelFragment"
+            app:destination="@id/gameLevelFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_statsFragment"
+            app:destination="@id/statsFragment" />
+
     </fragment>
 
     <fragment
@@ -36,6 +52,7 @@
             android:id="@+id/action_streakFragment_to_bestStreakDetailFragment"
             app:destination="@id/bestStreakDetailFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/changeStreakFragment"
         android:name="com.example.madgroupproject.ui.streakpage.ChangeStreakFragment"
@@ -50,6 +67,7 @@
         android:id="@+id/bestStreakDetailFragment"
         android:name="com.example.madgroupproject.ui.streakpage.BestStreakDetailFragment"
         android:label="Best Streak" />
+
     <fragment
         android:id="@+id/goalFragment"
         android:name="com.example.madgroupproject.ui.goalpage.GoalFragment"
@@ -66,12 +84,17 @@
         android:id="@+id/gameLevelFragment"
         android:name="com.example.madgroupproject.ui.gamelevelspage.GameLevelFragment"
         android:label="fragment_game_level"
-        tools:layout="@layout/fragment_game_level" >
-
-    <action
-        android:id="@+id/action_gameLevelFragment_to_levelDetailFragment"
-        app:destination="@id/levelDetailFragment" />
+        tools:layout="@layout/fragment_game_level">
+        <action
+            android:id="@+id/action_gameLevelFragment_to_levelDetailFragment"
+            app:destination="@id/levelDetailFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/levelDetailFragment"
+        android:name="com.example.madgroupproject.ui.gamelevelspage.LevelDetailFragment"
+        android:label="Level Detail"
+        tools:layout="@layout/level_details" />
 
     <fragment
         android:id="@+id/settingMainActivity"
@@ -80,13 +103,8 @@
         tools:layout="@layout/setting_main" />
 
     <fragment
-        android:id="@+id/levelDetailFragment"
-        android:name="com.example.madgroupproject.ui.gamelevelspage.LevelDetailFragment"
-        android:label="Level Detail"
-        tools:layout="@layout/level_details" />
-    <fragment
         android:id="@+id/appleFragment"
         android:name="com.example.madgroupproject.ui.homepage.AppleFragment"
-        tools:layout="@layout/fragment_apple"
-        android:label="AppleFragment" />
+        android:label="AppleFragment"
+        tools:layout="@layout/fragment_apple" />
 </navigation>

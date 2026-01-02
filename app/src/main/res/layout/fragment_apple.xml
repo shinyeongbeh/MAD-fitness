@@ -1,125 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8E8E8">
+    android:background="@color/white"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingBottom="40dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Apple page"
-            android:textColor="#AAAAAA"
-            android:textSize="18sp"
-            android:layout_marginBottom="16dp"
-            tools:ignore="HardcodedText" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:src="@drawable/fitness_banner"
+            android:scaleType="centerCrop"
+            android:contentDescription="Jogging Image" />
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="#FFFFFF">
+            android:orientation="vertical"
+            android:padding="24dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="An Apple A Day"
-                android:textColor="#000000"
-                android:textSize="18sp"
+                android:text="Why Start Jogging?"
+                android:textSize="28sp"
                 android:textStyle="bold"
-                android:gravity="center"
-                android:padding="16dp"
-                android:background="@drawable/border_card"
-                tools:ignore="HardcodedText" />
-        </androidx.cardview.widget.CardView>
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:src="@drawable/apples"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="Large Apple Image"
-            tools:ignore="HardcodedText" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="#FFFFFF">
-
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp"
-                android:background="@drawable/border_card">
+                android:text="Health &amp; Wellness"
+                android:textSize="14sp"
+                android:textColor="#FF9800"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="KEEP DOCTOR AWAY"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="20dp"
-                    tools:ignore="HardcodedText" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:lineSpacingExtra="8dp"
+                android:textColor="#424242"
+                android:text="Jogging is one of the most effective forms of aerobic exercise. It doesn't require expensive equipment, just a pair of running shoes and dedication.\n\n1. Improves Cardiovascular Health\nRunning strengthens the heart and improves blood circulation, reducing the risk of heart disease.\n\n2. Mental Clarity\nRunning releases endorphins, often called 'runner's high', which reduces stress and anxiety levels significantly.\n\n3. Weight Management\nIt burns calories effectively and helps maintain a healthy metabolism throughout the day.\n\nStart with a slow pace and gradually increase your distance!" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Helps in smooth bowel movement"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="12dp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Helps control diabetes"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="12dp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Apple good for skin whitening"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="12dp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Apple reduces risk of Alzheimer's disease"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="12dp"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Apple reduces pressure on blood vessels"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    tools:ignore="HardcodedText" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
