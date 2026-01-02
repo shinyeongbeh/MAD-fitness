@@ -55,11 +55,11 @@ public interface GoalDao {
     @Query("SELECT * FROM goals WHERE completed = 1 ORDER BY displayOrder ASC, createdAt ASC")
     List<GoalEntity> getCompletedGoals();
 
-    // 更新完成状态
+    // 更新完成状态（用于用户手动切换目标状态）
     @Query("UPDATE goals SET completed = :completed WHERE id = :goalId")
     void updateCompletedStatus(int goalId, boolean completed);
 
-    // 清空所有目标
+    // 清空所有目标（用于每日0点清空前一天的目标）
     @Query("DELETE FROM goals")
     void deleteAll();
 
@@ -67,7 +67,6 @@ public interface GoalDao {
     @Query("SELECT COUNT(*) FROM goals")
     int getGoalCount();
 
-    // 重置所有目标的完成状态（用于每日重置）
-    @Query("UPDATE goals SET completed = 0")
-    void resetAllCompletionStatus();
+    // 🗑️ 已删除：resetAllCompletionStatus()
+    // 原因：新需求是清空目标而非重置状态
 }

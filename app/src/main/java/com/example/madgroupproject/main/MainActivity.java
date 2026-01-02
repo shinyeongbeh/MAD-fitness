@@ -39,21 +39,34 @@ import androidx.work.WorkInfo;
 
 import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.repository.FitnessRepository;
+import com.example.madgroupproject.data.repository.GoalRepository;
+import com.example.madgroupproject.data.repository.StreakRepository;
 import com.example.madgroupproject.fitnessmanager.FitnessSyncWorker;
 import com.example.madgroupproject.fitnessmanager.RecordingAPIManager;
 import com.example.madgroupproject.goalmanager.DailyGoalResetScheduler;
+import com.example.madgroupproject.util.MidnightChangeListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.fitness.LocalRecordingClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
+
+    // 全局午夜监听器
+    private MidnightChangeListener midnightListener;
+    private GoalRepository goalRepository;
+    private StreakRepository streakRepository;
+    private SharedPreferences prefs;
 
     // for debugging only, may delete later
     // used so that the db is shown in Android Studio's Database Inspector
@@ -69,9 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
     }
-
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -98,33 +109,44 @@ public class MainActivity extends AppCompatActivity {
         // Create notification channel
         NotificationUtil.createNotificationChannel(this);
 
-        // DEMO: show immediately  for Daily goals
+        // DEMO: show immediately for Daily goals
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             sendBroadcast(new Intent(this, GoalNotificationReceiver.class));
         }, 1000);
 
-        // DEMO: show immediately  for Streak
+        // DEMO: show immediately for Streak
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             sendBroadcast(new Intent(this, StreakNotificationReceiver.class));
         }, 1000);
 
-        // ✅ Start daily goal reset scheduler
-        Log.d("MainActivity", "========================================");
-        Log.d("MainActivity", "📅 Scheduling Daily Goal Reset...");
+        // 初始化仓库和SharedPreferences
+        goalRepository = new GoalRepository(this);
+        streakRepository = new StreakRepository(this);
+        prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+
+        // ✅ 启动时检查是否跨日(处理用户在午夜后首次打开App的情况)
+        checkAndHandleAppStartup();
+
+        // ✅ 设置全局午夜监听器(处理App运行中跨日的情况)
+        setupGlobalMidnightListener();
+
+        // ✅ Start daily goal reset scheduler (作为后备机制)
+        Log.d(TAG, "========================================");
+        Log.d(TAG, "📅 Scheduling Daily Goal Reset...");
 
         try {
             DailyGoalResetScheduler.scheduleDailyReset(this);
             String nextReset = DailyGoalResetScheduler.getNextResetTime();
-            Log.d("MainActivity", "✅ Next goal reset at: " + nextReset);
+            Log.d(TAG, "✅ Next goal reset at: " + nextReset);
 
             // 🔍 Verify the task was scheduled
             verifyResetTaskScheduled();
 
         } catch (Exception e) {
-            Log.e("MainActivity", "❌ Failed to schedule reset", e);
+            Log.e(TAG, "❌ Failed to schedule reset", e);
         }
 
-        Log.d("MainActivity", "========================================");
+        Log.d(TAG, "========================================");
 
         //For notification
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -154,6 +176,82 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * ✅ 启动时检查:如果上次运行日期 != 今天,执行清理
+     */
+    private void checkAndHandleAppStartup() {
+        String lastRunDate = prefs.getString("last_run_date", "");
+        String today = LocalDate.now().toString();
+
+        Log.d(TAG, "📅 Checking app startup - Last run: " + lastRunDate + ", Today: " + today);
+
+        if (!lastRunDate.equals(today)) {
+            Log.d(TAG, "🔄 App opened on new day, performing cleanup...");
+            performMidnightCleanup("AppStartup");
+            prefs.edit().putString("last_run_date", today).apply();
+        } else {
+            Log.d(TAG, "✅ App opened on same day, no cleanup needed");
+        }
+    }
+
+    /**
+     * ✅ 设置全局午夜监听器
+     */
+    private void setupGlobalMidnightListener() {
+        Log.d(TAG, "🌙 Setting up global midnight listener...");
+
+        midnightListener = new MidnightChangeListener(this);
+        midnightListener.addListener(() -> {
+            runOnUiThread(() -> {
+                Log.d(TAG, "🌙🌙🌙 MIDNIGHT PASSED! New day started!");
+                performMidnightCleanup("MidnightListener");
+
+                // 更新最后运行日期
+                String today = LocalDate.now().toString();
+                prefs.edit().putString("last_run_date", today).apply();
+                Log.d(TAG, "📅 Updated last_run_date to: " + today);
+            });
+        });
+
+        Log.d(TAG, "✅ Global midnight listener setup complete");
+    }
+
+    /**
+     * ✅ 统一的午夜清理逻辑
+     */
+    private void performMidnightCleanup(String source) {
+        Log.d(TAG, "🧹 Performing midnight cleanup from: " + source);
+
+        // 1️⃣ 清空所有Goal
+        goalRepository.deleteAllGoals(new GoalRepository.OnResultListener<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                Log.d(TAG, "✅ Goals cleared for new day");
+                GoalNotificationManager.updateGoalNotification(MainActivity.this);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e(TAG, "❌ Error clearing goals", e);
+            }
+        });
+
+        // 2️⃣ 创建新一天的Streak记录
+        streakRepository.autoInitTodayRecord();
+        Log.d(TAG, "✅ New streak record initialized");
+
+        // 3️⃣ 显示通知
+        Toast.makeText(this,
+                "Happy new day! 🎉\nGoals cleared and streak updated!",
+                Toast.LENGTH_LONG).show();
+
+        // 4️⃣ 发送广播通知所有Fragment刷新
+        Intent intent = new Intent("com.example.madgroupproject.MIDNIGHT_PASSED");
+        sendBroadcast(intent);
+        Log.d(TAG, "📡 Broadcast sent to all fragments");
+
+    }
+
+    /**
      * 🔍 Verify that the reset task was successfully scheduled
      */
     private void verifyResetTaskScheduled() {
@@ -166,23 +264,23 @@ public class MainActivity extends AppCompatActivity {
                 List<WorkInfo> workInfos = future.get();
 
                 if (workInfos == null || workInfos.isEmpty()) {
-                    Log.e("MainActivity", "❌ CRITICAL: Reset task NOT found in WorkManager!");
-                    Log.e("MainActivity", "❌ Goals will NOT reset at midnight!");
+                    Log.e(TAG, "❌ CRITICAL: Reset task NOT found in WorkManager!");
+                    Log.e(TAG, "❌ Goals will NOT reset at midnight!");
                 } else {
                     for (WorkInfo workInfo : workInfos) {
-                        Log.d("MainActivity", "✅ Reset task verified:");
-                        Log.d("MainActivity", "   State: " + workInfo.getState());
-                        Log.d("MainActivity", "   ID: " + workInfo.getId());
+                        Log.d(TAG, "✅ Reset task verified:");
+                        Log.d(TAG, "   State: " + workInfo.getState());
+                        Log.d(TAG, "   ID: " + workInfo.getId());
 
                         if (workInfo.getState() == WorkInfo.State.ENQUEUED) {
-                            Log.d("MainActivity", "✅ Task is properly ENQUEUED and will run at midnight");
+                            Log.d(TAG, "✅ Task is properly ENQUEUED and will run at midnight");
                         } else {
-                            Log.w("MainActivity", "⚠️ Unexpected state: " + workInfo.getState());
+                            Log.w(TAG, "⚠️ Unexpected state: " + workInfo.getState());
                         }
                     }
                 }
             } catch (Exception e) {
-                Log.e("MainActivity", "❌ Error verifying reset task", e);
+                Log.e(TAG, "❌ Error verifying reset task", e);
             }
         }, 2000); // Check after 2 seconds to ensure task is registered
     }
@@ -212,7 +310,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void checkGooglePlayService() {
         int minVersion = LocalRecordingClient.LOCAL_RECORDING_CLIENT_MIN_VERSION_CODE;
         int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this, minVersion);
@@ -232,18 +329,15 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION);
             } else {
                 startTracking();
-
                 startStepForegroundService(); // start pinned notification
             }
         } else {
             startTracking();
-
             startStepForegroundService(); // start pinned notification
         }
     }
 
     private void startTracking() {
-
         RecordingAPIManager recordingAPIManager = new RecordingAPIManager(this);
         recordingAPIManager.subscribeToRecording(this);
 
@@ -273,4 +367,14 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // ✅ 销毁全局午夜监听器
+        if (midnightListener != null) {
+            midnightListener.destroy();
+            midnightListener = null;
+            Log.d(TAG, "🌙 Global midnight listener destroyed");
+        }
+    }
 }
