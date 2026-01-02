@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import com.example.madgroupproject.R;
 import com.example.madgroupproject.data.local.AppDatabase;
 import com.example.madgroupproject.data.local.entity.GameLevelEntity;
 import com.example.madgroupproject.data.local.entity.GameLevelHistoryEntity;
+import com.example.madgroupproject.data.local.entity.GameProgressEntity;
 import com.example.madgroupproject.data.local.entity.UserProfile;
 import com.example.madgroupproject.data.viewmodel.GameLevelViewModel;
 
@@ -25,6 +27,7 @@ public class LevelDetailFragment extends Fragment {
     private ImageView levelFrameIV, levelProfileIV;
     private GameLevelViewModel viewModel;
     int levelNumber=1;
+    ProgressBar levelProgressBar;
 
 
     @Override
@@ -40,6 +43,7 @@ public class LevelDetailFragment extends Fragment {
         levelPercentageTV = view.findViewById(R.id.idTVPercentage);
         levelDateTV = view.findViewById(R.id.idTVDate);
         levelProfileIV = view.findViewById(R.id.user);
+        levelProgressBar = view.findViewById(R.id.progressBar);
 
         viewModel = new ViewModelProvider(this).get(GameLevelViewModel.class);
 
@@ -59,11 +63,9 @@ public class LevelDetailFragment extends Fragment {
         //level percentage
         viewModel.getLevel(levelNumber).observe(getViewLifecycleOwner(), level -> {
             if (level == null) return;
-
             viewModel.observeProgress().observe(getViewLifecycleOwner(), progress -> {
                 if (progress == null) return;
-
-                float percent;
+                float percent = 0;
 
                 // NOT STARTED
                 if (progress.currentLevel < levelNumber) {
@@ -74,7 +76,7 @@ public class LevelDetailFragment extends Fragment {
                 else if (progress.currentLevel == levelNumber) {
                     percent = (progress.progressValue / level.targetValue) * 100f;
                     levelPercentageTV.setVisibility(View.VISIBLE);
-                    levelPercentageTV.setText(String.format("%.0f%%", percent));
+                    levelPercentageTV.setText(String.format("%.1f%%", percent));
                     levelDateTV.setVisibility(View.GONE);
                 }
                 // COMPLETED
@@ -83,8 +85,14 @@ public class LevelDetailFragment extends Fragment {
                     levelPercentageTV.setText("100%");
                     percent=100;
                 }
+
+                //progress bar
+                levelProgressBar.setVisibility(View.VISIBLE);
+                levelProgressBar.setProgress((int) percent);
             });
         });
+
+
 
         // Completion date
         viewModel.observeHistoryForLevel(levelNumber)
