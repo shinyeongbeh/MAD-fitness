@@ -77,54 +77,49 @@ public class LevelDetailFragment extends Fragment {
 
         }
 
+        // Completion date
+        viewModel.observeHistoryForLevel(levelNumber)
+                .observe(getViewLifecycleOwner(), history -> {
+                    if (history != null) {
+                        levelDateTV.setText(history.completedDate);
+                    }
+                });
+
         //level percentage
         viewModel.getLevel(levelNumber).observe(getViewLifecycleOwner(), level -> {
             if (level == null) return;
             viewModel.observeProgress().observe(getViewLifecycleOwner(), progress -> {
                 if (progress == null) return;
-                float percent = 0;
                 levelProgressBar.setVisibility(View.GONE);
-
+                levelDateTV.setVisibility(View.GONE);
+                levelDateTV.setVisibility(View.GONE);
 
                 // NOT STARTED
                 if (progress.currentLevel < levelNumber) {
-                    levelPercentageTV.setVisibility(View.GONE);
-                    levelDateTV.setVisibility(View.GONE);
+                    return;
                 }
                 // IN PROGRESS
                 else if (progress.currentLevel == levelNumber) {
-                    percent = (progress.progressValue / level.targetValue) * 100f;
+                    float percent = (progress.progressValue / level.targetValue) * 100f;
                     levelPercentageTV.setVisibility(View.VISIBLE);
                     levelPercentageTV.setText(String.format("%.1f%%", percent));
-                    levelDateTV.setVisibility(View.GONE);
-
                     //progress bar
                     levelProgressBar.setVisibility(View.VISIBLE);
                     levelProgressBar.setProgress((int) percent);
+                    return;
                 }
                 // COMPLETED
                 else {
                     levelPercentageTV.setVisibility(View.VISIBLE);
                     levelPercentageTV.setText("100%");
-                    percent=100;
                     //progress bar
                     levelProgressBar.setVisibility(View.VISIBLE);
-                    levelProgressBar.setProgress((int) percent);
+                    levelProgressBar.setProgress(100);
+                    levelDateTV.setVisibility(View.VISIBLE);
                 }
 
             });
         });
-
-
-
-        // Completion date
-        viewModel.observeHistoryForLevel(levelNumber)
-                .observe(getViewLifecycleOwner(), history -> {
-                    if (history != null) {
-                        levelDateTV.setVisibility(View.VISIBLE);
-                        levelDateTV.setText(history.completedDate);
-                    }
-                });
 
         //sync profile pic
         AppDatabase db = AppDatabase.getDatabase(getContext());
@@ -194,6 +189,8 @@ public class LevelDetailFragment extends Fragment {
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(shareIntent, "Share Level"));
     }
+
+    //remove black corners
     private Bitmap toCircularBitmap(Bitmap source) {
         int size = Math.min(source.getWidth(), source.getHeight());
 
