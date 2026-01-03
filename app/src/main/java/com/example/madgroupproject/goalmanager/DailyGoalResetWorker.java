@@ -13,7 +13,7 @@ import com.example.madgroupproject.main.GoalNotificationManager;
 
 /**
  * 每日目标重置Worker
- * 在每天0点自动执行，删除所有目标（清空前一天的目标）
+ * ✅ 修改：在每天0点自动执行，重置所有目标的完成状态为未完成（而不是删除）
  */
 public class DailyGoalResetWorker extends Worker {
 
@@ -27,23 +27,23 @@ public class DailyGoalResetWorker extends Worker {
     @Override
     public Result doWork() {
         try {
-            Log.d(TAG, "Starting daily goal reset (delete all goals)...");
+            Log.d(TAG, "Starting daily goal reset (reset completion status)...");
 
             // 获取数据库DAO
             AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
             GoalDao goalDao = db.goalDao();
 
-            // 🔴 修改：删除所有目标（而不是重置状态）
-            goalDao.deleteAll();
+            // ✅ 修改：重置所有目标的完成状态为未完成（而不是删除）
+            goalDao.resetAllCompletionStatus();
 
-            Log.d(TAG, "All goals deleted successfully for new day");
+            Log.d(TAG, "All goal completion statuses reset successfully for new day");
 
-            // 清空后更新通知
+            // 重置后更新通知
             GoalNotificationManager.updateGoalNotification(getApplicationContext());
 
             return Result.success();
         } catch (Exception e) {
-            Log.e(TAG, "Error deleting goals", e);
+            Log.e(TAG, "Error resetting goal statuses", e);
             return Result.retry();
         }
     }

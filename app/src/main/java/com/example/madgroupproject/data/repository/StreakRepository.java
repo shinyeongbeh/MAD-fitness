@@ -108,35 +108,44 @@ public class StreakRepository {
             return new StreakResult(null, 0);
         }
 
-        // 检查今天或昨天是否达标
-        if (!achievedDays.get(0).date.equals(today)) {
-            if (!achievedDays.get(0).date.equals(yesterday)) {
-                return new StreakResult(null, 0);
-            }
-        }
-
-        // 计算连续 streak
-        int streak = 0;
-        int endCounter = 0;
+        // ✅ 修复：从今天开始往回找连续的达标天数
+        // 先找到今天或昨天的记录位置
+        int startIndex = -1;
         for (int i = 0; i < achievedDays.size(); i++) {
-            StreakHistoryEntity currentRecord = achievedDays.get(i);
-            if (i > 0) {
-                try {
-                    LocalDate currentRecordDate = LocalDate.parse(currentRecord.date);
-                    LocalDate lastRecordDate = LocalDate.parse(achievedDays.get(i - 1).date);
-                    if (!currentRecordDate.equals(lastRecordDate.minusDays(1))) {
-                        break;
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Error parsing date in current streak calculation", e);
-                    break;
-                }
+            if (achievedDays.get(i).date.equals(today) || achievedDays.get(i).date.equals(yesterday)) {
+                startIndex = i;
+                break;
             }
-            streak++;
-            endCounter = i;
         }
 
-        List<StreakHistoryEntity> result = achievedDays.subList(0, endCounter + 1);
+        // 如果今天和昨天都没有达标，streak为0
+        if (startIndex == -1) {
+            return new StreakResult(null, 0);
+        }
+
+        // ✅ 从找到的位置开始，往后计算连续天数
+        int streak = 1; // 至少有1天（今天或昨天）
+        int endCounter = startIndex;
+
+        for (int i = startIndex + 1; i < achievedDays.size(); i++) {
+            try {
+                LocalDate currentRecordDate = LocalDate.parse(achievedDays.get(i).date);
+                LocalDate lastRecordDate = LocalDate.parse(achievedDays.get(i - 1).date);
+
+                // 检查是否连续（相差1天）
+                if (currentRecordDate.equals(lastRecordDate.minusDays(1))) {
+                    streak++;
+                    endCounter = i;
+                } else {
+                    break; // 不连续了，停止
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error parsing date in current streak calculation", e);
+                break;
+            }
+        }
+
+        List<StreakHistoryEntity> result = achievedDays.subList(startIndex, endCounter + 1);
         return new StreakResult(result, streak);
     }
 

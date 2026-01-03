@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
     private StreakRepository streakRepository;
     private SharedPreferences prefs;
 
+    // ✅ 添加flag防止同一天重复显示Toast
+    private boolean hasShownTodayToast = false;
+
     // for debugging only, may delete later
     // used so that the db is shown in Android Studio's Database Inspector
     private void triggerDatabaseInspectorRoom() {
@@ -190,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putString("last_run_date", today).apply();
         } else {
             Log.d(TAG, "✅ App opened on same day, no cleanup needed");
+            // ✅ 如果是同一天，说明已经显示过Toast了
+            hasShownTodayToast = true;
         }
     }
 
@@ -203,6 +208,10 @@ public class MainActivity extends AppCompatActivity {
         midnightListener.addListener(() -> {
             runOnUiThread(() -> {
                 Log.d(TAG, "🌙🌙🌙 MIDNIGHT PASSED! New day started!");
+
+                // ✅ 重置Toast flag，允许显示新一天的Toast
+                hasShownTodayToast = false;
+
                 performMidnightCleanup("MidnightListener");
 
                 // 更新最后运行日期
@@ -216,22 +225,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * ✅ 统一的午夜清理逻辑
+     * ✅ 统一的午夜清理逻辑 - 修改为重置goal状态而非删除
      */
     private void performMidnightCleanup(String source) {
         Log.d(TAG, "🧹 Performing midnight cleanup from: " + source);
 
-        // 1️⃣ 清空所有Goal
-        goalRepository.deleteAllGoals(new GoalRepository.OnResultListener<Void>() {
+        // 1️⃣ ✅ 修改：重置所有Goal的状态为未完成（而非删除）
+        goalRepository.resetAllGoalsStatus(new GoalRepository.OnResultListener<Void>() {
             @Override
             public void onSuccess(Void result) {
-                Log.d(TAG, "✅ Goals cleared for new day");
+                Log.d(TAG, "✅ Goals status reset for new day (goals preserved)");
                 GoalNotificationManager.updateGoalNotification(MainActivity.this);
             }
 
             @Override
             public void onError(Exception e) {
-                Log.e(TAG, "❌ Error clearing goals", e);
+                Log.e(TAG, "❌ Error resetting goals status", e);
             }
         });
 
@@ -239,12 +248,18 @@ public class MainActivity extends AppCompatActivity {
         streakRepository.autoInitTodayRecord();
         Log.d(TAG, "✅ New streak record initialized");
 
-        // 3️⃣ 显示通知
-        Toast.makeText(this,
-                "Happy new day! 🎉\nGoals cleared and streak updated!",
-                Toast.LENGTH_LONG).show();
+        // 3️⃣ 显示统一的新一天提示（只显示一次）
+        if (!hasShownTodayToast) {
+            Toast.makeText(this,
+                    "Happy new day! 🎉",
+                    Toast.LENGTH_SHORT).show();
+            hasShownTodayToast = true;
+            Log.d(TAG, "✅ Toast shown for new day");
+        } else {
+            Log.d(TAG, "⏭️ Toast already shown today, skipping");
+        }
 
-        // 4️⃣ 发送广播通知所有Fragment刷新
+        // 4️⃣ 发送广播通知所有Fragment刷新（Fragment不再显示Toast）
         Intent intent = new Intent("com.example.madgroupproject.MIDNIGHT_PASSED");
         sendBroadcast(intent);
         Log.d(TAG, "📡 Broadcast sent to all fragments");

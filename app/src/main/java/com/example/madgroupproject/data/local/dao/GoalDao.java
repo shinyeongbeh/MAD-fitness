@@ -59,14 +59,15 @@ public interface GoalDao {
     @Query("UPDATE goals SET completed = :completed WHERE id = :goalId")
     void updateCompletedStatus(int goalId, boolean completed);
 
-    // 清空所有目标（用于每日0点清空前一天的目标）
+    // ✅ 新增：重置所有目标的完成状态为未完成（用于每日0点重置）
+    @Query("UPDATE goals SET completed = 0")
+    void resetAllCompletionStatus();
+
+    // 清空所有目标（保留此方法以备不时之需，但不再用于日常重置）
     @Query("DELETE FROM goals")
     void deleteAll();
 
     // 获取目标总数
     @Query("SELECT COUNT(*) FROM goals")
     int getGoalCount();
-
-    // 🗑️ 已删除：resetAllCompletionStatus()
-    // 原因：新需求是清空目标而非重置状态
 }

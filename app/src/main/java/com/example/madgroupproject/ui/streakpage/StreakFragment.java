@@ -431,31 +431,45 @@ public class StreakFragment extends Fragment {
                         return;
                     }
 
-                    // 🔴 关键修复：使用主线程Handler
+                    // 🔴 关键修复：使用主线程Handler + 防止闪退
                     new android.os.Handler(Looper.getMainLooper()).postDelayed(() -> {
                         if (!isAdded()) {
                             Log.e(TAG, "❌ Fragment not added (delayed check)");
                             return;
                         }
 
-                        Log.d(TAG, "🔄 Starting UI update on main thread...");
+                        try {
+                            Log.d(TAG, "🔄 Starting UI update on main thread...");
 
-                        // 1️⃣ 更新日期显示
-                        updateTodayDateDisplay();
+                            // 🔑 关键修复: 先确保今日记录已初始化，防止闪退
+                            viewModel.autoInitTodayRecord();
+                            Log.d(TAG, "✅ Ensured today's record exists");
 
-                        // 2️⃣ 如果当前查看的是当月,刷新日历数据
-                        YearMonth now = YearMonth.now();
-                        if (currentYearMonth != null && currentYearMonth.equals(now)) {
-                            Log.d(TAG, "🔄 Refreshing calendar for new day...");
-                            loadMonthData();
+                            // ✅ 刷新今日日期，让Today步数LiveData观察新的日期
+                            viewModel.refreshTodayDate();
+                            Log.d(TAG, "✅ Refreshed today's date for LiveData");
+
+                            // 1️⃣ 更新日期显示
+                            updateTodayDateDisplay();
+
+                            // 2️⃣ 如果当前查看的是当月,刷新日历数据
+                            YearMonth now = YearMonth.now();
+                            if (currentYearMonth != null && currentYearMonth.equals(now)) {
+                                Log.d(TAG, "🔄 Refreshing calendar for new day...");
+                                loadMonthData();
+                            }
+
+                            // MainActivity已显示Toast，这里不再重复显示
+                            Log.d(TAG, "✅ UI update complete!");
+                        } catch (Exception e) {
+                            Log.e(TAG, "❌ Error during midnight update", e);
+                            // 防止崩溃，显示友好提示
+                            if (isAdded()) {
+                                Toast.makeText(requireContext(),
+                                        "Please refresh the page",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-
-                        // 3️⃣ 显示欢迎消息
-                        Toast.makeText(requireContext(),
-                                "New day, new streak challenge! 💪",
-                                Toast.LENGTH_SHORT).show();
-
-                        Log.d(TAG, "✅ UI update complete!");
                     }, 500);
                 }
             }
@@ -471,5 +485,4 @@ public class StreakFragment extends Fragment {
         Log.d(TAG, "✅ Midnight broadcast receiver registered");
     }
 }
-
 
