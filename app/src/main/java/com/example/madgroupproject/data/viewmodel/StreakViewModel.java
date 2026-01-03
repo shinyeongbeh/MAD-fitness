@@ -6,18 +6,23 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.madgroupproject.data.local.entity.StreakHistoryEntity;
 import com.example.madgroupproject.data.repository.StreakRepository;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
 public class StreakViewModel extends AndroidViewModel {
     private final StreakRepository repository;
     private final LiveData<StreakRepository.StreakResult> currentStreakLiveData;
-    private final LiveData<StreakHistoryEntity> todayStepsLiveData;
     private final LiveData<StreakRepository.LongestStreakResult> longestStreakLiveData;
+
+    // ✅ 修改：使用MutableLiveData来跟踪当前日期
+    private final MutableLiveData<String> currentDateLiveData = new MutableLiveData<>();
+    private final LiveData<StreakHistoryEntity> todayStepsLiveData;
 
     // ✅ 新增：保存当前查看的月份
     private final MutableLiveData<YearMonth> currentViewingMonth = new MutableLiveData<>();
@@ -26,11 +31,19 @@ public class StreakViewModel extends AndroidViewModel {
         super(application);
         this.repository = new StreakRepository(application);
         this.currentStreakLiveData = this.repository.getCurrentStreakLive();
-        this.todayStepsLiveData = this.repository.getLiveStepsFromStreakEntity();
         this.longestStreakLiveData = this.repository.getLongestStreakWithDetailsLive();
 
         // ✅ 初始化为当前月份
         this.currentViewingMonth.setValue(YearMonth.now());
+
+        // ✅ 初始化为今天的日期
+        this.currentDateLiveData.setValue(LocalDate.now().toString());
+
+        // ✅ 使用Transformations.switchMap动态切换日期的LiveData
+        this.todayStepsLiveData = Transformations.switchMap(
+                currentDateLiveData,
+                date -> repository.getStreakByDateLive(date)
+        );
     }
 
     public LiveData<StreakRepository.StreakResult> getCurrentStreakLiveData() {
@@ -39,6 +52,12 @@ public class StreakViewModel extends AndroidViewModel {
 
     public LiveData<StreakHistoryEntity> getTodayStepsLiveData() {
         return todayStepsLiveData;
+    }
+
+    // ✅ 新增：刷新今天的日期（0点时调用）
+    public void refreshTodayDate() {
+        String today = LocalDate.now().toString();
+        currentDateLiveData.setValue(today);
     }
 
     public LiveData<StreakHistoryEntity> getStreakByDate(String date) {

@@ -120,15 +120,9 @@ public class GoalFragment extends Fragment {
                 if ("com.example.madgroupproject.MIDNIGHT_PASSED".equals(intent.getAction())) {
                     Log.d(TAG, "📡 Received midnight broadcast!");
 
-                    // LiveData会自动刷新UI(因为数据库已清空)
-                    // 只需要显示欢迎消息
-                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                        if (isAdded()) {
-                            Toast.makeText(requireContext(),
-                                    "Welcome to a new day! ✨",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }, 300);
+                    // LiveData会自动刷新UI(因为数据库状态已重置)
+                    // MainActivity已显示Toast，这里不再重复显示
+                    Log.d(TAG, "✅ Goals UI will auto-refresh via LiveData");
                 }
             }
         };

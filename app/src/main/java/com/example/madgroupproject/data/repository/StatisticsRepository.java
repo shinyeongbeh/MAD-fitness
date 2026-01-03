@@ -48,6 +48,19 @@ public class StatisticsRepository {
         return fitnessDataDao.getDailyStatsByMonth(month); // Implement DAO query below
     }
 
+    // Returns LiveData list of all FitnessDataEntity for a given month
+    public LiveData<List<FitnessDataEntity>> getMonthlyData(int year, int month) {
+        String monthStr = String.format("%04d-%02d", year, month + 1); // month is 0-indexed
+        return fitnessDataDao.getByMonth(monthStr + "%"); // use LIKE 'YYYY-MM%'
+    }
+
+    // Returns LiveData list of all FitnessDataEntity for a given year
+    public LiveData<List<FitnessDataEntity>> getYearlyData(int year) {
+        String yearStr = String.format("%04d", year);
+        return fitnessDataDao.getByYear(yearStr + "%"); // use LIKE 'YYYY-%'
+    }
+
+
 
 
 }
