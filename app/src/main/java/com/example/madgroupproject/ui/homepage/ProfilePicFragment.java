@@ -59,49 +59,33 @@ public class ProfilePicFragment extends Fragment {
         Executors.newSingleThreadExecutor().execute(() -> {
             profile = db.userProfileDao().getProfile();
                 requireActivity().runOnUiThread(() -> {
-                    if(profile!=null) {
+                    if (profile != null) {
                         String profilePicUri = profile.getProfileImageUri();
-                        profilePic.setImageURI(Uri.parse(profilePicUri));
+                        if (profilePicUri != null && !profilePicUri.isEmpty()) {
+                            try {
+                                profilePic.setImageURI(Uri.parse(profilePicUri));
+                            } catch (Exception e) {
+                                // Fallback in case of invalid URI
+                                profilePic.setImageResource(R.drawable.puppiescouk_053399600_1663317083_2412);
+                            }
+                        } else {
+                            // Default image if URI is null/empty
+                            profilePic.setImageResource(R.drawable.puppiescouk_053399600_1663317083_2412);
+                        }
+                    } else {
+                        // Default image if profile is null
+                        profilePic.setImageResource(R.drawable.puppiescouk_053399600_1663317083_2412);
                     }
                 });
         });
-
-
-
-//            // Update UI on main thread
-//            requireActivity().runOnUiThread(() -> {
-//
-//                etName.setText(profile.getName());
-//                etEmail.setText(profile.getEmail());
-//                etPhone.setText(profile.getPhone());
-//                etBirthday.setText(profile.getBirthday());
-//                etWeight.setText(profile.getWeight());
-//                etHeight.setText(profile.getHeight());
-//
-//                String uriString = profile.getProfileImageUri();//from db
-//                if (uriString != null && !uriString.isEmpty()) {
-//                    Uri uri = Uri.parse(uriString);
-//                    try {
-//                        profileUser.setImageURI(Uri.parse(uriString));
-//                    } catch (SecurityException e) {
-//                        profileUser.setImageResource(R.drawable.puppiescouk_053399600_1663317083_2412);
-//                    }
-//
-//                }
-//
-
-//            });
-
-
-        // current profile picture
-//    profile.setImageResource(R.drawable.profile_pic);
 
         // Demo frame (always applied)
         frame.setImageResource(R.drawable.frame_1);
 
         //auto update frame based on current level
         gameProgressDao.getCurrentLevel().observe(getViewLifecycleOwner(), level -> {
-            int frameRes = getFrameByLevel(level);
+            int levelNum = (level!=null)? level : 1;
+            int frameRes = getFrameByLevel(levelNum);
             frame.setImageResource(frameRes);
         });
 

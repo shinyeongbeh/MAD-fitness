@@ -94,7 +94,7 @@ public class HomePage extends Fragment {
         Executors.newSingleThreadExecutor().execute(() -> {
             UserProfile profile = db.userProfileDao().getProfile();
             requireActivity().runOnUiThread(() -> {
-                if(profile!=null) {
+                if(profile!=null && !profile.getName().isEmpty()) {
                     tvWelcomeBack.setText("Welcome back, " + profile.getName()+".");
                 }
             });
