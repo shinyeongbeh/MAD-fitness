@@ -10,51 +10,81 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <Spinner
-            android:id="@+id/spinnerMonth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChartMonthly"
+        <!-- ===== Monthly Selector ===== -->
+        <LinearLayout
+            android:id="@+id/layoutMonthSelector"
             android:layout_width="match_parent"
-            android:layout_height="220dp"/>
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
 
+            <TextView
+                android:id="@+id/tvSelectedMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Jan 2026 🔻"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp" />
 
+            <ImageView
+                android:id="@+id/ivMonthDropdown"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="dropdown"
+                android:src="@drawable/ic_baseline_arrow_drop_down" />
+        </LinearLayout>
 
+        <!-- ===== Calendar Container ===== -->
+        <LinearLayout
+            android:id="@+id/layoutMonthCalendarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+
+            <CalendarView
+                android:id="@+id/calendarViewMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- ===== Monthly Total & Average ===== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Monthly Summary"
+            android:text="Monthly Total"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="16dp"
             android:textColor="?attr/colorOnBackground" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:layout_marginTop="12dp">
 
-
+            <!-- Total Steps -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                app:cardElevation="4dp"
-                app:cardCornerRadius="12dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
                     <TextView
                         android:text="Steps"
@@ -73,20 +103,20 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
+            <!-- Total Calories -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                app:cardElevation="4dp"
-                app:cardCornerRadius="12dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
                     <TextView
                         android:text="Calories"
@@ -105,19 +135,19 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
+            <!-- Total Distance -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:cardElevation="4dp"
-                app:cardCornerRadius="12dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
                     <TextView
                         android:text="Distance"
@@ -128,17 +158,16 @@
 
                     <TextView
                         android:id="@+id/tvMonthlyTotalDistance"
-                        android:text="0 km"
+                        android:text="0.00 km"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
 
-
+        <!-- Monthly Average -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -146,30 +175,29 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="12dp"
             android:textColor="?attr/colorOnBackground" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:layout_marginTop="12dp">
 
-
+            <!-- Avg Steps -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                app:cardElevation="4dp"
-                app:cardCornerRadius="12dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
                     <TextView
                         android:text="Steps"
@@ -188,20 +216,20 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
+            <!-- Avg Calories -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                app:cardElevation="4dp"
-                app:cardCornerRadius="12dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
                     <TextView
                         android:text="Calories"
@@ -220,19 +248,19 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
+            <!-- Avg Distance -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:cardElevation="4dp"
-                app:cardCornerRadius="12dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
                     <TextView
                         android:text="Distance"
@@ -243,15 +271,30 @@
 
                     <TextView
                         android:id="@+id/tvMonthlyAvgDistance"
-                        android:text="0 km"
+                        android:text="0.00 km"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
+
+        <!-- ===== Monthly Bar Chart ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monthly Steps Chart"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:textColor="?attr/colorOnBackground" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChartMonthly"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="12dp" />
 
     </LinearLayout>
 </ScrollView>
