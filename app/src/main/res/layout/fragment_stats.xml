@@ -1,47 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.statspage.StatsFragment" >
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Your Journey Stats"
-        android:textSize="24dp"
-        android:textColor="?attr/colorOnSurface"/>
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/TabLayoutStats"
+        android:id="@+id/tabLayoutStats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorSurface"
-        app:tabIndicatorColor="?attr/colorPrimary"
-        app:tabSelectedTextColor="?attr/colorPrimary"
-        app:tabTextColor="?attr/colorOnSurfaceVariant"
-        >
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabWeekly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Weekly"
-            />
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabMonthly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Monthly"
-            />
-    </com.google.android.material.tabs.TabLayout>
+        app:tabIndicatorColor="@color/primary"
+        app:tabTextColor="@color/black"
+        app:tabSelectedTextColor="@color/primary"/>
 
-    <FrameLayout
-        android:id="@+id/FrameLayoutStats"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerStats"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>

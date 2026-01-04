@@ -59,5 +59,19 @@ public interface FitnessDataDao {
 
     @Query("SELECT * FROM fitness_data WHERE date = :date")
     List<FitnessDataEntity> getStatsForDate(String date);
+
+    // Return all rows for a given month: monthStr = "2026-01"
+    @Query("SELECT * FROM fitness_data WHERE date LIKE :monthStr ORDER BY date ASC")
+    LiveData<List<FitnessDataEntity>> getByMonth(String monthStr);
+
+    // Return all rows for a given year: yearStr = "2026"
+    @Query("SELECT * FROM fitness_data WHERE date LIKE :yearStr ORDER BY date ASC")
+    LiveData<List<FitnessDataEntity>> getByYear(String yearStr);
+
+    // DAO
+    @Query("SELECT * FROM fitness_data WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
+    LiveData<List<FitnessDataEntity>> getStatsForWeek(String startDate, String endDate);
+
+
 }
 
