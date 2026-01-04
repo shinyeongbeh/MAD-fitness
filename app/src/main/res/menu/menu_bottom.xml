@@ -25,7 +25,7 @@
 
     <item
         android:title="Game Levels"
-        android:icon="@drawable/ic_gamelevel"
+        android:icon="@drawable/ic_trophy"
         android:id="@+id/gameLevelFragment"
         />
 

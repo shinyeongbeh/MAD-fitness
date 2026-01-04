@@ -32,7 +32,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Today"
+                    android:text="StepUp"
                     android:textColor="@android:color/black"
                     android:textSize="28sp"
                     android:textStyle="bold" />
@@ -45,6 +45,32 @@
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 
+            <!--Profile picture-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/homeProfilePicContainer"
+                android:layout_marginBottom="16dp"/>
+            <TextView
+                android:id="@+id/TVwelcomeBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome Back!"
+                android:textSize="16dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="TODAY'S PROGRESS"
+                android:textAllCaps="true"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!--Fitness dashboard-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardDashboard"
                 android:layout_width="match_parent"
