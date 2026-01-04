@@ -145,6 +145,8 @@ public class StreakRepository {
             }
         }
 
+
+
         List<StreakHistoryEntity> result = achievedDays.subList(startIndex, endCounter + 1);
         return new StreakResult(result, streak);
     }
@@ -269,6 +271,7 @@ public class StreakRepository {
             } catch (Exception e) {
                 Log.e(TAG, "Error updating steps", e);
             }
+
         });
     }
 
