@@ -12,6 +12,7 @@
         <item name="colorOnPrimaryContainer">@color/black</item>
 
         <!-- Backgrounds -->
+        <item name="android:colorBackground">@color/page_background</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="colorSurface">@color/card_bg</item>
         <item name="colorSurfaceVariant">@color/button_bg</item>
