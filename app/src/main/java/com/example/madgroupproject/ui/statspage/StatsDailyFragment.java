@@ -85,7 +85,7 @@ public class StatsDailyFragment extends Fragment {
     private void updateDailyStats(FitnessDataEntity data) {
         if (data != null) {
             tvDailySteps.setText(String.valueOf(data.steps));
-            tvDailyDistance.setText(data.distanceMeters + " km");
+            tvDailyDistance.setText(data.distanceMeters + " m");
             tvDailyCalories.setText(data.calories + " kcal");
         } else {
             tvDailySteps.setText("0");
