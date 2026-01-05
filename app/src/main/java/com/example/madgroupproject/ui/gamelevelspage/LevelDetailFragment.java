@@ -92,7 +92,7 @@ public class LevelDetailFragment extends Fragment {
                 if (progress == null) return;
                 levelProgressBar.setVisibility(View.GONE);
                 levelDateTV.setVisibility(View.GONE);
-                levelDateTV.setVisibility(View.GONE);
+                levelPercentageTV.setVisibility(View.GONE);
 
                 // NOT STARTED
                 if (progress.currentLevel < levelNumber) {

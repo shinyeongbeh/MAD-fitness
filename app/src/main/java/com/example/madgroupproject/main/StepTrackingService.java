@@ -116,6 +116,7 @@ public class StepTrackingService extends Service {
                     .setOnlyAlertOnce(true)
                     .build();
 
+
             NotificationManagerCompat.from(this)
                     .notify(NOTIFICATION_ID, notification);
 
