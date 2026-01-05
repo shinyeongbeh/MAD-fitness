@@ -25,7 +25,7 @@ public class GameProgressEntity {
 //    @Nullable
 //    public String completionDate; // yyyy-MM-dd
 
-    public float lastSyncedFitnessValue;
+//    public float lastSyncedFitnessValue;
     // track the last synced raw fitness value for accumulative calculation
 
     public String lastSyncedDate; // yyyy-MM-dd

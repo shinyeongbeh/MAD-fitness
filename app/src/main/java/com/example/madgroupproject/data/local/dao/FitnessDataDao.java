@@ -21,6 +21,12 @@ public interface FitnessDataDao {
     @Query("SELECT * FROM fitness_data WHERE date = :date")
     LiveData<List<FitnessDataEntity>> getByDateLive(String date);
 
+    @Query("SELECT SUM(steps) FROM fitness_data")
+    int getTotalSteps();
+
+    @Query("SELECT SUM(distanceMeters) FROM fitness_data")
+    float getTotalDistance();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertOrUpdate(FitnessDataEntity data);
 
