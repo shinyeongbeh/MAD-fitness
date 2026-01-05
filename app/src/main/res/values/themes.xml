@@ -33,10 +33,10 @@
     <!-- Main application theme -->
     <style name="Theme.MAD" parent="Base.Theme.MAD" />
 
-    <!-- AppTheme 别名 -->
+    <!-- AppTheme  -->
     <style name="AppTheme" parent="Base.Theme.MAD" />
 
-    <!-- Add this style -->
+    <!-- Make the frame circle -->
     <style name="CircleImageStyle" parent="">
         <item name="cornerSize">50%</item>
     </style>

@@ -68,24 +68,21 @@ public class App extends Fragment {
         return inflater.inflate(R.layout.setting_fragment_app, container, false);
     }
 
-    //rating bar function
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Find the RatingBar using the fragment's view
+
         RatingBar ratingBar = view.findViewById(R.id.ratingBar);
 
-
-        // 2. Set a listener to detect when the rating changes
+        //rating bar function
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
+            //Check if there is a changes made by user
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                // 3. Check if the change was made by the user
-
-
                 if (fromUser) {
-                    // 4. Show a "Thank you" message using a Toast
+                    // Display a toast message when a rating is given
                     Toast.makeText(getContext(), "Thank you for your rating!", Toast.LENGTH_SHORT).show();
                 }
             }

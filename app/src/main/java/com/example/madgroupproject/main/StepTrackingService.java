@@ -41,14 +41,14 @@ public class StepTrackingService extends Service {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Step Tracking Active")
                 .setContentText("Tracking your steps in background")
-                .setSmallIcon(R.drawable.ic_exercise) // MUST exist
-                .setOngoing(true)                  // 🔒 pin
+                .setSmallIcon(R.drawable.ic_exercise)
+                .setOngoing(true)                  // pin
                 .setOnlyAlertOnce(true)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build();
 
-        // REQUIRED for foreground service
+        // foreground service
         startForeground(NOTIFICATION_ID, notification);
     }
 
@@ -59,6 +59,7 @@ public class StepTrackingService extends Service {
     }
 
     private void startStepLoop() {
+        //create a recursive loop 
         mainHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -67,7 +68,7 @@ public class StepTrackingService extends Service {
                     int steps = readStepsSafely(); // background thread
 
                     mainHandler.post(() -> {
-                        updateNotification(steps); // UI thread
+                        updateNotification(steps); // UI thread and live update
                     });
                 });
 
@@ -79,7 +80,7 @@ public class StepTrackingService extends Service {
 
     private int readStepsSafely() {
         RecordingAPIManager recordingAPIManager = new RecordingAPIManager(this);
-
+        //read step from API
         int steps = recordingAPIManager.readDailyTotals().steps;
         return Math.max(0, steps);
     }

@@ -3,6 +3,7 @@ package com.example.madgroupproject.data.local.entity;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+//all info in userProfile include the Profile pic
 @Entity(tableName = "user_profile")
 public class UserProfile {
 

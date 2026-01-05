@@ -76,6 +76,7 @@ public class Theme extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
+
         Switch switchDark= view.findViewById(R.id.Dark);
 
         SharedPreferences prefs =
@@ -104,6 +105,7 @@ public class Theme extends Fragment {
         SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(getContext());
 
+        //switch on
         if (darkMode) {
             prefs.edit()
                     .putInt("theme_mode", AppCompatDelegate.MODE_NIGHT_YES)

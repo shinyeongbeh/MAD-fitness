@@ -33,7 +33,6 @@ public class StreakNotificationReceiver extends BroadcastReceiver {
 
 
         //using history to calculate
-
         //get the current Streak
         Executors.newSingleThreadExecutor().execute(() -> {
             AppDatabase db = AppDatabase.getDatabase(context);
@@ -62,10 +61,6 @@ public class StreakNotificationReceiver extends BroadcastReceiver {
             }
         });
 
-
-
-
-
        // manager.notify(STREAK_NOTIFICATION_ID, builder.build());
     }
 
@@ -77,16 +72,30 @@ public class StreakNotificationReceiver extends BroadcastReceiver {
         history.sort((a, b) -> b.date.compareTo(a.date));
 
         int streak = 0;
-        LocalDate expectedDate = LocalDate.now();
+        LocalDate today = LocalDate.now();
+        //calculate the previous day by minusDay
+        LocalDate expectedDate = today;
+
+        boolean todayChecked = false;
 
         for (StreakHistoryEntity day : history) {
             LocalDate recordDate = LocalDate.parse(day.date);
 
-            // let streak to start from yesterday if today not achieved yet
-            if (streak == 0 && recordDate.equals(expectedDate.minusDays(1))) {
-                expectedDate = expectedDate.minusDays(1);
+            // First record is today
+            if (!todayChecked && recordDate.equals(today)) {
+                todayChecked = true;
+
+                if (day.achieved) {
+                    streak++;
+                    expectedDate = today.minusDays(1);
+                } else {
+                    // Today not achieved but allow streak to continue from yesterday
+                    expectedDate = today.minusDays(1);
+                }
+                continue;
             }
 
+            // Continue counting from yesterday backward
             if (recordDate.equals(expectedDate) && day.achieved) {
                 streak++;
                 expectedDate = expectedDate.minusDays(1);

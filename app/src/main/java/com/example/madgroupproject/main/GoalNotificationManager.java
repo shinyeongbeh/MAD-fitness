@@ -36,12 +36,11 @@ public class GoalNotificationManager {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             try {
-                // 从数据库读取所有目标
+                // read from db
                 AppDatabase db = AppDatabase.getDatabase(context);
                 GoalDao goalDao = db.goalDao();
                 List<GoalEntity> goals = goalDao.getAllGoals();
 
-                // 生成并显示通知
                 showGoalNotification(context, goals);
 
             } catch (Exception e) {
@@ -52,12 +51,9 @@ public class GoalNotificationManager {
         });
     }
 
-    /**
-     * 根据目标列表生成并显示通知
-     */
     private static void showGoalNotification(Context context, List<GoalEntity> goals) {
         if (goals == null || goals.isEmpty()) {
-            // 情况1：没有设置任何目标
+            //No goal set
             NotificationUtil.showNotification(
                     context,
                     GOAL_NOTIFICATION_ID,
@@ -67,7 +63,7 @@ public class GoalNotificationManager {
             return;
         }
 
-        // 统计未完成的目标
+        //calculate incomplete goal
         StringBuilder message = new StringBuilder();
         int incompleteCount = 0;
 
@@ -79,7 +75,7 @@ public class GoalNotificationManager {
         }
 
         if (incompleteCount == 0) {
-            // 情况2：所有目标都完成了
+            //all goal completed
             NotificationUtil.showNotification(
                     context,
                     GOAL_NOTIFICATION_ID,
@@ -87,7 +83,7 @@ public class GoalNotificationManager {
                     "All goals completed today!"
             );
         } else {
-            // 情况3：显示未完成的目标列表
+            // remain incomplete goal
             String title = "Today's Goals";
             if (incompleteCount > 0) {
                 title += " (" + incompleteCount + " remaining)";
@@ -102,10 +98,4 @@ public class GoalNotificationManager {
         }
     }
 
-    /**
-     * 取消目标通知
-     */
-    public static void cancelGoalNotification(Context context) {
-        NotificationUtil.cancelNotification(context, GOAL_NOTIFICATION_ID);
-    }
 }
