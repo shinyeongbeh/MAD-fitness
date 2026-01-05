@@ -20,6 +20,7 @@ import com.example.madgroupproject.data.repository.StatisticsRepository;
 import com.example.madgroupproject.data.viewmodel.StatisticsViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -146,6 +147,11 @@ public class StatsMonthlyFragment extends Fragment {
         barChartMonthly.getAxisRight().setEnabled(false);
         barChartMonthly.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChartMonthly.getXAxis().setGranularity(1f);
+
+        YAxis yAxis = barChartMonthly.getAxisLeft();
+        yAxis.setAxisMinimum(0f);   // 🔥 force start from 0
+        yAxis.setGranularity(1000f); // optional (steps scale)
+        yAxis.setDrawGridLines(true);
         barChartMonthly.setFitBars(true);
 
         barChartMonthly.getXAxis().setValueFormatter(new ValueFormatter() {

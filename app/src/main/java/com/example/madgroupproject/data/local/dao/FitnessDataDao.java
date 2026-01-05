@@ -45,6 +45,15 @@ public interface FitnessDataDao {
     """)
     LiveData<List<StatisticsRepository.MonthlyAverageStats>> getMonthlyAverageLive(String month);
 
+    //added for yearly update
+    @Query("""
+    SELECT * FROM fitness_data
+    WHERE date LIKE :year || '%'
+""")
+    LiveData<List<FitnessDataEntity>> getStatsByYear(String year);
+
+
+
 
     //TODO: delete later
     // this is a dummy / stupid / quick way to update the database

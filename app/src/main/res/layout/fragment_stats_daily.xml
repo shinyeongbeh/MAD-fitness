@@ -28,8 +28,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Today 🔻"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface" />
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/ivDropdown"
@@ -67,78 +68,80 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:weightSum="3">
 
             <!-- Steps Card -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:padding="12dp">
 
                     <TextView
-                        android:text="Steps"
-                        android:textSize="14sp"
-                        android:textColor="?attr/colorPrimary"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="Steps"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvDailySteps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="0"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Calories Card -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:padding="12dp">
 
                     <TextView
-                        android:text="Calories"
-                        android:textSize="14sp"
-                        android:textColor="?attr/colorPrimary"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="Calories"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvDailyCalories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="0 kcal"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Distance Card -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp">
@@ -146,23 +149,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:padding="12dp">
 
                     <TextView
-                        android:text="Distance"
-                        android:textSize="14sp"
-                        android:textColor="?attr/colorPrimary"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="Distance"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvDailyDistance"
-                        android:text="0.00 km"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="0.00 m"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

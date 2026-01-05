@@ -72,6 +72,9 @@ public class StatisticsViewModel extends AndroidViewModel {
     // Yearly steps (used for monthly bar chart)
     public LiveData<List<FitnessDataEntity>> getYearlySteps(String year) {
         // We'll use strftime to filter year in DAO, if needed
-        return fitnessDataDao.getDailyStatsByMonth(year); // treat "YYYY" as prefix
+        return fitnessDataDao.getStatsByYear(year); // treat "YYYY" as prefix
     }
+
+
+
 }
