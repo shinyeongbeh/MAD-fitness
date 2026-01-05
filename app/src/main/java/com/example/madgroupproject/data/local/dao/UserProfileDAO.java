@@ -6,6 +6,7 @@ import androidx.room.Update;
 
 import com.example.madgroupproject.data.local.entity.UserProfile;
 
+//Use to handle CRUD for userProfile
 @Dao
 public interface UserProfileDAO {
     @Insert

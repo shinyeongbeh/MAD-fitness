@@ -26,10 +26,13 @@ public class StreakNotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        //NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        //this method fail so we calculate manually
         //int streak = StreakPreferenceManager.getStreak(context);
 
+
+        //using history to calculate
         //get the current Streak
         Executors.newSingleThreadExecutor().execute(() -> {
             AppDatabase db = AppDatabase.getDatabase(context);
@@ -58,21 +61,46 @@ public class StreakNotificationReceiver extends BroadcastReceiver {
             }
         });
 
-
-
        // manager.notify(STREAK_NOTIFICATION_ID, builder.build());
     }
 
+    //calculate manually
     private int getCurrentStreak(List<StreakHistoryEntity> history) {
-        int streak = 0;
+        if (history == null || history.isEmpty()) return 0;
 
-        // Start from the last entry (most recent day)
-        for (int i = history.size() - 1; i >= 0; i--) {
-            StreakHistoryEntity day = history.get(i);
-            if (day.achieved) {
+        // get from the lastest
+        history.sort((a, b) -> b.date.compareTo(a.date));
+
+        int streak = 0;
+        LocalDate today = LocalDate.now();
+        //calculate the previous day by minusDay
+        LocalDate expectedDate = today;
+
+        boolean todayChecked = false;
+
+        for (StreakHistoryEntity day : history) {
+            LocalDate recordDate = LocalDate.parse(day.date);
+
+            // First record is today
+            if (!todayChecked && recordDate.equals(today)) {
+                todayChecked = true;
+
+                if (day.achieved) {
+                    streak++;
+                    expectedDate = today.minusDays(1);
+                } else {
+                    // Today not achieved but allow streak to continue from yesterday
+                    expectedDate = today.minusDays(1);
+                }
+                continue;
+            }
+
+            // Continue counting from yesterday backward
+            if (recordDate.equals(expectedDate) && day.achieved) {
                 streak++;
+                expectedDate = expectedDate.minusDays(1);
             } else {
-                break; // streak broken
+                break;
             }
         }
 

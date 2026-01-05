@@ -1,6 +1,7 @@
 package com.example.madgroupproject.ui.homepage;
 
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,11 +19,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.madgroupproject.R;
+import com.example.madgroupproject.data.local.AppDatabase;
 import com.example.madgroupproject.data.local.entity.GoalEntity;
+import com.example.madgroupproject.data.local.entity.UserProfile;
 import com.example.madgroupproject.data.repository.GoalRepository;
 import com.example.madgroupproject.data.viewmodel.StreakViewModel;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class HomePage extends Fragment {
 
@@ -31,6 +35,7 @@ public class HomePage extends Fragment {
 
     private TextView tvStreakNumber;
     private LinearLayout goalsDisplayContainer;
+    private TextView tvWelcomeBack;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -75,6 +80,25 @@ public class HomePage extends Fragment {
                     .add(R.id.dashboardContainer, new FitnessDashboard())
                     .commit();
         }
+
+        if (getChildFragmentManager().findFragmentById(R.id.homeProfilePicContainer) == null) {
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.homeProfilePicContainer, new ProfilePicFragment())
+                    .commit();
+        }
+        // Set Welcome Back message with user's username
+        tvWelcomeBack = view.findViewById(R.id.TVwelcomeBack);
+        String username = "";
+        AppDatabase db = AppDatabase.getDatabase(requireContext());
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            UserProfile profile = db.userProfileDao().getProfile();
+            requireActivity().runOnUiThread(() -> {
+                if(profile!=null && !profile.getName().isEmpty()) {
+                    tvWelcomeBack.setText("Welcome back, " + profile.getName()+".");
+                }
+            });
+        });
 
         // =======================================================
         // 5. 点击跳转逻辑

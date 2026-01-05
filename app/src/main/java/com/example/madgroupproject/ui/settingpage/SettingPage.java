@@ -68,6 +68,8 @@ public class SettingPage extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        //All navigation
+
         //App
         Button btnApp = view.findViewById(R.id.button_App_SP);
         View.OnClickListener OCLApp = new View.OnClickListener() {
@@ -100,7 +102,7 @@ public class SettingPage extends Fragment {
         };
         btnNotification.setOnClickListener(OCLNoc);
 
-
+        //not use
         //Privacy
         Button btnPrivacy = view.findViewById(R.id.button_Privacy_SP);
         View.OnClickListener OCLPri = new View.OnClickListener() {
@@ -121,7 +123,7 @@ public class SettingPage extends Fragment {
         };
         btnTheme.setOnClickListener(OCLThe);
 
-
+        //not use
         //Sync
         Button btnSync = view.findViewById(R.id.button_Sync_SP);
         View.OnClickListener OCLSync = new View.OnClickListener() {

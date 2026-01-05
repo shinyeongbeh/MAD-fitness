@@ -23,6 +23,7 @@ import com.example.madgroupproject.data.local.entity.GoalEntity;
 import com.example.madgroupproject.data.local.entity.StreakHistoryEntity;
 import com.example.madgroupproject.data.local.entity.UserProfile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -38,7 +39,7 @@ import java.util.concurrent.Executors;
                 GameProgressEntity.class,
                 GoalEntity.class  // ✅ 添加Goal实体
         },
-        version = 6, // ✅ 升级数据库版本到4 //UserProfileIncreaseSchema
+        version = 7, // need to increase the version once db structure changes
         exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -86,6 +87,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     databaseWriteExecutor.execute(() -> {
                         if (INSTANCE != null) {
                             insertDefaultLevels(INSTANCE.gameLevelDao());
+                            initializeProgress(INSTANCE.gameProgressDao());
                         }
                     });
                 }
@@ -118,6 +120,15 @@ public abstract class AppDatabase extends RoomDatabase {
 
 
         dao.insertAll(levels);
+    }
+
+    private static void initializeProgress(GameProgressDao dao) {
+        GameProgressEntity progress = new GameProgressEntity();
+        progress.currentLevel = 1;
+        progress.progressValue = 0;
+        progress.id = 1;
+        progress.lastSyncedDate = LocalDate.now().toString();
+        dao.updateOrInsertProgress(progress);
     }
 
     private static GameLevelEntity createLevel(int levelNum, String type, int targetValue) {

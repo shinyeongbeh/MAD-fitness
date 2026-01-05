@@ -11,6 +11,7 @@ import java.util.Locale;
 
 public class StreakPreferenceManager {
     private static final String PREF_NAME = "StreakPrefs";
+    private static final String KEY_STREAK = "current_streak";
     private static final String KEY_DAILY_GOAL = "daily_goal";
     private static final int DEFAULT_DAILY_GOAL = 10000;
 
@@ -23,8 +24,14 @@ public class StreakPreferenceManager {
     //for notification use
     public static int getStreak(Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-                .getInt(KEY_DAILY_GOAL, 0);
+                .getInt(KEY_STREAK, 0);
     }
+
+    //get current streak from Streak Repo
+    public void setStreak(int streak) {
+        prefs.edit().putInt("KEY_STREAK", streak).apply();
+    }
+
 
     public int getDailyGoal() {
         return prefs.getInt(KEY_DAILY_GOAL, DEFAULT_DAILY_GOAL);

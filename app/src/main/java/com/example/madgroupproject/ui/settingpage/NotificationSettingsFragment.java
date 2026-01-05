@@ -26,25 +26,25 @@ public class NotificationSettingsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.setting_fragment_notification, container, false);
 
+        // Initialize the switches (3 for notification bar , the daily step is always pinned so no need switch )
         Switch switchNotificationGoal = view.findViewById(R.id.switchGoal);
         Switch switchNotificationStreak = view.findViewById(R.id.switchStreak);
         Switch switchNotificationStep = view.findViewById(R.id.switchStep);
-
 
 
         SharedPreferences prefs =
                 requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE);
 
         // Load saved value
-        boolean enabled = prefs.getBoolean("notifications_enabled", true);
-        switchNotificationGoal.setChecked(enabled);
+        //boolean enabled = prefs.getBoolean("notifications_enabled", true);
+        //switchNotificationGoal.setChecked(enabled);
 
-        // 1. Load saved values for each individual setting
+        // Load saved values for each individual setting
         switchNotificationGoal.setChecked(prefs.getBoolean("goal_notifications_enabled", true));
         switchNotificationStreak.setChecked(prefs.getBoolean("streak_notifications_enabled", true));
         switchNotificationStep.setChecked(prefs.getBoolean("step_notifications_enabled", true));
 
-        // 2. Set individual listeners for each switch
+        //Set individual listeners for each switch
         switchNotificationGoal.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean("goal_notifications_enabled", isChecked).apply();
 
@@ -64,15 +64,10 @@ public class NotificationSettingsFragment extends Fragment {
     }
 
 
-    //if (isChecked) {
-    //    scheduleDailyGoalNotification(requireContext());
-    //} else {
-    //    cancelDailyGoalNotification(requireContext());
-    //}
 
 
     /*
-    // Schedule 8AM notification
+    // Schedule reminder notification (default 8am)
     private void scheduleDailyGoalNotification(Context context) {
 
         Calendar calendar = Calendar.getInstance();
@@ -157,7 +152,5 @@ public class NotificationSettingsFragment extends Fragment {
 
 
     */
-
-
 
 }
