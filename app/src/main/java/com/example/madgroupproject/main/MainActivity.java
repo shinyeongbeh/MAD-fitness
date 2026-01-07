@@ -68,7 +68,12 @@ public class MainActivity extends AppCompatActivity {
     private StreakRepository streakRepository;
     private SharedPreferences prefs;
 
-    // ✅ 添加flag防止同一天重复显示Toast
+    // ✅ 使用静态变量实现全局单例保护(防止Activity重建导致的重复Toast)
+    private static String lastToastDate = ""; // 上次显示Toast的日期
+    private static long lastToastTimestamp = 0; // 上次显示Toast的时间戳
+    private static final long TOAST_COOLDOWN_MS = 5000; // 5秒冷却时间
+
+    // 实例级别的flag
     private boolean hasShownTodayToast = false;
 
     // for debugging only, may delete later
@@ -186,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         String today = LocalDate.now().toString();
 
         Log.d(TAG, "📅 Checking app startup - Last run: " + lastRunDate + ", Today: " + today);
+        Log.d(TAG, "   lastToastDate (static): " + lastToastDate);
 
         if (!lastRunDate.equals(today)) {
             Log.d(TAG, "🔄 App opened on new day, performing cleanup...");
@@ -193,8 +199,13 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putString("last_run_date", today).apply();
         } else {
             Log.d(TAG, "✅ App opened on same day, no cleanup needed");
-            // ✅ 如果是同一天，说明已经显示过Toast了
+            // ✅ 如果是同一天,说明已经显示过Toast了
             hasShownTodayToast = true;
+            // ✅ 同步静态变量
+            if (!today.equals(lastToastDate)) {
+                Log.d(TAG, "   Syncing static lastToastDate to today");
+                lastToastDate = today;
+            }
         }
     }
 
@@ -208,8 +219,10 @@ public class MainActivity extends AppCompatActivity {
         midnightListener.addListener(() -> {
             runOnUiThread(() -> {
                 Log.d(TAG, "🌙🌙🌙 MIDNIGHT PASSED! New day started!");
+                Log.d(TAG, "   Current hasShownTodayToast: " + hasShownTodayToast);
+                Log.d(TAG, "   Thread: " + Thread.currentThread().getName());
 
-                // ✅ 重置Toast flag，允许显示新一天的Toast
+                // ✅ 重置Toast flag,允许显示新一天的Toast
                 hasShownTodayToast = false;
 
                 performMidnightCleanup("MidnightListener");
@@ -226,11 +239,27 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * ✅ 统一的午夜清理逻辑 - 修改为重置goal状态而非删除
+     * ✅ 增强版: 使用静态变量实现跨Activity实例的防重复保护
      */
     private void performMidnightCleanup(String source) {
-        Log.d(TAG, "🧹 Performing midnight cleanup from: " + source);
+        long currentTime = System.currentTimeMillis();
+        String today = LocalDate.now().toString();
 
-        // 1️⃣ ✅ 修改：重置所有Goal的状态为未完成（而非删除）
+        Log.d(TAG, "🧹 performMidnightCleanup called from: " + source);
+        Log.d(TAG, "   hasShownTodayToast: " + hasShownTodayToast);
+        Log.d(TAG, "   lastToastDate (static): " + lastToastDate);
+        Log.d(TAG, "   today: " + today);
+        Log.d(TAG, "   Time since last toast: " + (currentTime - lastToastTimestamp) + "ms");
+        Log.d(TAG, "   Thread: " + Thread.currentThread().getName());
+
+        // 🔴 关键:添加调用堆栈日志,帮助追踪重复调用
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        Log.d(TAG, "📞 Call stack:");
+        for (int i = 0; i < Math.min(8, stackTrace.length); i++) {
+            Log.d(TAG, "   " + i + ": " + stackTrace[i].toString());
+        }
+
+        // 1️⃣ ✅ 修改:重置所有Goal的状态为未完成(而非删除)
         goalRepository.resetAllGoalsStatus(new GoalRepository.OnResultListener<Void>() {
             @Override
             public void onSuccess(Void result) {
@@ -248,18 +277,47 @@ public class MainActivity extends AppCompatActivity {
         streakRepository.autoInitTodayRecord();
         Log.d(TAG, "✅ New streak record initialized");
 
-        // 3️⃣ 显示统一的新一天提示（只显示一次）
-        if (!hasShownTodayToast) {
+        // 3️⃣ ✅ 增强版: 使用静态变量检查,防止Activity重建导致重复Toast
+        boolean shouldShowToast = false;
+
+        // 检查1: 静态日期是否不同(说明是新的一天)
+        if (!today.equals(lastToastDate)) {
+            Log.d(TAG, "   Static date check: different day, reset flags");
+            lastToastDate = today;
+            hasShownTodayToast = false;
+            shouldShowToast = true;
+        }
+
+        // 检查2: 冷却时间
+        if (currentTime - lastToastTimestamp <= TOAST_COOLDOWN_MS) {
+            Log.d(TAG, "   Cooldown check: too soon (" +
+                    (currentTime - lastToastTimestamp) + "ms < " +
+                    TOAST_COOLDOWN_MS + "ms)");
+            shouldShowToast = false;
+        }
+
+        // 检查3: 今天是否已经显示过(实例级别)
+        if (hasShownTodayToast) {
+            Log.d(TAG, "   Instance check: already shown today");
+            shouldShowToast = false;
+        }
+
+        if (shouldShowToast) {
+            Log.d(TAG, "🎉 Showing Toast: Happy new day!");
             Toast.makeText(this,
                     "Happy new day! 🎉",
                     Toast.LENGTH_SHORT).show();
             hasShownTodayToast = true;
-            Log.d(TAG, "✅ Toast shown for new day");
+            lastToastTimestamp = currentTime;
+            lastToastDate = today;
+            Log.d(TAG, "✅ Toast shown - Updated all flags");
+            Log.d(TAG, "   lastToastDate (static): " + lastToastDate);
+            Log.d(TAG, "   lastToastTimestamp (static): " + lastToastTimestamp);
         } else {
-            Log.d(TAG, "⏭️ Toast already shown today, skipping");
+            Log.d(TAG, "⏭️ Toast skipped - one or more checks failed");
         }
 
-        // 4️⃣ 发送广播通知所有Fragment刷新（Fragment不再显示Toast）
+        // 4️⃣ 发送广播通知所有Fragment刷新(Fragment不再显示Toast)
         Intent intent = new Intent("com.example.madgroupproject.MIDNIGHT_PASSED");
         sendBroadcast(intent);
         Log.d(TAG, "📡 Broadcast sent to all fragments");
