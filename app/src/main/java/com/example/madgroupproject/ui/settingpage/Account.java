@@ -248,7 +248,8 @@ public class Account extends Fragment {
 
         //auto update frame based on current level
         gameProgressDao.getCurrentLevel().observe(getViewLifecycleOwner(), level -> {
-            int frameRes = getFrameByLevel(level);
+            int levelNum = (level!=null)? level : 1;
+            int frameRes = getFrameByLevel(levelNum);
             frame.setImageResource(frameRes);
         });
 
