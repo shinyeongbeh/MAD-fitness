@@ -55,17 +55,17 @@ A gamified fitness tracking Android application that motivates users to stay act
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                   Room Database (SQLite)                    │
-│   Tables: fitness_data, streak_history, game_levels, etc.  │
+│   Tables: fitness_data, streak_history, game_levels, etc.   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ## 📖 Documentation
 
-Additional documentation is available in the `/docs` folder:
+Documentation is available in the `/docs` folder:
 - [Fitness Data Flow](docs/Fitness%20Data%20Flow.md) — How fitness data moves through the app
-- [Streak Data Flow](docs/Streak%20Data%20Flow.md) — Streak tracking implementation
-- [Stats Integration](docs/Stats%20Integration.md) — Statistics UI integration guide
-- [Game Entities & Architecture](docs/GameEntitiesAndArchitecture.md) — Gamification system design
+- [Streak Data Flow & Integration Guide](docs/Streak%20Data%20Flow%20&%20Integration%20Guide.md) — Streak data integration guide
+- [Stats Integration Guide](docs/Stats%20Integration%20Guide.md) — Statistics UI integration guide
+- [Game Integration Guide](docs/Game%20Integration%20Guide.md) — Game data integration guideline
 
 ## 👥 Team
 
