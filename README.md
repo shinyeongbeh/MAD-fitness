@@ -4,14 +4,14 @@ A gamified fitness tracking Android application that motivates users to stay act
 
 ## 📱 Features
 
-- **Live Fitness Tracking** — Real-time step counting, distance tracking, and calorie monitoring via Google Fit API
-- **Daily Streak System** — Track consecutive days of meeting step goals with calendar visualization
-- **Gamified Levels** — Level-up system based on cumulative steps/distance to unlock achievements
-- **Statistics Dashboard** — View fitness analytics with daily, weekly, and monthly breakdowns
-- **Custom Goal Setting** — Create personalized fitness goals with automatic daily reset
-- **Background Sync** — Automatic periodic sync (every 15 minutes) to persist fitness data
-- **Smart Notifications** — Push notifications for goal reminders and streak achievements
-- **User Profile & Settings** — Dark mode, theme options, notification preferences
+- **Live Fitness Tracking**: Real-time step counting, distance tracking, and calorie monitoring via Google Fit API
+- **Daily Streak System**: Track consecutive days of meeting step goals with calendar visualization
+- **Gamified Levels**: Level-up system based on cumulative steps/distance to unlock achievements
+- **Statistics Dashboard**: View fitness analytics with daily, weekly, and monthly breakdowns
+- **Custom Goal Setting**: Create personalized fitness goals with automatic daily reset
+- **Background Sync**: Automatic periodic sync (every 15 minutes) to persist fitness data
+- **Smart Notifications**: Push notifications for goal reminders and streak achievements
+- **User Profile & Settings**: Dark mode, theme options, notification preferences
 
 ## 🛠️ Tech Stack
 
