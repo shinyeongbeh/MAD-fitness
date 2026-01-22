@@ -14,60 +14,59 @@ import java.util.List;
 
 @Dao
 public interface GoalDao {
-
-    // 插入目标
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(GoalEntity goal);
 
-    // 插入多个目标
+    // insert multiple goals
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<GoalEntity> goals);
 
-    // 更新目标
     @Update
     void update(GoalEntity goal);
 
-    // 删除目标
     @Delete
     void delete(GoalEntity goal);
 
-    // 根据ID删除
     @Query("DELETE FROM goals WHERE id = :goalId")
     void deleteById(int goalId);
 
+    // retrieve all goals (ascending order)
     // 获取所有目标（按显示顺序排序）
     @Query("SELECT * FROM goals ORDER BY displayOrder ASC, createdAt ASC")
     List<GoalEntity> getAllGoals();
 
+    // retrieve all goals (LiveData, to observe data changes)
     // 获取所有目标（LiveData，用于观察数据变化）
     @Query("SELECT * FROM goals ORDER BY displayOrder ASC, createdAt ASC")
     LiveData<List<GoalEntity>> getAllGoalsLive();
 
-    // 根据ID获取目标
+
     @Query("SELECT * FROM goals WHERE id = :goalId")
     GoalEntity getGoalById(int goalId);
 
+    // get goals that are in incomplete status
     // 获取未完成的目标
     @Query("SELECT * FROM goals WHERE completed = 0 ORDER BY displayOrder ASC, createdAt ASC")
     List<GoalEntity> getIncompleteGoals();
 
+    // get goals that are in completed status
     // 获取已完成的目标
     @Query("SELECT * FROM goals WHERE completed = 1 ORDER BY displayOrder ASC, createdAt ASC")
     List<GoalEntity> getCompletedGoals();
 
+    // update completed status (used when users manually change completed status)
     // 更新完成状态（用于用户手动切换目标状态）
     @Query("UPDATE goals SET completed = :completed WHERE id = :goalId")
     void updateCompletedStatus(int goalId, boolean completed);
 
-    // ✅ 新增：重置所有目标的完成状态为未完成（用于每日0点重置）
+    // reset all goals to incomplete (used in daily 0am reset)
+    // 重置所有目标的完成状态为未完成（用于每日0点重置）
     @Query("UPDATE goals SET completed = 0")
     void resetAllCompletionStatus();
 
-    // 清空所有目标（保留此方法以备不时之需，但不再用于日常重置）
     @Query("DELETE FROM goals")
     void deleteAll();
 
-    // 获取目标总数
     @Query("SELECT COUNT(*) FROM goals")
     int getGoalCount();
 }

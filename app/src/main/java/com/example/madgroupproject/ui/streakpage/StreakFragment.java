@@ -64,7 +64,7 @@ public class StreakFragment extends Fragment {
 
     private LiveData<List<StreakHistoryEntity>> currentMonthLiveData;
 
-    // ✅ 添加广播接收器
+    // 添加广播接收器
     private BroadcastReceiver midnightReceiver;
 
     @Override
@@ -83,13 +83,10 @@ public class StreakFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // ✅ 先初始化 ViewModel
         viewModel = new ViewModelProvider(this).get(StreakViewModel.class);
-
-        // ✅ 确保今天的记录存在(MainActivity已经初始化过,这里作为保险)
         viewModel.autoInitTodayRecord();
 
-        // ✅ 从 ViewModel 恢复月份(ViewModel 在 Fragment 重建时会保留)
+        // find current month data
         currentYearMonth = viewModel.getCurrentViewingMonthValue();
         Log.d(TAG, "Restored month from ViewModel: " + currentYearMonth);
 
@@ -404,7 +401,7 @@ public class StreakFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        // ✅ 取消注册广播接收器
+        // 取消注册广播接收器
         if (midnightReceiver != null) {
             try {
                 requireContext().unregisterReceiver(midnightReceiver);
@@ -416,7 +413,7 @@ public class StreakFragment extends Fragment {
     }
 
     /**
-     * ✅ 设置广播接收器（修复版 - 使用主线程Handler）
+     * 设置广播接收器（修复版 - 使用主线程Handler）
      */
     private void setupMidnightBroadcastReceiver() {
         midnightReceiver = new BroadcastReceiver() {
@@ -441,11 +438,11 @@ public class StreakFragment extends Fragment {
                         try {
                             Log.d(TAG, "🔄 Starting UI update on main thread...");
 
-                            // 🔑 关键修复: 先确保今日记录已初始化，防止闪退
+                            // 先确保今日记录已初始化，防止闪退
                             viewModel.autoInitTodayRecord();
                             Log.d(TAG, "✅ Ensured today's record exists");
 
-                            // ✅ 刷新今日日期，让Today步数LiveData观察新的日期
+                            // 刷新今日日期，让Today步数LiveData观察新的日期
                             viewModel.refreshTodayDate();
                             Log.d(TAG, "✅ Refreshed today's date for LiveData");
 

@@ -49,10 +49,12 @@ public class HomePage extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // initialize
         // 1. 初始化数据
         goalRepository = new GoalRepository(requireContext());
         streakViewModel = new ViewModelProvider(this).get(StreakViewModel.class);
 
+        // find the UI view
         // 2. 绑定 UI
         tvStreakNumber = view.findViewById(R.id.tvStreakNumber);
         goalsDisplayContainer = view.findViewById(R.id.goalsDisplayContainer);
@@ -61,6 +63,7 @@ public class HomePage extends Fragment {
             tvStreakNumber.setTextColor(getThemedColor(R.color.text_primary));
         }
 
+        // observe data (LiveData)
         // 3. 数据观察
         streakViewModel.getCurrentStreakLiveData()
                 .observe(getViewLifecycleOwner(), result -> {
@@ -74,6 +77,7 @@ public class HomePage extends Fragment {
         goalRepository.getAllGoalsLive()
                 .observe(getViewLifecycleOwner(), this::displayGoals);
 
+        // Load subfragment (FitnessDashboard)
         // 4. 加载 Dashboard
         if (getChildFragmentManager().findFragmentById(R.id.dashboardContainer) == null) {
             getChildFragmentManager().beginTransaction()
@@ -101,9 +105,11 @@ public class HomePage extends Fragment {
         });
 
         // =======================================================
+        // navigation logic
         // 5. 点击跳转逻辑
         // =======================================================
 
+        // -> navigate to Streak page
         // -> 跳转 Streak
         View.OnClickListener toStreakAction = v ->
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_streakFragment);
@@ -113,7 +119,7 @@ public class HomePage extends Fragment {
         if (cardStreak != null) cardStreak.setOnClickListener(toStreakAction);
         if (btnFire != null) btnFire.setOnClickListener(toStreakAction);
 
-
+        // -> navigate to Goal page
         // -> 跳转 Goal
         View.OnClickListener toGoalAction = v ->
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_goalFragment);
@@ -123,7 +129,7 @@ public class HomePage extends Fragment {
         if (cardGoal != null) cardGoal.setOnClickListener(toGoalAction);
         if (btnFlag != null) btnFlag.setOnClickListener(toGoalAction);
 
-
+        // -> navigate to Game page
         // -> 跳转 Game
         View btnTrophy = view.findViewById(R.id.btnAchievement);
         if (btnTrophy != null) {
@@ -132,6 +138,7 @@ public class HomePage extends Fragment {
             );
         }
 
+        // -> navigate to Stats page
         // -> 跳转 Stats
         View cardDashboard = view.findViewById(R.id.cardDashboard);
         if (cardDashboard != null) {
@@ -140,6 +147,7 @@ public class HomePage extends Fragment {
             );
         }
 
+        // -> navigate to Settings page
         // -> Settings
         ImageView btnSettings = view.findViewById(R.id.btnSettings);
         if (btnSettings != null) {
@@ -148,10 +156,9 @@ public class HomePage extends Fragment {
             );
         }
 
-        // -> 核心修改：这里修复了 iv_apple 找不到的问题
-        // 我们改为查找 cardArticle 和 iv_article_image
+        // -> navigate to health info page
         View cardArticle = view.findViewById(R.id.cardArticle);
-        ImageView articleImage = view.findViewById(R.id.iv_article_image); // 这里修复了ID
+        ImageView articleImage = view.findViewById(R.id.iv_article_image);
 
         View.OnClickListener toArticleAction = v ->
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_appleFragment3);
@@ -160,9 +167,6 @@ public class HomePage extends Fragment {
         if (articleImage != null) articleImage.setOnClickListener(toArticleAction);
     }
 
-    // ===========================================
-    // 辅助方法
-    // ===========================================
     private void displayGoals(List<GoalEntity> goals) {
         if (goalsDisplayContainer == null) return;
         goalsDisplayContainer.removeAllViews();

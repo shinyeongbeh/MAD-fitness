@@ -48,7 +48,7 @@ public class MidnightChangeListener {
     private String lastKnownDate;
     private int lastCheckHour = -1; // 记录上次检查的小时
 
-    // 🆕 防重复触发机制
+    // 防重复触发机制
     private String lastTriggeredDate = ""; // 记录上次触发的日期
     private boolean hasTriggeredToday = false; // 今天是否已经触发过
 
@@ -177,7 +177,7 @@ public class MidnightChangeListener {
         Log.d(TAG, String.format("⏰ Checking... Time: %02d:%02d, Date: %s, Last hour: %d, HasTriggeredToday: %b",
                 currentHour, currentMinute, currentDate, lastCheckHour, hasTriggeredToday));
 
-        // 🆕 关键修复:检查日期是否变化,如果变了就重置标志
+        // 检查日期是否变化,如果变了就重置标志
         if (!currentDate.equals(lastTriggeredDate)) {
             Log.d(TAG, "📅 New day detected! Resetting trigger flag.");
             Log.d(TAG, "   Last triggered: " + lastTriggeredDate);
@@ -186,7 +186,7 @@ public class MidnightChangeListener {
             lastTriggeredDate = currentDate;
         }
 
-        // 🆕 如果今天已经触发过,直接跳过所有检查
+        // 如果今天已经触发过,直接跳过所有检查
         if (hasTriggeredToday) {
             Log.d(TAG, "   Already triggered today, skipping...");
             lastCheckHour = currentHour; // 更新小时以便下次检查
@@ -234,7 +234,7 @@ public class MidnightChangeListener {
             Log.d(TAG, "   Reason: " + triggerReason);
             Log.d(TAG, "   Current time: " + String.format("%02d:%02d", currentHour, currentMinute));
 
-            // 🆕 标记今天已经触发过
+            // 标记今天已经触发过
             hasTriggeredToday = true;
             lastTriggeredDate = currentDate;
             Log.d(TAG, "   ✅ Marked as triggered for date: " + currentDate);

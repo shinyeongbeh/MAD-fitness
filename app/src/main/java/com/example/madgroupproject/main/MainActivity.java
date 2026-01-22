@@ -1,9 +1,6 @@
 package com.example.madgroupproject.main;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,7 +16,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -31,8 +26,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkInfo;
@@ -52,7 +45,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -62,35 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    // 全局午夜监听器
     private MidnightChangeListener midnightListener;
     private GoalRepository goalRepository;
     private StreakRepository streakRepository;
     private SharedPreferences prefs;
-
-    // ✅ 使用静态变量实现全局单例保护(防止Activity重建导致的重复Toast)
-    private static String lastToastDate = ""; // 上次显示Toast的日期
-    private static long lastToastTimestamp = 0; // 上次显示Toast的时间戳
-    private static final long TOAST_COOLDOWN_MS = 5000; // 5秒冷却时间
-
-    // 实例级别的flag
+    private static String lastToastDate = "";
+    private static long lastToastTimestamp = 0;
+    private static final long TOAST_COOLDOWN_MS = 5000;
     private boolean hasShownTodayToast = false;
 
-    // for debugging only, may delete later
-    // used so that the db is shown in Android Studio's Database Inspector
-    private void triggerDatabaseInspectorRoom() {
-        Executors.newSingleThreadExecutor().execute(() -> {
-                    try {
-                        FitnessRepository repository = new FitnessRepository(getApplicationContext());
-                        repository.fetchDailyData("2025-12-21");
-                        Log.i("DEBUG DB", "successfully fetch");
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                        Log.e("DEBUG DB", e.toString());
-                    }
-                }
-        );
-    }
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -127,18 +99,15 @@ public class MainActivity extends AppCompatActivity {
             sendBroadcast(new Intent(this, StreakNotificationReceiver.class));
         }, 1000);
 
-        // 初始化仓库和SharedPreferences
+        // initialize goal and streak repo and shared preferences
         goalRepository = new GoalRepository(this);
         streakRepository = new StreakRepository(this);
         prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
 
-        // ✅ 启动时检查是否跨日(处理用户在午夜后首次打开App的情况)
         checkAndHandleAppStartup();
-
-        // ✅ 设置全局午夜监听器(处理App运行中跨日的情况)
         setupGlobalMidnightListener();
 
-        // ✅ Start daily goal reset scheduler (作为后备机制)
+        // Start daily goal reset scheduler (作为后备机制)
         Log.d(TAG, "========================================");
         Log.d(TAG, "📅 Scheduling Daily Goal Reset...");
 
@@ -147,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             String nextReset = DailyGoalResetScheduler.getNextResetTime();
             Log.d(TAG, "✅ Next goal reset at: " + nextReset);
 
-            // 🔍 Verify the task was scheduled
+            // Verify the task was scheduled
             verifyResetTaskScheduled();
 
         } catch (Exception e) {
@@ -168,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.POST_NOTIFICATIONS},
                         101
                 );
-                return; // stop here
+                return;
             }
         }
 
@@ -184,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * ✅ 启动时检查:如果上次运行日期 != 今天,执行清理
+     * 启动时检查:如果上次运行日期 != 今天,执行清理
      */
     private void checkAndHandleAppStartup() {
         String lastRunDate = prefs.getString("last_run_date", "");
@@ -199,9 +168,9 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putString("last_run_date", today).apply();
         } else {
             Log.d(TAG, "✅ App opened on same day, no cleanup needed");
-            // ✅ 如果是同一天,说明已经显示过Toast了
+            // 如果是同一天,说明已经显示过Toast了
             hasShownTodayToast = true;
-            // ✅ 同步静态变量
+            // 同步静态变量
             if (!today.equals(lastToastDate)) {
                 Log.d(TAG, "   Syncing static lastToastDate to today");
                 lastToastDate = today;
@@ -209,9 +178,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * ✅ 设置全局午夜监听器
-     */
     private void setupGlobalMidnightListener() {
         Log.d(TAG, "🌙 Setting up global midnight listener...");
 
@@ -222,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "   Current hasShownTodayToast: " + hasShownTodayToast);
                 Log.d(TAG, "   Thread: " + Thread.currentThread().getName());
 
-                // ✅ 重置Toast flag,允许显示新一天的Toast
+                // 重置Toast flag,允许显示新一天的Toast
                 hasShownTodayToast = false;
 
                 performMidnightCleanup("MidnightListener");
@@ -238,8 +204,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * ✅ 统一的午夜清理逻辑 - 修改为重置goal状态而非删除
-     * ✅ 增强版: 使用静态变量实现跨Activity实例的防重复保护
+     * 统一的午夜清理逻辑 - 修改为重置goal状态而非删除
+     * 增强版: 使用静态变量实现跨Activity实例的防重复保护
      */
     private void performMidnightCleanup(String source) {
         long currentTime = System.currentTimeMillis();
@@ -259,7 +225,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "   " + i + ": " + stackTrace[i].toString());
         }
 
-        // 1️⃣ ✅ 修改:重置所有Goal的状态为未完成(而非删除)
+        // reset all goals as incomplete
+        // 1️⃣ 重置所有Goal的状态为未完成
         goalRepository.resetAllGoalsStatus(new GoalRepository.OnResultListener<Void>() {
             @Override
             public void onSuccess(Void result) {
@@ -273,11 +240,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // create new streak record in db
         // 2️⃣ 创建新一天的Streak记录
         streakRepository.autoInitTodayRecord();
         Log.d(TAG, "✅ New streak record initialized");
 
-        // 3️⃣ ✅ 增强版: 使用静态变量检查,防止Activity重建导致重复Toast
+        // 3️⃣ 使用静态变量检查,防止Activity重建导致重复Toast
         boolean shouldShowToast = false;
 
         // 检查1: 静态日期是否不同(说明是新的一天)
@@ -325,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 🔍 Verify that the reset task was successfully scheduled
+     * Verify that the reset task was successfully scheduled
      */
     private void verifyResetTaskScheduled() {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -443,11 +411,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // ✅ 销毁全局午夜监听器
+        // 销毁全局午夜监听器
         if (midnightListener != null) {
             midnightListener.destroy();
             midnightListener = null;
             Log.d(TAG, "🌙 Global midnight listener destroyed");
         }
+    }
+
+    // for debugging only, may delete later
+    // used so that the db is shown in Android Studio's Database Inspector
+    private void triggerDatabaseInspectorRoom() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+                    try {
+                        FitnessRepository repository = new FitnessRepository(getApplicationContext());
+                        repository.fetchDailyData("2025-12-21");
+                        Log.i("DEBUG DB", "successfully fetch");
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                        Log.e("DEBUG DB", e.toString());
+                    }
+                }
+        );
     }
 }

@@ -78,7 +78,7 @@ public class ChangeStreakFragment extends Fragment {
             btnChange.setEnabled(false);
             btnCancel.setEnabled(false);
 
-            // ✅ 使用回调确认操作完成
+            // 使用回调确认操作完成
             viewModel.updateMinSteps(newGoal, (success, errorMessage) -> {
                 requireActivity().runOnUiThread(() -> {
                     if (success) {

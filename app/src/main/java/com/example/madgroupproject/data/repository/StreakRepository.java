@@ -29,7 +29,6 @@ public class StreakRepository {
         preferenceManager = new StreakPreferenceManager(context);
     }
 
-    // ✅ 当前 Streak 结果
     public static class StreakResult {
         public List<StreakHistoryEntity> streakDays;
         public int streakCount;
@@ -40,7 +39,8 @@ public class StreakRepository {
         }
     }
 
-    // ✅ 最长 Streak 的完整信息
+    // Longest streak object
+    // 最长 Streak 的完整信息
     public static class LongestStreakResult {
         public int count;
         public String startDate;
@@ -75,12 +75,14 @@ public class StreakRepository {
         }
     }
 
-    // ✅ 获取今日步数 - LiveData 会自动监听数据库变化
+    // Get today's step - LiveData will observe database changes
+    // 获取今日步数 - LiveData 会自动监听数据库变化
     public LiveData<StreakHistoryEntity> getLiveStepsFromStreakEntity() {
         return streakHistoryDao.observeByDate(LocalDate.now().toString());
     }
 
-    // ✅ 获取当前 streak - LiveData 会自动更新
+    // Get current streak - LiveData
+    // 获取当前 streak - LiveData 会自动更新
     public LiveData<StreakResult> getCurrentStreakLive() {
         MediatorLiveData<StreakResult> resultLiveData = new MediatorLiveData<>();
         LiveData<List<StreakHistoryEntity>> source = streakHistoryDao.getAchievedDaysDescLive();
@@ -108,7 +110,7 @@ public class StreakRepository {
             return new StreakResult(null, 0);
         }
 
-        // ✅ 修复：从今天开始往回找连续的达标天数
+        // Find today or yesterday's record
         // 先找到今天或昨天的记录位置
         int startIndex = -1;
         for (int i = 0; i < achievedDays.size(); i++) {
@@ -118,13 +120,13 @@ public class StreakRepository {
             }
         }
 
+        // if today and yesterday did not achieve goals, streak = 0
         // 如果今天和昨天都没有达标，streak为0
         if (startIndex == -1) {
             return new StreakResult(null, 0);
         }
 
-        // ✅ 从找到的位置开始，往后计算连续天数
-        int streak = 1; // 至少有1天（今天或昨天）
+        int streak = 1;
         int endCounter = startIndex;
 
         for (int i = startIndex + 1; i < achievedDays.size(); i++) {
@@ -132,12 +134,11 @@ public class StreakRepository {
                 LocalDate currentRecordDate = LocalDate.parse(achievedDays.get(i).date);
                 LocalDate lastRecordDate = LocalDate.parse(achievedDays.get(i - 1).date);
 
-                // 检查是否连续（相差1天）
                 if (currentRecordDate.equals(lastRecordDate.minusDays(1))) {
                     streak++;
                     endCounter = i;
                 } else {
-                    break; // 不连续了，停止
+                    break;
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Error parsing date in current streak calculation", e);
@@ -151,7 +152,8 @@ public class StreakRepository {
         return new StreakResult(result, streak);
     }
 
-    // ✅ 新增：获取最长 Streak 的完整信息（包括日期范围和统计数据）
+    // Get longest streak information
+    // 获取最长 Streak 的完整信息（包括日期范围和统计数据）
     public LiveData<LongestStreakResult> getLongestStreakWithDetailsLive() {
         return Transformations.map(
                 streakHistoryDao.getAchievedDaysDescLive(),
@@ -228,7 +230,6 @@ public class StreakRepository {
         }
     }
 
-    // 保留向后兼容
     public LiveData<Integer> getLongestStreakLiveData() {
         return Transformations.map(
                 getLongestStreakWithDetailsLive(),
@@ -236,7 +237,7 @@ public class StreakRepository {
         );
     }
 
-    // ✅ 插入或更新步数 - 会触发 LiveData 更新
+    // insert or update steps
     public void insertOrUpdateSteps(int steps) {
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
@@ -275,12 +276,13 @@ public class StreakRepository {
         });
     }
 
-    // ✅ 获取某日 streak - LiveData 会监听变化
+    // Get streak by date - LiveData
     public LiveData<StreakHistoryEntity> getStreakByDateLive(String date) {
         return streakHistoryDao.observeByDate(date);
     }
 
-    // ✅ 更新最小步数目标 - 添加回调机制
+    // update the min steps (min target / threshold users need to achieve)
+    // 更新最小步数目标 - 添加回调机制
     public void updateMinSteps(int newGoal, OnUpdateCompleteListener listener) {
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
@@ -321,12 +323,12 @@ public class StreakRepository {
         });
     }
 
-    // ✅ 获取当月数据 - LiveData 会监听变化
+    // get month streak data - LiveData
     public LiveData<List<StreakHistoryEntity>> getMonthStreakLive(String yearMonth) {
         return streakHistoryDao.observeMonthData(yearMonth);
     }
 
-    // ✅ 安全初始化当天记录（自动版）
+    // automatically initialize today new record
     public void autoInitTodayRecord() {
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
@@ -359,7 +361,6 @@ public class StreakRepository {
         });
     }
 
-    // ✅ 回调接口
     public interface OnUpdateCompleteListener {
         void onUpdateComplete(boolean success, String errorMessage);
     }

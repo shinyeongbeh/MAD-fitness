@@ -20,11 +20,9 @@ public class StreakViewModel extends AndroidViewModel {
     private final LiveData<StreakRepository.StreakResult> currentStreakLiveData;
     private final LiveData<StreakRepository.LongestStreakResult> longestStreakLiveData;
 
-    // ✅ 修改：使用MutableLiveData来跟踪当前日期
     private final MutableLiveData<String> currentDateLiveData = new MutableLiveData<>();
     private final LiveData<StreakHistoryEntity> todayStepsLiveData;
 
-    // ✅ 新增：保存当前查看的月份
     private final MutableLiveData<YearMonth> currentViewingMonth = new MutableLiveData<>();
 
     public StreakViewModel(@NonNull Application application) {
@@ -33,13 +31,10 @@ public class StreakViewModel extends AndroidViewModel {
         this.currentStreakLiveData = this.repository.getCurrentStreakLive();
         this.longestStreakLiveData = this.repository.getLongestStreakWithDetailsLive();
 
-        // ✅ 初始化为当前月份
         this.currentViewingMonth.setValue(YearMonth.now());
 
-        // ✅ 初始化为今天的日期
         this.currentDateLiveData.setValue(LocalDate.now().toString());
 
-        // ✅ 使用Transformations.switchMap动态切换日期的LiveData
         this.todayStepsLiveData = Transformations.switchMap(
                 currentDateLiveData,
                 date -> repository.getStreakByDateLive(date)
@@ -54,7 +49,6 @@ public class StreakViewModel extends AndroidViewModel {
         return todayStepsLiveData;
     }
 
-    // ✅ 新增：刷新今天的日期（0点时调用）
     public void refreshTodayDate() {
         String today = LocalDate.now().toString();
         currentDateLiveData.setValue(today);
@@ -84,7 +78,6 @@ public class StreakViewModel extends AndroidViewModel {
         repository.autoInitTodayRecord();
     }
 
-    // ✅ 新增：获取和设置当前查看的月份
     public LiveData<YearMonth> getCurrentViewingMonth() {
         return currentViewingMonth;
     }

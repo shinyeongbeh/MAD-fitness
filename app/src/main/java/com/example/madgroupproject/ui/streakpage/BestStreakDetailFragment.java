@@ -46,7 +46,7 @@ public class BestStreakDetailFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(StreakViewModel.class);
 
-        // ✅ 使用 LiveData 实时观察 Best Streak 变化
+        // 使用 LiveData 实时观察 Best Streak 变化
         setupObserver();
     }
 

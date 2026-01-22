@@ -23,7 +23,6 @@ import java.util.concurrent.Executors;
 public class FitnessDashboard extends Fragment {
 
     private TextView tvSteps, tvDistance, tvCalories;
-//    private ViewModel viewModel;
     private RecordingAPIManager recordingAPIManager;
     private AppDatabase db;
     private Handler handler;
@@ -44,8 +43,6 @@ public class FitnessDashboard extends Fragment {
         tvSteps = view.findViewById(R.id.tvSteps);
         tvDistance = view.findViewById(R.id.tvDistance);
         tvCalories = view.findViewById(R.id.tvCalories);
-
-//        viewModel = new ViewModelProvider(this).get(FitnessUIViewModel.class);
         handler = new Handler(Looper.getMainLooper());
         recordingAPIManager = new RecordingAPIManager(getContext());
         startLiveUpdateLoop();

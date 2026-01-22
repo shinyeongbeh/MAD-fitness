@@ -1,11 +1,7 @@
 package com.example.madgroupproject.data.repository;
 
-
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 
-import com.example.madgroupproject.data.local.AppDatabase;
 import com.example.madgroupproject.data.local.dao.GameLevelDao;
 import com.example.madgroupproject.data.local.dao.GameLevelHistoryDao;
 import com.example.madgroupproject.data.local.dao.GameProgressDao;
@@ -71,6 +67,5 @@ public class GameLevelRepository {
     public LiveData<GameLevelHistoryEntity> observeHistoryForLevel(int level) {
         return historyDao.observeHistoryForLevel(level);
     }
-
 
 }

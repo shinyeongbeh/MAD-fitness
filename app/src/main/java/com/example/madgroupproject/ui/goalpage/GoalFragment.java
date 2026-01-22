@@ -48,7 +48,7 @@ public class GoalFragment extends Fragment {
     // Flag to prevent triggering switch listener during UI updates
     private boolean isUpdatingUI = false;
 
-    // ✅ 添加广播接收器
+    // 添加广播接收器
     private BroadcastReceiver midnightReceiver;
 
     @Override
@@ -57,7 +57,7 @@ public class GoalFragment extends Fragment {
         goalRepository = new GoalRepository(requireContext());
         mainHandler = new Handler(Looper.getMainLooper());
 
-        // ✅ 注册广播接收器
+        // 注册广播接收器
         setupMidnightBroadcastReceiver();
     }
 
@@ -105,13 +105,13 @@ public class GoalFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // ✅ 只更新通知,不再检查日期变化(MainActivity已处理)
+        // 只更新通知,不再检查日期变化(MainActivity已处理)
         GoalNotificationManager.updateGoalNotification(requireContext());
         Log.d(TAG, "onResume - Updated notification");
     }
 
     /**
-     * ✅ 设置广播接收器监听午夜事件
+     * 设置广播接收器监听午夜事件
      */
     private void setupMidnightBroadcastReceiver() {
         midnightReceiver = new BroadcastReceiver() {
@@ -141,7 +141,7 @@ public class GoalFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        // ✅ 取消注册广播接收器
+        // 取消注册广播接收器
         if (midnightReceiver != null) {
             try {
                 requireContext().unregisterReceiver(midnightReceiver);

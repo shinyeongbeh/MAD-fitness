@@ -37,7 +37,7 @@ import java.util.concurrent.Executors;
                 GameLevelEntity.class,
                 GameLevelHistoryEntity.class,
                 GameProgressEntity.class,
-                GoalEntity.class  // ✅ 添加Goal实体
+                GoalEntity.class
         },
         version = 7, // need to increase the version once db structure changes
         exportSchema = false
@@ -56,7 +56,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract GameProgressDao gameProgressDao();
     public abstract GameLevelDao gameLevelDao();
     public abstract GameLevelHistoryDao gameLevelHistoryDao();
-    public abstract GoalDao goalDao();  // ✅ 添加GoalDao
+    public abstract GoalDao goalDao();
 
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -67,7 +67,6 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class,
                                     "fitness_app_db"
                             )
-                            // ✅ 允许删库重建
                             .fallbackToDestructiveMigration()
                             .addCallback(PREPOPULATE_LEVELS_CALLBACK)
                             .build();

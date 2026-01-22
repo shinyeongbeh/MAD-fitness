@@ -94,7 +94,8 @@ public class GoalRepository {
         });
     }
 
-    // ✅ 新增：重置所有goals的完成状态为未完成（保留goal数据）
+    // reset all goals to incomplete
+    // 重置所有goals的完成状态为未完成（保留goal数据）
     public void resetAllGoalsStatus(OnResultListener<Void> listener) {
         executorService.execute(() -> {
             try {
@@ -105,24 +106,6 @@ public class GoalRepository {
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Error resetting all goals status", e);
-                if (listener != null) {
-                    listener.onError(e);
-                }
-            }
-        });
-    }
-
-    // 🔴 保留此方法但不再用于日常重置
-    public void deleteAllGoals(OnResultListener<Void> listener) {
-        executorService.execute(() -> {
-            try {
-                goalDao.deleteAll();
-                Log.d(TAG, "All goals deleted successfully");
-                if (listener != null) {
-                    listener.onSuccess(null);
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Error deleting all goals", e);
                 if (listener != null) {
                     listener.onError(e);
                 }
